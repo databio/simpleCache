@@ -12,11 +12,19 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   loadEnvir = environment())
 }
 \arguments{
-\item{recreate}{forces reconstruction of the cache}
+\item{cacheName}{Unique name for the cache. Be careful.}
+
+\item{instruction}{Quoted R code to be evaluated. The returned value of this code is what will be cached under the cacheName.}
+
+\item{buildEnv}{You may choose to provide additional variables necessary for evaluating the code in instruction.}
 
 \item{reload}{forces re-loading the cache, even if it exists in the env.}
 
+\item{recreate}{forces reconstruction of the cache}
+
 \item{noload}{noload is useful for: you want to create the caches, but not load them if they aren't there (like a cache creation loop).}
+
+\item{assignToVariable}{By default, simpleCache assigns the cache to a variable named cacheName; you can overrule that here.}
 }
 \description{
 simpleCache provides a function (simpleCache())
@@ -47,6 +55,6 @@ because of lexical scope, you may need to pass some environment variables you us
 Nathan Sheffield
 }
 \references{
-' \url{http://github.com/sheffield}
+\url{http://github.com/sheffield}
 }
 

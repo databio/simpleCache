@@ -1,26 +1,29 @@
-#some test code:
+simpleCache
 
+SimpleCache is an R package providing functions for caching R objects, to encourage writing reusable, restartable, and reproducible analysis pipelines for projects with massive data and computational requirements. You set up a directory for storing caches, and then provide the function with nothing more than a cache name and instructions for how to produce the R object. It is designed to be simple and user-friendly. At the same time, it provides some advanced options like environment assignments, recreating or reloading caches, making it flexible enough for use in large-scale data analysis projects.
 
-packageFolder = "~/Rncs/simpleCache";
-install.packages(packageFolder, repos=NULL)
+Please see the R documentation for more details.
 
-library(simpleCache)
-setLocalCacheDir("~")
-
-normSample = rnorm(1e7, 0,1)
-
-simpleCache("normSample", "rnorm(1e7, 0,1)", recreate=TRUE)
-
-simpleCache("normSample", "rnorm(1e7, 0,1)")
-refreshPackage("simpleCache")
-
-
-
-
-#Install from github:
+################################################################################
+#HOW TO INSTALL
+#install the development version directly from github with devtools
 
 require(devtools)
 install_github("sheffien/simpleCache") #public
+
+#to install a local copy:
+packageFolder = "~/Rncs/simpleCache";
+install.packages(packageFolder, repos=NULL)
+
+################################################################################
+#HOW TO RUN
+
+library(simpleCache)
+?simpleCache
+
+setLocalCacheDir("~")
+simpleCache("normSample", "rnorm(1e7, 0,1)", recreate=TRUE)
+simpleCache("normSample", "rnorm(1e7, 0,1)")
 
 
 
