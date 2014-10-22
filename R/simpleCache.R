@@ -43,7 +43,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 		cacheDir=paste0(cacheDir, cacheSubDir);
 	}
 	if (is.null(cacheDir)) {
-		message("You must set global option RCACHE.DIR with setGlobalCacheDir(), or specify a cacheDir parameter directly to simpleCache().");
+		message("You must set global option RCACHE.DIR with setSharedCacheDir(), or specify a cacheDir parameter directly to simpleCache().");
 		return(NA);
 	}
 	cacheDir=enforceTrailingSlash(cacheDir);
@@ -87,11 +87,21 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 	#return(); #used to return ret, but not any more
 }
 
+################################################################################
+# Helper aliases for common options
+
 #' Helper alias for caching across experiments/people.
 #' 
 #' @export
 simpleCacheShared = function(...) {
 	simpleCache(..., cacheDir=getOption("SHARE.RCACHE.DIR"))
+}
+
+#' Helper alias for loading caches into the global environment.
+#' 
+#' @export
+simpleCacheGlobal = function(...) {
+	simpleCache(..., loadEnvir=globalenv());
 }
 
 
@@ -160,15 +170,15 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, no
 
 
 #cache dir setter functions
-#' Sets local cache directory
+#' Sets a global variable specifying the default cache directory for simpleCache() calls.
 #'
 #' hello
 #' @export
-setLocalCacheDir = function(localCacheDir) {
-	options(RCACHE.DIR=localCacheDir); 
+setCacheDir = function(cacheDir) {
+	options(RCACHE.DIR=cacheDir); 
 }
 
-#' Sets global cache directory for sharing across experiments
+#' Sets global variable specifying the default cache directory for simpleCacheShared() calls; this function is simply a helper alias for caching results that will be used across experiments.
 #'
 #' hello
 #' @export
