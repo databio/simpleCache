@@ -1,0 +1,6 @@
+#some test code:
+
+
+packageFolder = "~/Rncs/simpleCache";
+install.packages(packageFolder, repos=NULL)
+
