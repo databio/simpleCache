@@ -2,7 +2,8 @@
 
 export(downloadCache)
 export(setCacheBuildDir)
-export(setGlobalCacheDir)
 export(setLocalCacheDir)
+export(setSharedCacheDir)
 export(simpleCache)
 export(simpleCacheShared)
+export(viewCacheDirs)

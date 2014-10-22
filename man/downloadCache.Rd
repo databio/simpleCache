@@ -5,7 +5,7 @@
 \usage{
 downloadCache(object, url, env = NULL, reload = FALSE, recreate = FALSE,
   noload = FALSE, cacheDir = getOption("RCACHE.DIR"),
-  cacheSubDir = "download", loadEnvir = globalenv())
+  cacheSubDir = "download", loadEnvir = environment())
 }
 \description{
 Given a URL, this function will download the file and cache it, or load it if it has been previously downloaded.

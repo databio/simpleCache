@@ -4,3 +4,23 @@
 packageFolder = "~/Rncs/simpleCache";
 install.packages(packageFolder, repos=NULL)
 
+library(simpleCache)
+setLocalCacheDir("~")
+
+normSample = rnorm(1e7, 0,1)
+
+simpleCache("normSample", "rnorm(1e7, 0,1)", recreate=TRUE)
+
+simpleCache("normSample", "rnorm(1e7, 0,1)")
+refreshPackage("simpleCache")
+
+
+
+
+#Install from github:
+
+require(devtools)
+install_github("sheffien/simpleCache") #public
+
+
+

@@ -9,7 +9,7 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   reload = FALSE, recreate = FALSE, noload = FALSE,
   cacheDir = getOption("RCACHE.DIR"), cacheSubDir = NULL,
   buildDir = getOption("RBUILD.DIR"), assignToVariable = NULL,
-  loadEnvir = globalenv())
+  loadEnvir = environment())
 }
 \arguments{
 \item{recreate}{forces reconstruction of the cache}

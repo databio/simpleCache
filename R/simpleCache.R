@@ -38,7 +38,7 @@ NULL
 #' @param reload	forces re-loading the cache, even if it exists in the env.
 #' @param noload	noload is useful for: you want to create the caches, but not load them if they aren't there (like a cache creation loop).
 #' @export
-simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=globalenv()) {
+simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=environment()) {
 	if(!is.null(cacheSubDir)) {
 		cacheDir=paste0(cacheDir, cacheSubDir);
 	}
@@ -61,7 +61,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 		load(cacheFile);
 	} else if(file.exists(cacheFile) & !recreate) {
 		message("::Cache exists (no load)::\t", cacheFile);
-		#return (NULL);
+		return (NULL);
 	} else {
 		message("::Creating cache::\t", cacheFile);
 		if(is.null(instruction)) {
@@ -94,6 +94,7 @@ simpleCacheShared = function(...) {
 	simpleCache(..., cacheDir=getOption("SHARE.RCACHE.DIR"))
 }
 
+
 #helper alias for caching with variable variable names
 #Previously I used this:
 #assign(variable, simpleCache(variable, instruction=paste0("assign('", variable, "', ",  instruction, ")"), ...), envir=.GlobalEnv);
@@ -115,7 +116,7 @@ simpleCacheShared = function(...) {
 #' Given a URL, this function will download the file and cache it, or load it if it has been previously downloaded.
 #'
 #' @export
-downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir="download", loadEnvir=globalenv()) {
+downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir="download", loadEnvir=environment()) {
 	if(!is.null(cacheSubDir)) {
 		cacheDir=paste0(cacheDir, cacheSubDir);
 	}
@@ -171,7 +172,7 @@ setLocalCacheDir = function(localCacheDir) {
 #'
 #' hello
 #' @export
-setGlobalCacheDir = function(globalCacheDir) {
+setSharedCacheDir = function(globalCacheDir) {
 	options(SHARE.RCACHE.DIR=globalCacheDir); 
 }
 #' Sets local cache build directory with scripts for building files.
@@ -182,7 +183,13 @@ setCacheBuildDir = function(cacheBuildDir) {
 	options(RBUILD.DIR=cacheBuildDir); 
 }
 
-
+#' Views cache dir variables
+#' @export
+viewCacheDirs = function() {
+	message("SHARE.RCACHE.DIR:\t", getOption("SHARE.RCACHE.DIR"))
+	message("RCACHE.DIR:\t", getOption("RCACHE.DIR"))
+	message("RBUILD.DIR:\t", getOption("RBUILD.DIR"))
+}
 
 ################################################################################
 # UTILITY FUNCTIONS
