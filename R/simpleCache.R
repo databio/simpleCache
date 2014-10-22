@@ -43,7 +43,7 @@ NULL
 #' @param noload	noload is useful for: you want to create the caches, but not load them if they aren't there (like a cache creation loop).
 #' @param assignToVariable	By default, simpleCache assigns the cache to a variable named cacheName; you can overrule that here.
 #' @export
-simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=environment()) {
+simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame()) {
 	if(!is.null(cacheSubDir)) {
 		cacheDir=paste0(cacheDir, cacheSubDir);
 	}
