@@ -51,6 +51,10 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 		message("You must set global option RCACHE.DIR with setSharedCacheDir(), or specify a cacheDir parameter directly to simpleCache().");
 		return(NA);
 	}
+	if(! "character" %in% class(cacheName)) {
+		stop("simpleCache expects the cacheName variable to be a character vector.");
+	}
+
 	cacheDir=enforceTrailingSlash(cacheDir);
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir);
@@ -96,6 +100,8 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 # Helper aliases for common options
 
 #' Helper alias for caching across experiments/people.
+#' Just sets the cacheDir to the default SHARE directory 
+#' (instead of the typical default PROJECT directory)
 #' 
 #' @export
 simpleCacheShared = function(...) {
@@ -103,14 +109,23 @@ simpleCacheShared = function(...) {
 }
 
 #' Helper alias for loading caches into the global environment.
+#' simpleCache normally loads variables into the calling environment; this
+#' ensures that the variables are loaded in the global environment.
 #' 
 #' @export
 simpleCacheGlobal = function(...) {
 	simpleCache(..., loadEnvir=globalenv());
 }
 
+#' Helper alias for loading shared caches into the global environment.
+#' 
+#' @export
+simpleCacheSharedGlobal = function(...) {
+	simpleCache(..., cacheDir=getOption("SHARE.RCACHE.DIR"), loadEnvir=globalenv());
+}
 
 #helper alias for caching with variable variable names
+#This was deprecated when I improved simpleCache to handle this situation.
 #Previously I used this:
 #assign(variable, simpleCache(variable, instruction=paste0("assign('", variable, "', ",  instruction, ")"), ...), envir=.GlobalEnv);
 #but why do I need an "assign" in the simpleCache instruction?
@@ -129,6 +144,7 @@ simpleCacheGlobal = function(...) {
 #' Create or load a cache from the web.
 #'
 #' Given a URL, this function will download the file and cache it, or load it if it has been previously downloaded.
+#' BETA -- not finished.
 #'
 #' @export
 downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir="download", loadEnvir=environment()) {
@@ -172,64 +188,5 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, no
 	assign(assignToVariable, ret, envir=loadEnvir);
 	return(); #used to return ret, but not any more
 }
-
-
-#cache dir setter functions
-#' Sets a global variable specifying the default cache directory for simpleCache() calls.
-#'
-#' hello
-#' @export
-setCacheDir = function(cacheDir) {
-	options(RCACHE.DIR=cacheDir); 
-}
-
-#' Sets global variable specifying the default cache directory for simpleCacheShared() calls; this function is simply a helper alias for caching results that will be used across experiments.
-#'
-#' hello
-#' @export
-setSharedCacheDir = function(globalCacheDir) {
-	options(SHARE.RCACHE.DIR=globalCacheDir); 
-}
-#' Sets local cache build directory with scripts for building files.
-#'
-#' hello
-#' @export
-setCacheBuildDir = function(cacheBuildDir) {
-	options(RBUILD.DIR=cacheBuildDir); 
-}
-
-#' Views cache dir variables
-#' @export
-viewCacheDirs = function() {
-	message("SHARE.RCACHE.DIR:\t", getOption("SHARE.RCACHE.DIR"))
-	message("RCACHE.DIR:\t", getOption("RCACHE.DIR"))
-	message("RBUILD.DIR:\t", getOption("RBUILD.DIR"))
-}
-
-################################################################################
-# UTILITY FUNCTIONS
-################################################################################
-
-#check for, and fix, trailing slash. if necessary
-enforceTrailingSlash = function(folder) {
-	enforceEdgeCharacter(folder, appendChar="/");
-}
-enforceEdgeCharacter = function(string, prependChar="", appendChar="") {
-	if (string=="" | is.null(string)) {
-		return(string);
-	}
-	if(!is.null(appendChar)) {
-		if (substr(string,nchar(string), nchar(string)) != appendChar) { # +1 ?
-			string = paste0(string, appendChar);
-			}
-	}
-	if (!is.null(prependChar)) {
-		if (substr(string,1,1) != prependChar) { # +1 ?
-			string = paste0(prependChar, string);
-		}
-	}
-	return(string);
-}
-
 
 
