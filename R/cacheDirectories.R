@@ -15,8 +15,8 @@ setCacheDir = function(cacheDir) {
 #' Sets global variable specifying the default cache directory for simpleCacheShared() calls; this function is simply a helper alias for caching results that will be used across experiments.
 #'
 #' @export
-setSharedCacheDir = function(globalCacheDir) {
-	options(SHARE.RCACHE.DIR=globalCacheDir); 
+setSharedCacheDir = function(sharedCacheDir) {
+	options(SHARE.RCACHE.DIR=sharedCacheDir); 
 }
 #' Sets local cache build directory with scripts for building files.
 #'
@@ -32,5 +32,22 @@ viewCacheDirs = function() {
 	message("SHARE.RCACHE.DIR:\t", getOption("SHARE.RCACHE.DIR"))
 	message("RCACHE.DIR:\t", getOption("RCACHE.DIR"))
 	message("RBUILD.DIR:\t", getOption("RBUILD.DIR"))
+	message("SIMPLECACHE.ENV:\t", getOption("SIMPLECACHE.ENV"))
 }
+
+#' append a new Environment name (a character string) to a global option
+#' which is a vector of such names. SimpleCache will search all of these
+#' environments to check if a cache is previously loaded, before reloading it.
+#' @export
+addCacheSearchEnvironment = function(addEnv) {
+	options(SIMPLECACHE.ENV=append(addEnv, getOption("SIMPLECACHE.ENV"))); 
+}
+
+#' Sets global option of cache search environments to NULL.
+#' @export
+resetCacheSearchEnvironment = function() {
+	options(SIMPLECACHE.ENV=NULL); 
+}
+
+
 

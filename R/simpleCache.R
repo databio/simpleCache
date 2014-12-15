@@ -37,13 +37,15 @@ NULL
 #' because of lexical scope, you may need to pass some environment variables you use in your instruction (function call). You can use this using the parameter env (just provide a list of named variables).
 #' @param cacheName	Unique name for the cache. Be careful.
 #' @param instruction	Quoted R code to be evaluated. The returned value of this code is what will be cached under the cacheName.
-#' @param buildEnv	You may choose to provide additional variables necessary for evaluating the code in instruction.
+#' @param buildEnvir	You may choose to provide additional variables necessary for evaluating the code in instruction.
 #' @param reload	forces re-loading the cache, even if it exists in the env.
 #' @param recreate	forces reconstruction of the cache
 #' @param noload	noload is useful for: you want to create the caches, but not load them if they aren't there (like a cache creation loop).
 #' @param assignToVariable	By default, simpleCache assigns the cache to a variable named cacheName; you can overrule that here.
+#' @param loadEnvir	Into which environment would you like to load the variable?
+#' @param searchEnvir	a vector of environments to search for the already loaded cache.
 #' @export
-simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame()) {
+simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV")) {
 	if(!is.null(cacheSubDir)) {
 		cacheDir=paste0(cacheDir, cacheSubDir);
 	}
@@ -57,14 +59,25 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 
 	cacheDir=enforceTrailingSlash(cacheDir);
 	if (!file.exists(cacheDir)) {
-		dir.create(cacheDir);
+		dir.create(cacheDir, recursive=TRUE);
 	}
 	cacheFile = paste0(cacheDir, cacheName, ".RData")
-	if(exists(cacheName) & !reload & !recreate) {
-		message("::Object exists::\t", cacheName);
+	#check if cache exists in any provided search environment.
+	searchEnvir = append(searchEnvir, ".GlobalEnv");	#assume global env.
+	cacheExists = FALSE; cacheWhere = NULL;
+	for ( curEnv in searchEnvir ) {
+		if(exists(cacheName, where=get(curEnv))) {
+			cacheExists = TRUE;
+			cacheWhere = curEnv;
+			break;
+		}
+	} #for
+
+	if(cacheExists & !reload & !recreate) {
+		message("::Object exists (in ", cacheWhere, ")::\t", cacheName);
 		#return(get(cacheName));
 		#return();
-		ret=get(cacheName);
+		ret = get(cacheName, pos=get(cacheWhere));
 	} else if(file.exists(cacheFile) & !recreate & !noload) {
 		message("::Loading cache::\t", cacheFile);
 		load(cacheFile);
@@ -75,8 +88,11 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 		message("::Creating cache::\t", cacheFile);
 		if(is.null(instruction)) {
 				if (is.null(buildDir)) {
-					message("If you do not provide an instruction argument, you must set global option RBUILD.DIR with setCacheBuildDir, or specify a buildDir parameter directly to simpleCache().");
-					return(NA);
+					stop("::Error::\tIf you do not provide an instruction argument, you must set global option RBUILD.DIR with setCacheBuildDir, or specify a buildDir parameter directly to simpleCache().");
+				}
+				RBuildFile = paste0(buildDir, cacheName, ".R");
+				if (!file.exists(RBuildFile)) {
+					stop("::Error::\tNo instruction or RBuild file provided.");
 				}
 				source(paste0(buildDir, cacheName, ".R"), local=FALSE);
 				ret = get(cacheName);
@@ -124,27 +140,13 @@ simpleCacheSharedGlobal = function(...) {
 	simpleCache(..., cacheDir=getOption("SHARE.RCACHE.DIR"), loadEnvir=globalenv());
 }
 
-#helper alias for caching with variable variable names
-#This was deprecated when I improved simpleCache to handle this situation.
-#Previously I used this:
-#assign(variable, simpleCache(variable, instruction=paste0("assign('", variable, "', ",  instruction, ")"), ...), envir=.GlobalEnv);
-#but why do I need an "assign" in the simpleCache instruction?
-#varCache = function(loadCacheName, instruction, assignToVariableName=NULL, cacheEnvir=globalenv(), ...) {
-#	if(is.null(assignToVariableName)) { assignToVariableName=loadCacheName; }
-#	simpleCacheReturn = simpleCache(loadCacheName, instruction=instruction, ...);
-#	if (is.null(simpleCacheReturn)) {
-#		return(NULL); 
-#	} else {
-#		assign(assignToVariableName, simpleCacheReturn, envir=cacheEnvir);
-#	}
-#	#return(get(variable));
-#}
 
 
 #' Create or load a cache from the web.
 #'
 #' Given a URL, this function will download the file and cache it, or load it if it has been previously downloaded.
 #' BETA -- not finished.
+#' TODO -- update with searchEnvir feature of simpleCache.
 #'
 #' @export
 downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir="download", loadEnvir=environment()) {

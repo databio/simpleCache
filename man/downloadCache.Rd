@@ -9,5 +9,7 @@ downloadCache(object, url, env = NULL, reload = FALSE, recreate = FALSE,
 }
 \description{
 Given a URL, this function will download the file and cache it, or load it if it has been previously downloaded.
+BETA -- not finished.
+TODO -- update with searchEnvir feature of simpleCache.
 }
 

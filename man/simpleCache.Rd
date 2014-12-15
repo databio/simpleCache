@@ -9,14 +9,14 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   reload = FALSE, recreate = FALSE, noload = FALSE,
   cacheDir = getOption("RCACHE.DIR"), cacheSubDir = NULL,
   buildDir = getOption("RBUILD.DIR"), assignToVariable = NULL,
-  loadEnvir = environment())
+  loadEnvir = parent.frame(), searchEnvir = getOption("SIMPLECACHE.ENV"))
 }
 \arguments{
 \item{cacheName}{Unique name for the cache. Be careful.}
 
 \item{instruction}{Quoted R code to be evaluated. The returned value of this code is what will be cached under the cacheName.}
 
-\item{buildEnv}{You may choose to provide additional variables necessary for evaluating the code in instruction.}
+\item{buildEnvir}{You may choose to provide additional variables necessary for evaluating the code in instruction.}
 
 \item{reload}{forces re-loading the cache, even if it exists in the env.}
 
@@ -25,6 +25,10 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
 \item{noload}{noload is useful for: you want to create the caches, but not load them if they aren't there (like a cache creation loop).}
 
 \item{assignToVariable}{By default, simpleCache assigns the cache to a variable named cacheName; you can overrule that here.}
+
+\item{loadEnvir}{Into which environment would you like to load the variable?}
+
+\item{searchEnvir}{a vector of environments to search for the already loaded cache.}
 }
 \description{
 simpleCache provides a function (simpleCache())
@@ -55,6 +59,6 @@ because of lexical scope, you may need to pass some environment variables you us
 Nathan Sheffield
 }
 \references{
-\url{http://github.com/sheffield}
+\url{http://github.com/sheffien}
 }
 

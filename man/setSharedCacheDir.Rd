@@ -3,9 +3,9 @@
 \alias{setSharedCacheDir}
 \title{Sets global variable specifying the default cache directory for simpleCacheShared() calls; this function is simply a helper alias for caching results that will be used across experiments.}
 \usage{
-setSharedCacheDir(globalCacheDir)
+setSharedCacheDir(sharedCacheDir)
 }
 \description{
-hello
+Sets global variable specifying the default cache directory for simpleCacheShared() calls; this function is simply a helper alias for caching results that will be used across experiments.
 }
 
