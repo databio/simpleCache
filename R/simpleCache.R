@@ -98,7 +98,11 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 				ret = get(cacheName);
 		} else {
 			#"ret," for return, is the name the cacheName is stored under.
-			ret = with(buildEnvir, eval(parse(text=instruction)));
+			if (is.null(buildEnvir)) {
+				ret = eval(parse(text=instruction));	
+			} else {
+				ret = with(buildEnvir, eval(parse(text=instruction)));
+			}
 		}
 		if (is.null(ret)) {
 			message("NULL value returned; no cache created");
@@ -149,7 +153,7 @@ simpleCacheSharedGlobal = function(...) {
 #' TODO -- update with searchEnvir feature of simpleCache.
 #'
 #' @export
-downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir="download", loadEnvir=environment()) {
+downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir="download", loadEnvir=parent.frame(), assignToVariable=NULL) {
 	if(!is.null(cacheSubDir)) {
 		cacheDir=paste0(cacheDir, cacheSubDir);
 	}
