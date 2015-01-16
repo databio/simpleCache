@@ -2,8 +2,8 @@
 \name{storeCache}
 \alias{storeCache}
 \title{Sometimes you use significant computational power to create an object,
-but you didn't cache it with simpleCache. Maybe you wish you had after
-the fact. This function lets you store an object in the environtment so
+but you didn't cache it with simpleCache. Oops, maybe you wish you had, after
+the fact. This function lets you store an object in the environment so
 it could be loaded by future calls to simpleCache.}
 \usage{
 storeCache(cacheName, cacheDir = getOption("RCACHE.DIR"),

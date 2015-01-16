@@ -45,7 +45,7 @@ NULL
 #' @param loadEnvir	Into which environment would you like to load the variable?
 #' @param searchEnvir	a vector of environments to search for the already loaded cache.
 #' @export
-simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV")) {
+simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV")) {
 	if(!is.null(cacheSubDir)) {
 		cacheDir=paste0(cacheDir, cacheSubDir);
 	}
@@ -94,14 +94,20 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 				if (!file.exists(RBuildFile)) {
 					stop("::Error::\tNo instruction or RBuild file provided.");
 				}
+				if (timer) { tic(); }
 				source(paste0(buildDir, cacheName, ".R"), local=FALSE);
+				if (timer) { toc(); }
 				ret = get(cacheName);
 		} else {
 			#"ret," for return, is the name the cacheName is stored under.
 			if (is.null(buildEnvir)) {
+				if (timer) { tic(); }
 				ret = eval(parse(text=instruction));	
+				if (timer) { toc(); }
 			} else {
+				if (timer) { tic(); }
 				ret = with(buildEnvir, eval(parse(text=instruction)));
+				if (timer) { toc(); }
 			}
 		}
 		if (is.null(ret)) {
