@@ -44,8 +44,10 @@ NULL
 #' @param assignToVariable	By default, simpleCache assigns the cache to a variable named cacheName; you can overrule that here.
 #' @param loadEnvir	Into which environment would you like to load the variable?
 #' @param searchEnvir	a vector of environments to search for the already loaded cache.
+#' @param	slurmParams	**EXPERIMENTAL FEATURE** a list with parameter settings for SLURM submission. By default, this is NULL, meaning the cache will be created in the current R session. If you provide a slurmParams object, simpleCache assumes you want to submit a job to the cluster instead.
+#' @param	ignoreLock	 internal parameter used for slurm submission; don't touch.
 #' @export
-simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV")) {
+simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"), slurmParams=NULL, ignoreLock=FALSE) {
 	if(!is.null(cacheSubDir)) {
 		cacheDir=paste0(cacheDir, cacheSubDir);
 	}
@@ -62,6 +64,11 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 		dir.create(cacheDir, recursive=TRUE);
 	}
 	cacheFile = paste0(cacheDir, cacheName, ".RData")
+	lockFile = paste0(cacheDir, cacheName, ".lock")
+	if (ignoreLock) { #otherwise use a trycatch... ?
+		on.exit(file.remove(lockFile));
+	}
+	submitted=FALSE;
 	#check if cache exists in any provided search environment.
 	searchEnvir = append(searchEnvir, ".GlobalEnv");	#assume global env.
 	cacheExists = FALSE; cacheWhere = NULL;
@@ -78,6 +85,12 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 		#return(get(cacheName));
 		#return();
 		ret = get(cacheName, pos=get(cacheWhere));
+	} else if (file.exists(lockFile) & !ignoreLock) {
+		message("::Cache processing (lock file exists)::\t", lockFile)
+		#check for slurm log...
+		if (!is.null(slurmParams)) { slurmLog = paste0(slurmParams$hpcFolder, "/", cacheName, ".log"); message(slurmLog); tail(readLines(slurmLog), 10) }
+
+		return ();
 	} else if(file.exists(cacheFile) & !recreate & !noload) {
 		message("::Loading cache::\t", cacheFile);
 		load(cacheFile);
@@ -102,7 +115,21 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 			#"ret," for return, is the name the cacheName is stored under.
 			if (is.null(buildEnvir)) {
 				if (timer) { tic(); }
-				ret = eval(parse(text=instruction));	
+				if (is.null(slurmParams)) {
+					#tryCatch(
+					ret = eval(parse(text=instruction));	
+				} else {
+					#submit to slurm!
+					message("Submitting job to cluster");
+					#Build a simpleCache command
+					simpleCacheCode = paste0("simpleCache('", cacheName, "', instruction='", instruction, "', recreate=", recreate, ", ignoreLock=TRUE)");
+					#lock
+					if (slurmParams$jobName=="test") { slurmParams$jobName=cacheName; } #change default job name.			
+					file.create(lockFile);
+with(slurmParams, buildSlurmScript(simpleCacheCode, preamble, submit, hpcFolder, jobName, mem, cores, partition, timeLimit, sourceProjectInit))
+#lockregion?
+					submitted = "slurm";
+				}
 				if (timer) { toc(); }
 			} else {
 				if (timer) { tic(); }
@@ -110,10 +137,17 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 				if (timer) { toc(); }
 			}
 		}
-		if (is.null(ret)) {
+		if (submitted=="slurm") {
+			#message("Job submitted to Slurm; check for cache.")
+			return();
+		} else if (is.null(ret)) {
 			message("NULL value returned; no cache created");
+			return(); #so we don't assign NULL to the object.
 		} else {
 			save(ret, file=cacheFile);
+			#if (ignoreLock) {
+			#	on.exit(file.remove(lockFile));
+			#}
 		}
 	}
 	if (noload) { rm(ret); gc(); return(); }
@@ -121,6 +155,12 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 	assign(assignToVariable, ret, envir=loadEnvir);
 	#return(); #used to return ret, but not any more
 }
+
+#' @export
+testExec = function(instruction) {
+	eval(parse(text=instruction))
+}
+
 
 ################################################################################
 # Helper aliases for common options

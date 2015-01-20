@@ -9,7 +9,8 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   reload = FALSE, recreate = FALSE, noload = FALSE,
   cacheDir = getOption("RCACHE.DIR"), cacheSubDir = NULL, timer = FALSE,
   buildDir = getOption("RBUILD.DIR"), assignToVariable = NULL,
-  loadEnvir = parent.frame(), searchEnvir = getOption("SIMPLECACHE.ENV"))
+  loadEnvir = parent.frame(), searchEnvir = getOption("SIMPLECACHE.ENV"),
+  slurmParams = NULL, ignoreLock = FALSE)
 }
 \arguments{
 \item{cacheName}{Unique name for the cache. Be careful.}
@@ -29,6 +30,10 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
 \item{loadEnvir}{Into which environment would you like to load the variable?}
 
 \item{searchEnvir}{a vector of environments to search for the already loaded cache.}
+
+\item{slurmParams}{**EXPERIMENTAL FEATURE** a list with parameter settings for SLURM submission. By default, this is NULL, meaning the cache will be created in the current R session. If you provide a slurmParams object, simpleCache assumes you want to submit a job to the cluster instead.}
+
+\item{ignoreLock}{internal parameter used for slurm submission; don't touch.}
 }
 \description{
 simpleCache provides a function (simpleCache())
