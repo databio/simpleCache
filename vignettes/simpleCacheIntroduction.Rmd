@@ -41,7 +41,7 @@ Once a cache is created, you no longer need to provide instructions:
 simpleCache("normSample")
 ```
 
-If you want to record how long it takes to create a new cache, you can set `TIMER=TRUE`. It may be that you want to create a bunch of caches that are quite memory intensive, and you don't actually need them all in this particular R workspace. In this case, you can use the `noload` parameter, which will create the caches but not load them. Let's make 10 caches but not load them:
+If you want to record how long it takes to create a new cache, you can set `TIMER=TRUE`. It may be that you want to create a bunch of caches that are quite memory intensive, and you don't actually need them all in this particular R workspace. In this case, you can use the `noload` parameter, which will create the caches but not load them. Let's make 5 caches but not load them:
 
 ```{r}
 for (i in 1:5) {
@@ -62,5 +62,7 @@ for (i in 1:5) {
 	message(overallMinimum)
 ```
 
-
-
+You could just load all the caches into memory with this convenience alias:
+```{r}
+loadCaches(paste0("normSample_", 1:5))
+```
