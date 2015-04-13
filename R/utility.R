@@ -47,6 +47,9 @@ secToTime = function(timeInSec) {
 }
 
 #' Start a timer
+#' @param gcFirst Garbage Collect before starting the timer?
+#' @param type Type of time to return, 
+#' can be 'elapsed', 'user.self', or 'sys.self'
 tic <- function(gcFirst = TRUE, type=c("elapsed", "user.self", "sys.self")) {
 	type <- match.arg(type)
 	assign(".type_simpleCache", type, envir=baseenv())
@@ -54,7 +57,7 @@ tic <- function(gcFirst = TRUE, type=c("elapsed", "user.self", "sys.self")) {
 	tic <- proc.time()[type]         
 	assign(".tic_simpleCache", tic, envir=baseenv())
 	invisible(tic)
-	}
+}
 
 #' Check the time since the current timer was started with tic();
 toc <- function() {

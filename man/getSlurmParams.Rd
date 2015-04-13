@@ -4,11 +4,34 @@
 \alias{getSlurmParams}
 \title{Returns a slurm parameterization object for use in simpleCache();}
 \usage{
-getSlurmParams(preamble = "", submit = T, hpcFolder = "slurm",
+getSlurmParams(preamble = "", submit = TRUE, hpcFolder = "slurm",
   jobName = "test", mem = "4000", cores = "5", partition = "develop",
   timeLimit = "02:00:00", sourceProjectInit = TRUE)
 }
+\arguments{
+\item{preamble}{R code to be executed before the the instruction}
+
+\item{submit}{Toggle to flag submission or not (Default:True)}
+
+\item{hpcFolder}{High Performance Computing folder (location to store
+submission files)}
+
+\item{jobName}{Slurm job name.}
+
+\item{mem}{Slurm Memory requested.}
+
+\item{cores}{Slurm Number of cores.}
+
+\item{partition}{Slurm partition (queue) to submit to.}
+
+\item{timeLimit}{Slurm time limit.}
+
+\item{sourceProjectInit}{Should I also source the projectInit first? Default: TRUE)}
+}
 \description{
 Returns a slurm parameterization object for use in simpleCache();
+}
+\examples{
+slurmParam = getSlurmParams(mem="6000", cores="2")
 }
 

@@ -26,6 +26,18 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
 
 \item{noload}{noload is useful for: you want to create the caches, but not load them if they aren't there (like a cache creation loop).}
 
+\item{cacheDir}{The directory where caches are saved (and loaded from).
+Defaults to the global RCACHE.DIR variable}
+
+\item{cacheSubDir}{You can specify a subdirectory within the cacheDir
+variable. Defaults to NULL.}
+
+\item{timer}{Report how long it took to create the cache?}
+
+\item{buildDir}{Location of Build files (files with instructions for use
+If the instructions argument is not provided). Defaults to
+RBUILD.DIR global option.}
+
 \item{assignToVariable}{By default, simpleCache assigns the cache to a variable named cacheName; you can overrule that here.}
 
 \item{loadEnvir}{Into which environment would you like to load the variable?}

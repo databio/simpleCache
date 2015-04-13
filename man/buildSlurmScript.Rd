@@ -3,14 +3,40 @@
 \name{buildSlurmScript}
 \alias{buildSlurmScript}
 \title{Given arguments from a slurmParams object, creates and (possibly) submits a
-slurm job.}
+slurm job. To be used with getSlurmParams for ease.}
 \usage{
 buildSlurmScript(rcode, preamble = "", submit = FALSE,
   hpcFolder = "slurm", jobName = "test", mem = "4000", cores = "1",
   partition = "develop", timeLimit = "02:00:00", sourceProjectInit = TRUE)
 }
+\arguments{
+\item{rcode}{R code to run on the cluster.}
+
+\item{preamble}{R code to be executed before the the instruction}
+
+\item{submit}{Toggle to flag submission or not (Default:True)}
+
+\item{hpcFolder}{High Performance Computing folder (location to store
+submission files)}
+
+\item{jobName}{Slurm job name.}
+
+\item{mem}{Slurm Memory requested.}
+
+\item{cores}{Slurm Number of cores.}
+
+\item{partition}{Slurm partition (queue) to submit to.}
+
+\item{timeLimit}{Slurm time limit.}
+
+\item{sourceProjectInit}{Should I also source the projectInit first? Default: TRUE)}
+}
 \description{
 Given arguments from a slurmParams object, creates and (possibly) submits a
-slurm job.
+slurm job. To be used with getSlurmParams for ease.
+}
+\examples{
+slurmParams = getSlurmParams(mem="6000", cores="2", hpcFolder="~")
+with(slurmParams, buildSlurmScript("1+1", preamble, submit, hpcFolder, jobName, mem, cores, partition, timeLimit, sourceProjectInit))
 }
 

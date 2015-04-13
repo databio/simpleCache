@@ -4,7 +4,7 @@
 #' @param preamble R code to be executed before the the instruction
 #' @param submit Toggle to flag submission or not (Default:True)
 #' @param hpcFolder	High Performance Computing folder (location to store
-#'			submission files
+#'			submission files)
 #' @param jobName Slurm job name.
 #' @param mem	Slurm Memory requested.
 #' @param cores Slurm Number of cores.
@@ -12,6 +12,8 @@
 #' @param timeLimit Slurm time limit.
 #' @param sourceProjectInit Should I also source the projectInit first? Default: TRUE)
 #' @export
+#' @examples
+#' slurmParam = getSlurmParams(mem="6000", cores="2")
 getSlurmParams = function(preamble="", submit=TRUE, hpcFolder="slurm", jobName="test", mem="4000", cores="5", partition="develop", timeLimit="02:00:00", sourceProjectInit=TRUE) {
 	slurmSettings=list();
 	slurmSettings$preamble		=preamble
@@ -27,9 +29,24 @@ getSlurmParams = function(preamble="", submit=TRUE, hpcFolder="slurm", jobName="
 }
 
 #' Given arguments from a slurmParams object, creates and (possibly) submits a 
-#' slurm job.
-#' 
+#' slurm job. To be used with getSlurmParams for ease.
+#'
+#' @param rcode R code to run on the cluster.
+#' @param preamble R code to be executed before the the instruction
+#' @param submit Toggle to flag submission or not (Default:True)
+#' @param hpcFolder	High Performance Computing folder (location to store
+#'			submission files)
+#' @param jobName Slurm job name.
+#' @param mem	Slurm Memory requested.
+#' @param cores Slurm Number of cores.
+#' @param partition Slurm partition (queue) to submit to.
+#' @param timeLimit Slurm time limit.
+#' @param sourceProjectInit Should I also source the projectInit first? Default: TRUE)
 #' @export
+#' @examples
+#' slurmParams = getSlurmParams(mem="6000", cores="2", hpcFolder="~")
+#' with(slurmParams, buildSlurmScript("1+1", preamble, submit, hpcFolder, jobName, mem, cores, partition, timeLimit, sourceProjectInit))
+
 buildSlurmScript = function(rcode, preamble="", submit=FALSE, hpcFolder="slurm", jobName="test", mem="4000", cores="1", partition="develop", timeLimit="02:00:00", sourceProjectInit=TRUE) {
 	if (! file.exists(paste0(hpcFolder, "/")) ) {
 		stop(paste0(hpcFolder, " is not a directory"));

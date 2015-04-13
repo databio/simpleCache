@@ -6,6 +6,9 @@
 \usage{
 testExec(instruction)
 }
+\arguments{
+\item{instruction}{R code to run.}
+}
 \description{
 Debugging function... I can probably delete it.
 }

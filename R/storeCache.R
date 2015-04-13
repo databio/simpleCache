@@ -3,8 +3,17 @@
 #' the fact. This function lets you store an object in the environment so
 #' it could be loaded by future calls to simpleCache.
 #'
-#' This should just be used in interactive sessions.
+#' This can be used in interactive sessions, but could also be used for
+#' another use case: you have a complicated set of instructions (too
+#' much to pass as the instruction argument to simpleCache), so you could just
+#' stick a call to storeCache at the end.
 #' 
+#' @param cacheName	Unique name for the cache (and R object to be cached).
+#' @param cacheDir The directory where caches are saved (and loaded from).
+#' Defaults to the global RCACHE.DIR variable
+#' @param cacheSubDir You can specify a subdirectory within the cacheDir 
+#' variable. Defaults to NULL.
+#' @param recreate	forces reconstruction of the cache
 #' @export
 storeCache =function(cacheName, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, recreate=FALSE) {
 	if(!is.null(cacheSubDir)) {

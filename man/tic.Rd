@@ -6,6 +6,12 @@
 \usage{
 tic(gcFirst = TRUE, type = c("elapsed", "user.self", "sys.self"))
 }
+\arguments{
+\item{gcFirst}{Garbage Collect before starting the timer?}
+
+\item{type}{Type of time to return,
+can be 'elapsed', 'user.self', or 'sys.self'}
+}
 \description{
 Start a timer
 }

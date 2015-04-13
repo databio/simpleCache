@@ -10,7 +10,21 @@ it could be loaded by future calls to simpleCache.}
 storeCache(cacheName, cacheDir = getOption("RCACHE.DIR"),
   cacheSubDir = NULL, recreate = FALSE)
 }
+\arguments{
+\item{cacheName}{Unique name for the cache (and R object to be cached).}
+
+\item{cacheDir}{The directory where caches are saved (and loaded from).
+Defaults to the global RCACHE.DIR variable}
+
+\item{cacheSubDir}{You can specify a subdirectory within the cacheDir
+variable. Defaults to NULL.}
+
+\item{recreate}{forces reconstruction of the cache}
+}
 \description{
-This should just be used in interactive sessions.
+This can be used in interactive sessions, but could also be used for
+another use case: you have a complicated set of instructions (too
+much to pass as the instruction argument to simpleCache), so you could just
+stick a call to storeCache at the end.
 }
 

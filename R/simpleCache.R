@@ -41,11 +41,19 @@ NULL
 #' @param reload	forces re-loading the cache, even if it exists in the env.
 #' @param recreate	forces reconstruction of the cache
 #' @param noload	noload is useful for: you want to create the caches, but not load them if they aren't there (like a cache creation loop).
+#' @param cacheDir The directory where caches are saved (and loaded from).
+#'			Defaults to the global RCACHE.DIR variable
+#' @param cacheSubDir You can specify a subdirectory within the cacheDir 
+#' 			variable. Defaults to NULL.
 #' @param assignToVariable	By default, simpleCache assigns the cache to a variable named cacheName; you can overrule that here.
 #' @param loadEnvir	Into which environment would you like to load the variable?
 #' @param searchEnvir	a vector of environments to search for the already loaded cache.
 #' @param	slurmParams	**EXPERIMENTAL FEATURE** a list with parameter settings for SLURM submission. By default, this is NULL, meaning the cache will be created in the current R session. If you provide a slurmParams object, simpleCache assumes you want to submit a job to the cluster instead.
 #' @param	ignoreLock	 internal parameter used for slurm submission; don't touch.
+#' @param timer Report how long it took to create the cache?
+#' @param buildDir Location of Build files (files with instructions for use
+#'		If the instructions argument is not provided). Defaults to
+#'		RBUILD.DIR global option.
 #' @export
 simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"), slurmParams=NULL, ignoreLock=FALSE) {
 	if(!is.null(cacheSubDir)) {
@@ -157,6 +165,7 @@ with(slurmParams, buildSlurmScript(simpleCacheCode, preamble, submit, hpcFolder,
 }
 
 #' Debugging function... I can probably delete it.
+#' @param instruction R code to run.
 #' @export
 testExec = function(instruction) {
 	eval(parse(text=instruction))
@@ -217,7 +226,7 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, no
 
 	# downloadCache will use data.table's fread function for reading
 	# in downloads:
-	requireNamespace(data.table)
+	requireNamespace("data.table")
 	if(!is.null(cacheSubDir)) {
 		cacheDir=paste0(cacheDir, cacheSubDir);
 	}
@@ -250,7 +259,7 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, no
 			command = paste0("wget -O ", cacheFile, " '", url, "'");
 			sysResult = system(command, intern=TRUE);
 			message(command, sysResult);
-			ret = fread(cacheFile);
+			ret = data.table::fread(cacheFile);
 		}
 	}
 	if (noload) { rm(ret); gc(); return(); }
