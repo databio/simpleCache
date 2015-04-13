@@ -5,8 +5,6 @@ simpleCache: R caching for restartable analysis
 
 Like its name indicates, `simpleCache` is intended to be simple. You choose a location to store your caches, and then provide the function with nothing more than a cache name and instructions (R code) for how to produce the R object. While simple, `simpleCache` also provides some advanced options like environment assignments, recreating caches, reloading caches, and even cluster compute bindings (to SLURM) making it flexible enough for use in large-scale data analysis projects.
 
-For detailed documentation of functions and additional examples, please see the R documentation.
-
 --------------------------------------------------------------------------------
 ### Installing simpleCache
 Install the development version directly from github with devtools
@@ -25,16 +23,9 @@ install.packages(packageFolder, repos=NULL)
 --------------------------------------------------------------------------------
 ### Running simpleCache
 
-`simpleCache` comes really with a single primary function that will do almost everything you need. Please check out the [vignettes](vignettes/) to get started. You can begin with [An introduction to simpleCache](vignettes/simpleCacheIntroduction.Rmd)
+`simpleCache` comes with a single primary function that will do almost everything you need. I have produced some [R vignettes](vignettes/) to get you started. 
 
-```
-library(simpleCache)
-?simpleCache
-
-setLocalCacheDir("~")
-simpleCache("normSample", "rnorm(1e7, 0,1)", recreate=TRUE)
-simpleCache("normSample", "rnorm(1e7, 0,1)")
-```
+* [An introduction to simpleCache](vignettes/simpleCacheIntroduction.Rmd)
 
 --------------------------------------------------------------------------------
 ### simpleCache Philosophy
