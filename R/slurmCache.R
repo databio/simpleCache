@@ -45,7 +45,9 @@ getSlurmParams = function(preamble="", submit=TRUE, hpcFolder="slurm", jobName="
 #' @export
 #' @examples
 #' slurmParams = getSlurmParams(mem="6000", cores="2", hpcFolder="~")
-#' with(slurmParams, buildSlurmScript("1+1", preamble, submit, hpcFolder, jobName, mem, cores, partition, timeLimit, sourceProjectInit))
+#' with(slurmParams, 
+#' buildSlurmScript("1+1", preamble, submit, hpcFolder, jobName, mem, cores,
+#' partition, timeLimit, sourceProjectInit))
 
 buildSlurmScript = function(rcode, preamble="", submit=FALSE, hpcFolder="slurm", jobName="test", mem="4000", cores="1", partition="develop", timeLimit="02:00:00", sourceProjectInit=TRUE) {
 	if (! file.exists(paste0(hpcFolder, "/")) ) {
