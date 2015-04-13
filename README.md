@@ -25,7 +25,7 @@ install.packages(packageFolder, repos=NULL)
 --------------------------------------------------------------------------------
 ### Running simpleCache
 
-`simpleCache` comes really with a single primary function that will do almost everything you need.
+`simpleCache` comes really with a single primary function that will do almost everything you need. Please check out the [vignettes](vignettes/) to get started. You can begin with [An introduction to simpleCache](vignettes/simpleCacheIntroduction.Rmd)
 
 ```
 library(simpleCache)
