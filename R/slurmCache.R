@@ -1,8 +1,18 @@
 #Functions for SLURM binding within R... wow!
 #' Returns a slurm parameterization object for use in simpleCache();
-
+#'
+#' @param preamble R code to be executed before the the instruction
+#' @param submit Toggle to flag submission or not (Default:True)
+#' @param hpcFolder	High Performance Computing folder (location to store
+#'			submission files
+#' @param jobName Slurm job name.
+#' @param mem	Slurm Memory requested.
+#' @param cores Slurm Number of cores.
+#' @param partition Slurm partition (queue) to submit to.
+#' @param timeLimit Slurm time limit.
+#' @param sourceProjectInit Should I also source the projectInit first? Default: TRUE)
 #' @export
-getSlurmParams = function(preamble="", submit=T, hpcFolder="slurm", jobName="test", mem="4000", cores="5", partition="develop", timeLimit="02:00:00", sourceProjectInit=TRUE) {
+getSlurmParams = function(preamble="", submit=TRUE, hpcFolder="slurm", jobName="test", mem="4000", cores="5", partition="develop", timeLimit="02:00:00", sourceProjectInit=TRUE) {
 	slurmSettings=list();
 	slurmSettings$preamble		=preamble
 	slurmSettings$submit			=submit
@@ -33,7 +43,7 @@ buildSlurmScript = function(rcode, preamble="", submit=FALSE, hpcFolder="slurm",
 	rcode = paste0(preamble, "\n", rcode);
 	#escape $; otherwise, bash will interpret them as bash variables,
 	#though they are embedded in R script within bash.
-	rcode= str_replace(rcode, "\\$", "\\\\$");
+	rcode= gsub("\\$", "\\\\$", rcode);
 
 	script = paste0( "#!/bin/bash
 #SBATCH --job-name=", jobName, "

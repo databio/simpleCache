@@ -1,0 +1,20 @@
+---
+title: "An introduction to simpleCache"
+author: "Nathan Sheffield"
+date: "`r Sys.Date()`"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{An introduction to simpleCache}
+output: knitr:::html_vignette
+---
+
+# An introduction to simpleCache
+
+
+```{r Try it out}
+library(simpleCache)
+setCacheDir("~")
+simpleCache("normSample", "rnorm(1e7, 0,1)", recreate=TRUE)
+simpleCache("normSample", "rnorm(1e7, 0,1)")
+```
+

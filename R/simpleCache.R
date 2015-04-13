@@ -156,6 +156,7 @@ with(slurmParams, buildSlurmScript(simpleCacheCode, preamble, submit, hpcFolder,
 	#return(); #used to return ret, but not any more
 }
 
+#' Debugging function... I can probably delete it.
 #' @export
 testExec = function(instruction) {
 	eval(parse(text=instruction))
@@ -169,6 +170,7 @@ testExec = function(instruction) {
 #' Just sets the cacheDir to the default SHARE directory 
 #' (instead of the typical default PROJECT directory)
 #' 
+#' @param ... Parameters passed to simpleCache().
 #' @export
 simpleCacheShared = function(...) {
 	simpleCache(..., cacheDir=getOption("SHARE.RCACHE.DIR"))
@@ -177,7 +179,8 @@ simpleCacheShared = function(...) {
 #' Helper alias for loading caches into the global environment.
 #' simpleCache normally loads variables into the calling environment; this
 #' ensures that the variables are loaded in the global environment.
-#' 
+#'
+#' @param ... Parameters passed to simpleCache().
 #' @export
 simpleCacheGlobal = function(...) {
 	simpleCache(..., loadEnvir=globalenv());
@@ -185,6 +188,7 @@ simpleCacheGlobal = function(...) {
 
 #' Helper alias for loading shared caches into the global environment.
 #' 
+#' @param ... Parameters passed to simpleCache().
 #' @export
 simpleCacheSharedGlobal = function(...) {
 	simpleCache(..., cacheDir=getOption("SHARE.RCACHE.DIR"), loadEnvir=globalenv());
@@ -198,8 +202,22 @@ simpleCacheSharedGlobal = function(...) {
 #' BETA -- not finished.
 #' TODO -- update with searchEnvir feature of simpleCache.
 #'
+#' @param object Name of cache.
+#' @param url Web location of the text file to cache.
+#' @param env See documentation at simpleCache()
+#' @param reload See documentation at simpleCache()
+#' @param recreate See documentation at simpleCache()
+#' @param noload See documentation at simpleCache()
+#' @param cacheDir See documentation at simpleCache()
+#' @param cacheSubDir See documentation at simpleCache()
+#' @param loadEnvir See documentation at simpleCache()
+#' @param assignToVariable See documentation at simpleCache()
 #' @export
 downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir="download", loadEnvir=parent.frame(), assignToVariable=NULL) {
+
+	# downloadCache will use data.table's fread function for reading
+	# in downloads:
+	requireNamespace(data.table)
 	if(!is.null(cacheSubDir)) {
 		cacheDir=paste0(cacheDir, cacheSubDir);
 	}
@@ -218,7 +236,7 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, no
 		return(get(object));
 	} else if(file.exists(cacheFile) & !recreate & !noload) {
 		message("::Loading cache::\t", cacheFile);
-		ret = fread(cacheFile);
+		ret = data.table::fread(cacheFile);
 	} else if(file.exists(cacheFile) & !recreate) {
 		message("::Cache exists (no load)::\t", cacheFile);
 		return (NULL);
