@@ -26,6 +26,7 @@ install.packages(packageFolder, repos=NULL)
 `simpleCache` comes with a single primary function that will do almost everything you need. I have produced some [R vignettes](vignettes/) to get you started. 
 
 * [An introduction to simpleCache](vignettes/simpleCacheIntroduction.Rmd)
+* [Sharing caches across projects](vignettes/sharingCaches.Rmd)
 
 --------------------------------------------------------------------------------
 ### simpleCache Philosophy

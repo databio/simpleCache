@@ -1,0 +1,22 @@
+---
+title: "Sharing caches across projects"
+author: "Nathan Sheffield"
+date: "`r Sys.Date()`"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Sharing caches across projects}
+output: knitr:::html_vignette
+---
+
+# Sharing caches across projects
+
+By default, `simpleCache` will store its caches for your project in the `RCACHE.DIR` global option. This is designed to be a project-specific directory, so you I have a different RCache dir for each of my projects. Sometimes, though, I want to share caches across projects, and so it's useful to have a definition of a shared cache directory. I think of this as a general resource. For instance, I use this to store the location of all CpGs in the human genome, which I use repeatedely in many projects.
+
+To solve this problem, `simpleCache` uses a second global option, `SHARE.RCACHE.DIR`, which you can access with the convenience setter `setSharedCacheDir()`. Then, you use `simpleCache` as normal but with the additional parameter of cacheDir, or the convenience alias `simpleCacheShared()`, as outlined below:
+
+```{r Try it out}
+library(simpleCache)
+setSharedCacheDir("sharedRCache/")
+simpleCacheShared("normSample", "rnorm(1e7, 0,1)", recreate=TRUE)
+simpleCacheShared("normSample", "rnorm(1e7, 0,1)")
+```
