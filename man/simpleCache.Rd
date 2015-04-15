@@ -11,7 +11,7 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   cacheDir = getOption("RCACHE.DIR"), cacheSubDir = NULL, timer = FALSE,
   buildDir = getOption("RBUILD.DIR"), assignToVariable = NULL,
   loadEnvir = parent.frame(), searchEnvir = getOption("SIMPLECACHE.ENV"),
-  slurmParams = NULL, ignoreLock = FALSE)
+  slurmParams = NULL, ignoreLock = FALSE, parse = NULL)
 }
 \arguments{
 \item{cacheName}{Unique name for the cache. Be careful.}
@@ -47,6 +47,11 @@ RBUILD.DIR global option.}
 \item{slurmParams}{**EXPERIMENTAL FEATURE** a list with parameter settings for SLURM submission. By default, this is NULL, meaning the cache will be created in the current R session. If you provide a slurmParams object, simpleCache assumes you want to submit a job to the cluster instead.}
 
 \item{ignoreLock}{internal parameter used for slurm submission; don't touch.}
+
+\item{parse}{By default, simpleCache will guess whether you want to
+parse the instruction, based on whether it is quoted. You can overwrite
+the guess with this parameter; but this may disappear in the future. In
+general, you should note quote, but use {} around your instructions.}
 }
 \description{
 simpleCache provides a function (simpleCache())

@@ -37,6 +37,8 @@ slurm job. To be used with getSlurmParams for ease.
 }
 \examples{
 slurmParams = getSlurmParams(mem="6000", cores="2", hpcFolder="~")
-with(slurmParams, buildSlurmScript("1+1", preamble, submit, hpcFolder, jobName, mem, cores, partition, timeLimit, sourceProjectInit))
+with(slurmParams,
+buildSlurmScript("1+1", preamble, submit, hpcFolder, jobName, mem, cores,
+partition, timeLimit, sourceProjectInit))
 }
 

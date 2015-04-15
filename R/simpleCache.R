@@ -54,8 +54,25 @@ NULL
 #' @param buildDir Location of Build files (files with instructions for use
 #'		If the instructions argument is not provided). Defaults to
 #'		RBUILD.DIR global option.
+#' @param parse By default, simpleCache will guess whether you want to
+#' parse the instruction, based on whether it is quoted. You can overwrite
+#' the guess with this parameter; but this may disappear in the future. In
+#' general, you should note quote, but use {} around your instructions.
 #' @export
-simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"), slurmParams=NULL, ignoreLock=FALSE) {
+simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"), slurmParams=NULL, ignoreLock=FALSE, parse=NULL) {
+	# Because R evaluates arguments lazily (only when they are used),
+	# it will not evaluate the instruction if I first wrap it in a
+	# primitive substitute call. Then I can evaluate conditionally
+	# (if the cache needs to be recreated)
+	instruction = substitute(instruction)
+	if (is.null(parse)) {
+		if ("character" %in% class(instruction)) {
+			parse=TRUE;
+			#message("Detected a character instruction; consider wrapping in {} instead of quotes.");
+		} else {
+			parse=FALSE;
+		}
+	}
 	if(!is.null(cacheSubDir)) {
 		cacheDir=paste0(cacheDir, cacheSubDir);
 	}
@@ -125,7 +142,11 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 				if (timer) { tic(); }
 				if (is.null(slurmParams)) {
 					#tryCatch(
-					ret = eval(parse(text=instruction));	
+					if (parse) {
+						ret = eval(parse(text=instruction));	
+					} else {
+						ret = eval( instruction )
+					}
 				} else {
 					#submit to slurm!
 					message("Submitting job to cluster");
@@ -141,7 +162,11 @@ with(slurmParams, buildSlurmScript(simpleCacheCode, preamble, submit, hpcFolder,
 				if (timer) { toc(); }
 			} else {
 				if (timer) { tic(); }
-				ret = with(buildEnvir, eval(parse(text=instruction)));
+				if (parse) {
+					ret = with(buildEnvir, eval(parse(text=instruction)));
+				} else {
+					ret = with(buildEnvir, eval(instruction))
+				}
 				if (timer) { toc(); }
 			}
 		}

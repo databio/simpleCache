@@ -19,14 +19,15 @@ But before we start creating caches, it's important to tell `simpleCache` where 
 ```{r Try it out}
 library(simpleCache)
 setCacheDir("~")
-simpleCache("normSample", "rnorm(1e7, 0,1)", recreate=TRUE)
-simpleCache("normSample", "rnorm(1e7, 0,1)")
+simpleCache("normSample", { rnorm(1e7, 0,1) }, recreate=TRUE)
+simpleCache("normSample", { rnorm(1e7, 0,1) })
 ```
+ refreshPackage("simpleCache", "github/")
 
 One advantage of simpleCache over the default `save` and `load()` functions in base R is that we now require only a single function; `simpleCache()` handles both saving and loading. By default, the object will be loaded into a variable with the same name as the cache. You can change this behavior like so:
 
 ```{r}
-simpleCache("normSample", "rnorm(1e7, 0,1)", assignTo="mySamp")
+simpleCache("normSample", { rnorm(1e7, 0,1) }, assignTo="mySamp")
 ```
 
 After doing both of these commands, we have both `normSample` and `mySamp` in the workspace, and these objects are identical:
@@ -46,7 +47,7 @@ If you want to record how long it takes to create a new cache, you can set `TIME
 ```{r}
 for (i in 1:5) {
 	cacheName = paste0("normSample_", i);
-	simpleCache(cacheName, "rnorm(1e6, 0,1)", noload=TRUE, recreate=TRUE, timer=TRUE)
+	simpleCache(cacheName, { rnorm(1e6, 0,1) }, noload=TRUE, recreate=TRUE, timer=TRUE)
 }
 ```
 
