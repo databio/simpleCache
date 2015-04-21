@@ -5,6 +5,7 @@
 #' 
 #' @references \url{http://github.com/sheffien}
 ## @import if you import any packages; here.
+#' @import data.table
 #' @docType package
 #' @name simpleCache
 #' @author Nathan Sheffield
@@ -58,8 +59,13 @@ NULL
 #' parse the instruction, based on whether it is quoted. You can overwrite
 #' the guess with this parameter; but this may disappear in the future. In
 #' general, you should note quote, but use {} around your instructions.
+#' @param nofail By default, simpleCache throws an error if the instructions
+#' fail. Use this option to convert this error into a warning. No cache
+#' will be created, but simpleCache will not then hard-stop your processing.
+#' This is useful, for example, if you are creating a bunch of caches and it's
+#' ok if some of them do not complete.
 #' @export
-simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"), slurmParams=NULL, ignoreLock=FALSE, parse=NULL) {
+simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"), slurmParams=NULL, ignoreLock=FALSE, parse=NULL, nofail=FALSE) {
 	# Because R evaluates arguments lazily (only when they are used),
 	# it will not evaluate the instruction if I first wrap it in a
 	# primitive substitute call. Then I can evaluate conditionally
@@ -104,6 +110,8 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 			break;
 		}
 	} #for
+	
+	ret = NULL; # The default; in case the cache construction fails.
 
 	if(cacheExists & !reload & !recreate) {
 		message("::Object exists (in ", cacheWhere, ")::\t", cacheName);
@@ -124,6 +132,9 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 		return (NULL);
 	} else {
 		message("::Creating cache::\t", cacheFile);
+
+		tryCatch( { # Intercept any errors with creating this cache.
+
 		if(is.null(instruction)) {
 				if (is.null(buildDir)) {
 					stop("::Error::\tIf you do not provide an instruction argument, you must set global option RBUILD.DIR with setCacheBuildDir, or specify a buildDir parameter directly to simpleCache().");
@@ -141,12 +152,13 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 			if (is.null(buildEnvir)) {
 				if (timer) { tic(); }
 				if (is.null(slurmParams)) {
-					#tryCatch(
+					
 					if (parse) {
 						ret = eval(parse(text=instruction));	
 					} else {
 						ret = eval( instruction )
 					}
+
 				} else {
 					#submit to slurm!
 					message("Submitting job to cluster");
@@ -170,6 +182,9 @@ with(slurmParams, buildSlurmScript(simpleCacheCode, preamble, submit, hpcFolder,
 				if (timer) { toc(); }
 			}
 		}
+		# tryCatch
+		}, error = function(e) { if (nofail) warning(e) else stop(e) })
+
 		if (submitted=="slurm") {
 			#message("Job submitted to Slurm; check for cache.")
 			return();
@@ -186,6 +201,7 @@ with(slurmParams, buildSlurmScript(simpleCacheCode, preamble, submit, hpcFolder,
 	if (noload) { rm(ret); gc(); return(); }
 	if(is.null(assignToVariable)) { assignToVariable=cacheName; }
 	assign(assignToVariable, ret, envir=loadEnvir);
+				
 	#return(); #used to return ret, but not any more
 }
 

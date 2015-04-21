@@ -5,8 +5,8 @@ Title: A Simple Package for Caching R Objects
 Description: An R package for caching results.
 Author: Nathan Sheffield <http://www.nathansheffield.com>
 Maintainer: Nathan Sheffield <sheffien@github.com>
-Suggests: knitr, data.table,
-    testthat
+Imports: data.table
+Suggests: knitr, testthat
 VignetteBuilder: knitr
 License: GPL
 URL: http://www.github.com/sheffien/simpleCache
