@@ -14,7 +14,7 @@ output: knitr:::html_vignette
 
 The workhorse function of `simpleCache` is the eponymous `simpleCache()`, which in the simplest case requires just two parameters: a cache name, and an instruction string. The cache name should be considered unique and its underlying object immutable, while the instruction is the `R` code that generates the object you wish to cache.
 
-But before we start creating caches, it's important to tell `simpleCache` where to store the caches? SimpleCache sets a global variable (`RCACHE.DIR`) for caches, and provides a setter function (`setCacheDir()`) to change this. To get started, choose a cache directory, and generate some random data. Use the `recreate` flag to ensure that the cache is produced and overwritten even if it already exists:
+But before we start creating caches, it's important to tell `simpleCache` where to store the caches. SimpleCache sets a global variable (`RCACHE.DIR`) for caches, and provides a setter function (`setCacheDir()`) to change this. To get started, choose a cache directory, and generate some random data. Use the `recreate` flag to ensure that the cache is produced and overwritten even if it already exists:
 
 ```{r Try it out}
 library(simpleCache)
@@ -22,7 +22,7 @@ setCacheDir("~")
 simpleCache("normSample", { rnorm(1e7, 0,1) }, recreate=TRUE)
 simpleCache("normSample", { rnorm(1e7, 0,1) })
 ```
- refreshPackage("simpleCache", "github/")
+
 
 One advantage of simpleCache over the default `save` and `load()` functions in base R is that we now require only a single function; `simpleCache()` handles both saving and loading. By default, the object will be loaded into a variable with the same name as the cache. You can change this behavior like so:
 
