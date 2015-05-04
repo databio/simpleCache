@@ -7,7 +7,8 @@ slurm job. To be used with getSlurmParams for ease.}
 \usage{
 buildSlurmScript(rcode, preamble = "", submit = FALSE,
   hpcFolder = "slurm", jobName = "test", mem = "4000", cores = "1",
-  partition = "develop", timeLimit = "02:00:00", sourceProjectInit = TRUE)
+  partition = "develop", timeLimit = "02:00:00",
+  sourceProjectInit = FALSE)
 }
 \arguments{
 \item{rcode}{R code to run on the cluster.}

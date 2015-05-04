@@ -14,7 +14,7 @@
 #' @export
 #' @examples
 #' slurmParam = getSlurmParams(mem="6000", cores="2")
-getSlurmParams = function(preamble="", submit=TRUE, hpcFolder="slurm", jobName="test", mem="4000", cores="5", partition="develop", timeLimit="02:00:00", sourceProjectInit=TRUE) {
+getSlurmParams = function(preamble="", submit=TRUE, hpcFolder="slurm", jobName="test", mem="4000", cores="5", partition="develop", timeLimit="02:00:00", sourceProjectInit=FALSE) {
 	slurmSettings=list();
 	slurmSettings$preamble		=preamble
 	slurmSettings$submit			=submit
@@ -49,7 +49,37 @@ getSlurmParams = function(preamble="", submit=TRUE, hpcFolder="slurm", jobName="
 #' buildSlurmScript("1+1", preamble, submit, hpcFolder, jobName, mem, cores,
 #' partition, timeLimit, sourceProjectInit))
 
-buildSlurmScript = function(rcode, preamble="", submit=FALSE, hpcFolder="slurm", jobName="test", mem="4000", cores="1", partition="develop", timeLimit="02:00:00", sourceProjectInit=TRUE) {
+buildSlurmScript = function(rcode, preamble="", submit=FALSE, hpcFolder="slurm", jobName="test", mem="4000", cores="1", partition="develop", timeLimit="02:00:00", sourceProjectInit=FALSE) {
+	#preamble = substitute(preamble)
+	#rcode = substitute(rcode)
+	message("class1:",  class(preamble) )
+	# substitute first to prevent the code from being
+	# evaluated; followed by deparse to convert the expression
+	# back into a string so it can be put in a submit script.
+	
+	if ("call" %in% class(preamble)) {
+		preamble = eval(preamble)
+	}
+	if ("name" %in% class(preamble)) {
+		preamble = eval(preamble)
+	}
+	if ("{" %in% class(preamble)) {
+		preamble = paste0(deparse(preamble), collapse="\n")
+	}
+
+
+	if ("call" %in% class(rcode)) {
+		rcode = eval(rcode)
+	}
+	if ("name" %in% class(rcode)) {
+		rcode = eval(rcode)
+	}
+	if ("{" %in% class(rcode)) {
+
+		rcode = paste0(deparse(rcode), collapse="\n")
+	} 
+	message( "class:", class(preamble) )
+
 	if (! file.exists(paste0(hpcFolder, "/")) ) {
 		stop(paste0(hpcFolder, " is not a directory"));
 	}
@@ -59,10 +89,10 @@ buildSlurmScript = function(rcode, preamble="", submit=FALSE, hpcFolder="slurm",
 	} else {
 		spi = "";
 	}
-	rcode = paste0(preamble, "\n", rcode);
+	rcodeChar = paste0(preamble, "\n", rcode, collapse=" ");
 	#escape $; otherwise, bash will interpret them as bash variables,
 	#though they are embedded in R script within bash.
-	rcode= gsub("\\$", "\\\\$", rcode);
+	rcodeChar= gsub("\\$", "\\\\$", rcodeChar);
 
 	script = paste0( "#!/bin/bash
 #SBATCH --job-name=", jobName, "
@@ -80,7 +110,7 @@ buildSlurmScript = function(rcode, preamble="", submit=FALSE, hpcFolder="slurm",
 "echo 'Start time:' `date +'%Y-%m-%d %T'`\n", 
 "R --no-save<<END\n",
 spi,
-rcode,
+rcodeChar,
 "\nsessionInfo()\n",
 "\nEND\n",
 "echo 'End time:' `date +'%Y-%m-%d %T'`\n"); #end paste

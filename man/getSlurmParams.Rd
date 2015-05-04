@@ -6,7 +6,7 @@
 \usage{
 getSlurmParams(preamble = "", submit = TRUE, hpcFolder = "slurm",
   jobName = "test", mem = "4000", cores = "5", partition = "develop",
-  timeLimit = "02:00:00", sourceProjectInit = TRUE)
+  timeLimit = "02:00:00", sourceProjectInit = FALSE)
 }
 \arguments{
 \item{preamble}{R code to be executed before the the instruction}

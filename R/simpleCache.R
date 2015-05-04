@@ -163,7 +163,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 					#submit to slurm!
 					message("Submitting job to cluster");
 					#Build a simpleCache command
-					simpleCacheCode = paste0("simpleCache('", cacheName, "', instruction='", instruction, "', recreate=", recreate, ", ignoreLock=TRUE)");
+					simpleCacheCode = paste0("simpleCache('", cacheName, "', instruction='", paste0(deparse(instruction), collapse="\n"), "', recreate=", recreate, ", cacheDir='", cacheDir,"', ignoreLock=TRUE)");
 					#lock
 					if (slurmParams$jobName=="test") { slurmParams$jobName=cacheName; } #change default job name.			
 					file.create(lockFile);
