@@ -6,6 +6,9 @@
 #' @export
 loadCaches =function(cacheNames, ...) {
 	for (i in 1:length(cacheNames)) {
-		simpleCache(cacheNames[i], ...);
+		# By default, load these caches into the environment that
+		# calls loadCaches (which is the grandparent, n=2, of the call to	
+		# simpleCache.
+		simpleCache(cacheNames[i], loadEnvir=parent.frame(n=2), ...);
 	}
 }
