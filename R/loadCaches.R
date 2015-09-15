@@ -12,3 +12,15 @@ loadCaches =function(cacheNames, ...) {
 		simpleCache(cacheNames[i], loadEnvir=parent.frame(n=2), ...);
 	}
 }
+
+
+#' Show available caches.
+#'
+#' @param cacheSubDir Optional parameter to specify a subdirectory of the cache folder.
+#' @export
+availCaches =function(cacheSubDir="") {
+	list.files(paste0(getOption("RCACHE.DIR"), cacheSubDir))
+}
+
+
+
