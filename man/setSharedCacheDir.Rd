@@ -2,7 +2,7 @@
 % Please edit documentation in R/cacheDirectories.R
 \name{setSharedCacheDir}
 \alias{setSharedCacheDir}
-\title{Sets global variable specifying the default cache directory for simpleCacheShared() calls; this function is simply a helper alias for caching results that will be used across experiments.}
+\title{Sets global variable specifying the default cache directory for simpleCacheShared() calls; this function is simply a helper alias for caching results that will be used across projects.}
 \usage{
 setSharedCacheDir(sharedCacheDir)
 }
@@ -10,6 +10,6 @@ setSharedCacheDir(sharedCacheDir)
 \item{sharedCacheDir}{Directory where shared caches should be stored}
 }
 \description{
-Sets global variable specifying the default cache directory for simpleCacheShared() calls; this function is simply a helper alias for caching results that will be used across experiments.
+Sets global variable specifying the default cache directory for simpleCacheShared() calls; this function is simply a helper alias for caching results that will be used across projects.
 }
 

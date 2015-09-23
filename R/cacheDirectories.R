@@ -12,12 +12,12 @@ setCacheDir = function(cacheDir) {
 	options(RCACHE.DIR=cacheDir); 
 }
 
-#' Sets global variable specifying the default cache directory for simpleCacheShared() calls; this function is simply a helper alias for caching results that will be used across experiments.
+#' Sets global variable specifying the default cache directory for simpleCacheShared() calls; this function is simply a helper alias for caching results that will be used across projects.
 #'
 #' @param sharedCacheDir Directory where shared caches should be stored
 #' @export
 setSharedCacheDir = function(sharedCacheDir) {
-	options(SHARE.RCACHE.DIR=sharedCacheDir); 
+	options(RESOURCES.RCACHE=sharedCacheDir); 
 }
 #' Sets local cache build directory with scripts for building files.
 #'
@@ -30,7 +30,7 @@ setCacheBuildDir = function(cacheBuildDir) {
 #' Views cache dir global variables
 #' @export
 viewCacheDirs = function() {
-	message("SHARE.RCACHE.DIR:\t", getOption("SHARE.RCACHE.DIR"))
+	message("RESOURCES.RCACHE:\t", getOption("RESOURCES.RCACHE"))
 	message("RCACHE.DIR:\t", getOption("RCACHE.DIR"))
 	message("RBUILD.DIR:\t", getOption("RBUILD.DIR"))
 	message("SIMPLECACHE.ENV:\t", getOption("SIMPLECACHE.ENV"))

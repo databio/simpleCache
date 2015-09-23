@@ -223,7 +223,7 @@ testExec = function(instruction) {
 #' @param ... Parameters passed to simpleCache().
 #' @export
 simpleCacheShared = function(...) {
-	simpleCache(..., cacheDir=getOption("SHARE.RCACHE.DIR"))
+	simpleCache(..., cacheDir=getOption("RESOURCES.RCACHE"))
 }
 
 #' Helper alias for loading caches into the global environment.
@@ -241,7 +241,7 @@ simpleCacheGlobal = function(...) {
 #' @param ... Parameters passed to simpleCache().
 #' @export
 simpleCacheSharedGlobal = function(...) {
-	simpleCache(..., cacheDir=getOption("SHARE.RCACHE.DIR"), loadEnvir=globalenv());
+	simpleCache(..., cacheDir=getOption("RESOURCES.RCACHE"), loadEnvir=globalenv());
 }
 
 
