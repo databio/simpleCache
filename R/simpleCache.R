@@ -219,11 +219,16 @@ testExec = function(instruction) {
 #' Helper alias for caching across experiments/people.
 #' Just sets the cacheDir to the default SHARE directory 
 #' (instead of the typical default PROJECT directory)
+
 #' 
 #' @param ... Parameters passed to simpleCache().
 #' @export
 simpleCacheShared = function(...) {
-	simpleCache(..., cacheDir=getOption("RESOURCES.RCACHE"))
+	# Since this is a function calling this, I have to set the loadEnvir here,
+	# otherwise by default simpleCache will load the data into *this* environment,
+	# which then gets prompty discarded -- not good. The downside is that this
+	# function now couldn't take a custom loadEnvir.
+	simpleCache(..., cacheDir=getOption("RESOURCES.RCACHE"), loadEnvir=parent.frame())
 }
 
 #' Helper alias for loading caches into the global environment.
