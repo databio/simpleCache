@@ -121,7 +121,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 	} else if (file.exists(lockFile) & !ignoreLock) {
 		message("::Cache processing (lock file exists)::\t", lockFile)
 		#check for slurm log...
-		if (!is.null(slurmParams)) { slurmLog = paste0(slurmParams$hpcFolder, "/", cacheName, ".log"); message(slurmLog); tail(readLines(slurmLog), 10) }
+		if (!is.null(slurmParams)) { slurmLog = paste0(slurmParams$hpcFolder, "/", cacheName, ".log"); message(slurmLog); utils::tail(readLines(slurmLog), 10) }
 
 		return ();
 	} else if(file.exists(cacheFile) & !recreate & !noload) {
