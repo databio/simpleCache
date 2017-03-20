@@ -13,7 +13,7 @@
 #' @param sourceProjectInit Should I also source the projectInit first? Default: TRUE)
 #' @export
 #' @examples
-#' \dontrun {
+#' \dontrun{
 #' slurmParam = getSlurmParams(mem="6000", cores="2")
 #' }
 getSlurmParams = function(preamble="", submit=TRUE, hpcFolder="slurm", jobName="test", mem="4000", cores="5", partition="develop", timeLimit="02:00:00", sourceProjectInit=FALSE) {
@@ -46,10 +46,12 @@ getSlurmParams = function(preamble="", submit=TRUE, hpcFolder="slurm", jobName="
 #' @param sourceProjectInit Should I also source the projectInit first? Default: TRUE)
 #' @export
 #' @examples
+#' \dontrun{
 #' slurmParams = getSlurmParams(mem="6000", cores="2", hpcFolder="~")
 #' with(slurmParams, 
 #' buildSlurmScript("1+1", preamble, submit, hpcFolder, jobName, mem, cores,
 #' partition, timeLimit, sourceProjectInit))
+#' }
 
 buildSlurmScript = function(rcode, preamble="", submit=FALSE, hpcFolder="slurm", jobName="test", mem="4000", cores="1", partition="develop", timeLimit="02:00:00", sourceProjectInit=FALSE) {
 	#preamble = substitute(preamble)

@@ -37,9 +37,11 @@ Given arguments from a slurmParams object, creates and (possibly) submits a
 slurm job. To be used with getSlurmParams for ease.
 }
 \examples{
+\dontrun{
 slurmParams = getSlurmParams(mem="6000", cores="2", hpcFolder="~")
 with(slurmParams, 
 buildSlurmScript("1+1", preamble, submit, hpcFolder, jobName, mem, cores,
 partition, timeLimit, sourceProjectInit))
+}
 }
 
