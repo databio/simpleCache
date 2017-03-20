@@ -88,6 +88,6 @@ because of lexical scope, you may need to pass some environment variables you us
 Nathan Sheffield
 }
 \references{
-\url{https://github.com/sheffien}
+\url{https://github.com/nsheff/}
 }
 
