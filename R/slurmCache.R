@@ -13,7 +13,9 @@
 #' @param sourceProjectInit Should I also source the projectInit first? Default: TRUE)
 #' @export
 #' @examples
+#' \dontrun {
 #' slurmParam = getSlurmParams(mem="6000", cores="2")
+#' }
 getSlurmParams = function(preamble="", submit=TRUE, hpcFolder="slurm", jobName="test", mem="4000", cores="5", partition="develop", timeLimit="02:00:00", sourceProjectInit=FALSE) {
 	slurmSettings=list();
 	slurmSettings$preamble		=preamble

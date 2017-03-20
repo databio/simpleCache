@@ -32,6 +32,8 @@ submission files)}
 Returns a slurm parameterization object for use in simpleCache();
 }
 \examples{
+\dontrun {
 slurmParam = getSlurmParams(mem="6000", cores="2")
+}
 }
 
