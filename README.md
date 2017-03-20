@@ -14,7 +14,7 @@ Install the development version directly from github with devtools
 
 ```
 require(devtools)
-install_github("sheffien/simpleCache") #public
+install_github("nsheff/simpleCache") #public
 ```
 
 To install a local copy:
