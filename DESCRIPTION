@@ -1,6 +1,6 @@
 Package: simpleCache
 Version: 0.0.1
-Date: 2015-04
+Date: 2017-03-20
 Title: A Simple Package for Caching R Objects
 Description: An R package for caching results.
 Author: c(person("Nagraj", "VP", email = "vpnagraj@virginia.edu", role =
