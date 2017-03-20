@@ -3,7 +3,7 @@
 #'
 #' simpleCache provides a function (simpleCache())
 #' 
-#' @references \url{http://github.com/sheffien}
+#' @references \url{https://github.com/sheffien}
 ## @import if you import any packages; here.
 #' @import data.table
 #' @docType package
