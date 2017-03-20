@@ -2,7 +2,7 @@
 
 * local OS X install, R 3.3.2
 * Ubuntu 12.04, R 3.3.2 via TRAVIS CI
-* win-builder
+* win-builder 
 
 ## R CMD check results
 
