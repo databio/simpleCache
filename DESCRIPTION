@@ -1,12 +1,18 @@
 Package: simpleCache
 Version: 0.0.1
-Date: 2015-04
+Date: 2017-03-20
 Title: A Simple Package for Caching R Objects
 Description: An R package for caching results.
-Author: Nathan Sheffield <http://www.nathansheffield.com>
+Author: c(person("Nagraj", "VP", email = "vpnagraj@virginia.edu", role =
+    c("aut")), person("Sheffield", "Nathan", email = "sheffien@github.com", role =
+    c("aut", "cre")))
 Maintainer: Nathan Sheffield <sheffien@github.com>
-Imports: data.table
-Suggests: knitr, testthat
+Imports:
+    data.table
+Suggests:
+    knitr,
+    testthat
 VignetteBuilder: knitr
 License: GPL
 URL: http://www.github.com/sheffien/simpleCache
+RoxygenNote: 5.0.1
