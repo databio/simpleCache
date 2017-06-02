@@ -12,4 +12,3 @@ availCaches(cacheSubDir = "")
 \description{
 Show available caches.
 }
-

@@ -16,4 +16,3 @@ Helper alias for loading caches into the global environment.
 simpleCache normally loads variables into the calling environment; this
 ensures that the variables are loaded in the global environment.
 }
-

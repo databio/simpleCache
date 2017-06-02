@@ -15,4 +15,3 @@ can be 'elapsed', 'user.self', or 'sys.self'}
 \description{
 Start a timer
 }
-

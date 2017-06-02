@@ -64,8 +64,13 @@ NULL
 #' will be created, but simpleCache will not then hard-stop your processing.
 #' This is useful, for example, if you are creating a bunch of caches and it's
 #' ok if some of them do not complete.
+#' @param batch Logical indicating whether or not to perform caching operation as a batch process; Default is \code{FALSE}
+#' @param batchMethod Character vector indicating the method for batch processing
+#' @param batchDir Location of Build files (files with instructions for use
+#'		If the instructions argument is not provided). Defaults to
+#'		RBUILD.DIR global option.
 #' @export
-simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"), slurmParams=NULL, ignoreLock=FALSE, parse=NULL, nofail=FALSE) {
+simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE, buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL, loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"), slurmParams=NULL, ignoreLock=FALSE, parse=NULL, nofail=FALSE, batch = FALSE, batchMethod = NULL, batchDir = NULL) {
 	# Because R evaluates arguments lazily (only when they are used),
 	# it will not evaluate the instruction if I first wrap it in a
 	# primitive substitute call. Then I can evaluate conditionally
@@ -89,7 +94,8 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL, reload=FALS
 	if(! "character" %in% class(cacheName)) {
 		stop("simpleCache expects the cacheName variable to be a character vector.");
 	}
-
+  
+	
 	cacheDir=enforceTrailingSlash(cacheDir);
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir, recursive=TRUE);
@@ -201,8 +207,15 @@ with(slurmParams, buildSlurmScript(simpleCacheCode, preamble, submit, hpcFolder,
 	if (noload) { rm(ret); gc(); return(); }
 	if(is.null(assignToVariable)) { assignToVariable=cacheName; }
 	assign(assignToVariable, ret, envir=loadEnvir);
-				
+	
 	#return(); #used to return ret, but not any more
+
+	if (batch) {
+	  
+	  batchWrap(cacheName, instruction, cacheDir, batchDir)
+	  
+	}
+	
 }
 
 #' Debugging function... I can probably delete it.

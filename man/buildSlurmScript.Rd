@@ -44,4 +44,3 @@ buildSlurmScript("1+1", preamble, submit, hpcFolder, jobName, mem, cores,
 partition, timeLimit, sourceProjectInit))
 }
 }
-

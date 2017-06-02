@@ -9,4 +9,3 @@ viewCacheDirs()
 \description{
 Views cache dir global variables
 }
-

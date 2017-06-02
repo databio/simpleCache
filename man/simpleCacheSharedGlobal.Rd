@@ -12,4 +12,3 @@ simpleCacheSharedGlobal(...)
 \description{
 Helper alias for loading shared caches into the global environment.
 }
-

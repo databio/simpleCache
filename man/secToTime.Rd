@@ -16,4 +16,3 @@ This function takes a time in seconds and converts it to a more
 human-readable format, showing hours, minutes, or seconds, depending
 on how long the time is. Used by my implementation of tic()/toc().
 }
-

@@ -16,4 +16,3 @@ append a new Environment name (a character string) to a global option
 which is a vector of such names. SimpleCache will search all of these
 environments to check if a cache is previously loaded, before reloading it.
 }
-

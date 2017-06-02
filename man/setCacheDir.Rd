@@ -12,4 +12,3 @@ setCacheDir(cacheDir)
 \description{
 Sets a global variable specifying the default cache directory for simpleCache() calls.
 }
-

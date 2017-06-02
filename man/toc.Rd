@@ -9,4 +9,3 @@ toc()
 \description{
 Check the time since the current timer was started with tic();
 }
-

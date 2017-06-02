@@ -35,4 +35,3 @@ Given a URL, this function will download the file and cache it, or load it if it
 BETA -- not finished.
 TODO -- update with searchEnvir feature of simpleCache.
 }
-

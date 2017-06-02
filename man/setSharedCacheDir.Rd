@@ -12,4 +12,3 @@ setSharedCacheDir(sharedCacheDir)
 \description{
 Sets global variable specifying the default cache directory for simpleCacheShared() calls; this function is simply a helper alias for caching results that will be used across projects.
 }
-

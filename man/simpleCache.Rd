@@ -4,6 +4,7 @@
 \name{simpleCache}
 \alias{simpleCache}
 \alias{simpleCache-package}
+\alias{simpleCache}
 \title{Provides intuitive functions for caching R objects, encouraging faster reproducible and restartable R analysis}
 \usage{
 simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
@@ -11,7 +12,8 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   cacheDir = getOption("RCACHE.DIR"), cacheSubDir = NULL, timer = FALSE,
   buildDir = getOption("RBUILD.DIR"), assignToVariable = NULL,
   loadEnvir = parent.frame(), searchEnvir = getOption("SIMPLECACHE.ENV"),
-  slurmParams = NULL, ignoreLock = FALSE, parse = NULL, nofail = FALSE)
+  slurmParams = NULL, ignoreLock = FALSE, parse = NULL, nofail = FALSE,
+  batch = FALSE, batchMethod = NULL, batchDir = NULL)
 }
 \arguments{
 \item{cacheName}{Unique name for the cache. Be careful.}
@@ -58,6 +60,14 @@ fail. Use this option to convert this error into a warning. No cache
 will be created, but simpleCache will not then hard-stop your processing.
 This is useful, for example, if you are creating a bunch of caches and it's
 ok if some of them do not complete.}
+
+\item{batch}{Logical indicating whether or not to perform caching operation as a batch process; Default is \code{FALSE}}
+
+\item{batchMethod}{Character vector indicating the method for batch processing}
+
+\item{batchDir}{Location of Build files (files with instructions for use
+If the instructions argument is not provided). Defaults to
+RBUILD.DIR global option.}
 }
 \description{
 simpleCache provides a function (simpleCache())
@@ -84,10 +94,9 @@ You can force it to load the cached version instead with "reload"
 Because R uses lexical scoping and not dynamic scoping...
 because of lexical scope, you may need to pass some environment variables you use in your instruction (function call). You can use this using the parameter env (just provide a list of named variables).
 }
-\author{
-Nathan Sheffield
-}
 \references{
 \url{https://github.com/nsheff/}
 }
-
+\author{
+Nathan Sheffield
+}

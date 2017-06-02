@@ -27,4 +27,3 @@ another use case: you have a complicated set of instructions (too
 much to pass as the instruction argument to simpleCache), so you could just
 stick a call to storeCache at the end.
 }
-

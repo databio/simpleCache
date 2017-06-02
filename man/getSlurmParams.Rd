@@ -36,4 +36,3 @@ Returns a slurm parameterization object for use in simpleCache();
 slurmParam = getSlurmParams(mem="6000", cores="2")
 }
 }
-

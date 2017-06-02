@@ -69,6 +69,17 @@ toc <- function() {
 	invisible(toc)
 }
 
+batchWrap = function(cacheName, instruction, cacheDir, batchDir) {
+  
+  tmp = batchtools::makeRegistry(file.dir = batchDir, make.default = FALSE)
+  
+  args = list(cacheName = cacheName, instruction = instruction, cacheDir = cacheDir)
+  
+  ids = batchtools::batchMap(fun = simpleCache, args = args, reg = tmp)   
+  
+  batchtools::submitJobs(ids = ids, reg = tmp)
+  
+}
 
 
 

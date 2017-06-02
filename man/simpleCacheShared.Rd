@@ -16,4 +16,3 @@ Helper alias for caching across experiments/people.
 Just sets the cacheDir to the default SHARE directory 
 (instead of the typical default PROJECT directory)
 }
-
