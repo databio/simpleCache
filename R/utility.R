@@ -69,9 +69,25 @@ toc <- function() {
 	invisible(toc)
 }
 
-batchWrap = function(cacheName, instruction, cacheDir, batchDir) {
+#' Wrapper function fopr batchtools integration
+batchWrap = function(cacheName, instruction, cacheDir, batchDir, batchMethod) {
   
-  tmp = batchtools::makeRegistry(file.dir = batchDir, make.default = FALSE)
+  batchSwitch = function(batchMethod) {
+    
+    switch(batchMethod,
+           interactive = {
+             tmp = batchtools::makeRegistry(file.dir = batchDir, make.default = FALSE); 
+             return(tmp)
+           },
+           slurm = {
+             tmp = batchtools::makeRegistry(NA); 
+             tmp$cluster.functions = batchtools::makeClusterFunctionsSlurm(template = system.file("templates/slurm_simple.tmpl", package = "batchtools")); 
+             return(tmp)
+           }
+    )
+  }
+  
+  tmp = batchSwitch(batchMethod)
   
   args = list(cacheName = cacheName, instruction = instruction, cacheDir = cacheDir)
   
