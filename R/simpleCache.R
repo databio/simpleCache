@@ -226,6 +226,12 @@ with(slurmParams, buildSlurmScript(simpleCacheCode, preamble, submit, hpcFolder,
 ################################################################################
 # Helper aliases for common options
 
+#' Debugging function... I can probably delete it.
+#' @param instruction R code to run.
+#' @export
+testExec = function(instruction) {
+	eval(parse(text=instruction))
+}
 
 #' Creates or loads caches in a shared directory
 #'
