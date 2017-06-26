@@ -19,7 +19,7 @@ library(simpleCache)
 setCacheDir(getwd())
 
 registry = batchtools::makeRegistry(NA)
-templateFile = system.file("templates/slurm-advanced.tmpl", package = "simpleCache"))
+templateFile = system.file("templates/slurm-advanced.tmpl", package = "simpleCache")
 registry$cluster.functions = batchtools::makeClusterFunctionsSlurm(
   template = templateFile)
 registry
