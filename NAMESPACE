@@ -2,9 +2,7 @@
 
 export(addCacheSearchEnvironment)
 export(availCaches)
-export(buildSlurmScript)
 export(downloadCache)
-export(getSlurmParams)
 export(loadCaches)
 export(resetCacheSearchEnvironment)
 export(setCacheBuildDir)
