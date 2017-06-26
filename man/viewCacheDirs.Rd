@@ -2,10 +2,10 @@
 % Please edit documentation in R/cacheDirectories.R
 \name{viewCacheDirs}
 \alias{viewCacheDirs}
-\title{Views cache dir global variables}
+\title{View cache directories}
 \usage{
 viewCacheDirs()
 }
 \description{
-Views cache dir global variables
+Views cache directory global variables
 }

@@ -2,10 +2,7 @@
 % Please edit documentation in R/storeCache.R
 \name{storeCache}
 \alias{storeCache}
-\title{Sometimes you use significant computational power to create an object,
-but you didn't cache it with simpleCache. Oops, maybe you wish you had, after
-the fact. This function lets you store an object in the environment so
-it could be loaded by future calls to simpleCache.}
+\title{Stores as a cache an already-produced R object}
 \usage{
 storeCache(cacheName, cacheDir = getOption("RCACHE.DIR"),
   cacheSubDir = NULL, recreate = FALSE)
@@ -16,14 +13,20 @@ storeCache(cacheName, cacheDir = getOption("RCACHE.DIR"),
 \item{cacheDir}{The directory where caches are saved (and loaded from).
 Defaults to the global RCACHE.DIR variable}
 
-\item{cacheSubDir}{You can specify a subdirectory within the cacheDir 
+\item{cacheSubDir}{You can specify a subdirectory within the cacheDir
 variable. Defaults to NULL.}
 
-\item{recreate}{forces reconstruction of the cache}
+\item{recreate}{Forces reconstruction of the cache}
 }
 \description{
-This can be used in interactive sessions, but could also be used for
-another use case: you have a complicated set of instructions (too
-much to pass as the instruction argument to simpleCache), so you could just
-stick a call to storeCache at the end.
+Sometimes you use significant computational power to create an object, but
+you didn't cache it with simpleCache. Oops, maybe you wish you had, after the
+fact. This function lets you store an object in the environment so it could
+be loaded by future calls to simpleCache.
+}
+\details{
+This can be used in interactive sessions, but could also be used for another
+use case: you have a complicated set of instructions (too much to pass as the
+instruction argument to simpleCache), so you could just stick a call to
+storeCache at the end.
 }

@@ -8,10 +8,12 @@ Author: c(person("Nagraj", "VP", email = "vpnagraj@virginia.edu", role =
     c("aut", "cre")))
 Maintainer: Nathan Sheffield <sheffien@github.com>
 Imports:
-    data.table, batchtools
+    data.table
 Suggests:
     knitr,
     testthat
+Enhances:
+	batchtools
 VignetteBuilder: knitr
 License: GPL
 URL: http://www.github.com/sheffien/simpleCache

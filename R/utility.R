@@ -14,6 +14,7 @@
 enforceTrailingSlash = function(folder) {
 	enforceEdgeCharacter(folder, appendChar="/");
 }
+
 enforceEdgeCharacter = function(string, prependChar="", appendChar="") {
 	if (string=="" | is.null(string)) {
 		return(string);
@@ -69,19 +70,19 @@ toc <- function() {
 	invisible(toc)
 }
 
-#' Wrapper function fopr batchtools integration
+#' Wrapper function for batchtools integration
 batchWrap = function(cacheName, instruction, cacheDir, batchDir, batchMethod) {
   
   batchSwitch = function(batchMethod) {
     
     switch(batchMethod,
            interactive = {
-             tmp = batchtools::makeRegistry(file.dir = batchDir, make.default = FALSE); 
+             tmp = batchtools::makeRegistry(file.dir = batchDir, make.default = FALSE)
              return(tmp)
            },
            slurm = {
-             tmp = batchtools::makeRegistry(NA); 
-             tmp$cluster.functions = batchtools::makeClusterFunctionsSlurm(template = system.file("templates/slurm_simple.tmpl", package = "batchtools")); 
+             tmp = batchtools::makeRegistry(NA)
+             tmp$cluster.functions = batchtools::makeClusterFunctionsSlurm(template = system.file("templates/slurm_simple.tmpl", package = "batchtools"))
              return(tmp)
            }
     )

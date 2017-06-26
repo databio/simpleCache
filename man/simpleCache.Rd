@@ -5,94 +5,103 @@
 \alias{simpleCache}
 \alias{simpleCache-package}
 \alias{simpleCache}
-\title{Provides intuitive functions for caching R objects, encouraging faster reproducible and restartable R analysis}
+\title{Provides intuitive functions for caching R objects, encouraging faster
+reproducible and restartable R analysis}
 \usage{
 simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   reload = FALSE, recreate = FALSE, noload = FALSE,
   cacheDir = getOption("RCACHE.DIR"), cacheSubDir = NULL, timer = FALSE,
   buildDir = getOption("RBUILD.DIR"), assignToVariable = NULL,
   loadEnvir = parent.frame(), searchEnvir = getOption("SIMPLECACHE.ENV"),
-  slurmParams = NULL, ignoreLock = FALSE, parse = NULL, nofail = FALSE,
-  batch = FALSE, batchMethod = NULL, batchDir = NULL)
+  slurmParams = NULL, parse = NULL, nofail = FALSE,
+  batchRegistry = NULL, batchResources = NULL, pepSettings = NULL,
+  ignoreLock = FALSE)
 }
 \arguments{
 \item{cacheName}{Unique name for the cache. Be careful.}
 
-\item{instruction}{Quoted R code to be evaluated. The returned value of this code is what will be cached under the cacheName.}
+\item{instruction}{Quoted R code to be evaluated. The returned value of this
+code is what will be cached under the cacheName.}
 
-\item{buildEnvir}{You may choose to provide additional variables necessary for evaluating the code in instruction.}
+\item{buildEnvir}{You may choose to provide additional variables necessary
+for evaluating the code in instruction.}
 
 \item{reload}{forces re-loading the cache, even if it exists in the env.}
 
 \item{recreate}{forces reconstruction of the cache}
 
-\item{noload}{noload is useful for: you want to create the caches, but not load them if they aren't there (like a cache creation loop).}
+\item{noload}{noload is useful for: you want to create the caches, but not
+load them if they aren't there (like a cache creation loop).}
 
 \item{cacheDir}{The directory where caches are saved (and loaded from).
 Defaults to the global RCACHE.DIR variable}
 
-\item{cacheSubDir}{You can specify a subdirectory within the cacheDir 
+\item{cacheSubDir}{You can specify a subdirectory within the cacheDir
 variable. Defaults to NULL.}
 
 \item{timer}{Report how long it took to create the cache?}
 
-\item{buildDir}{Location of Build files (files with instructions for use
-If the instructions argument is not provided). Defaults to
-RBUILD.DIR global option.}
+\item{buildDir}{Location of Build files (files with instructions for use If
+the instructions argument is not provided). Defaults to RBUILD.DIR
+global option.}
 
-\item{assignToVariable}{By default, simpleCache assigns the cache to a variable named cacheName; you can overrule that here.}
+\item{assignToVariable}{By default, simpleCache assigns the cache to a
+variable named cacheName; you can overrule that here.}
 
-\item{loadEnvir}{Into which environment would you like to load the variable?}
+\item{loadEnvir}{Into which environment would you like to load the
+variable? Defaults to parent.frame.}
 
-\item{searchEnvir}{a vector of environments to search for the already loaded cache.}
+\item{searchEnvir}{a vector of environments to search for the already loaded
+cache.}
 
-\item{slurmParams}{**EXPERIMENTAL FEATURE** a list with parameter settings for SLURM submission. By default, this is NULL, meaning the cache will be created in the current R session. If you provide a slurmParams object, simpleCache assumes you want to submit a job to the cluster instead.}
-
-\item{ignoreLock}{internal parameter used for slurm submission; don't touch.}
-
-\item{parse}{By default, simpleCache will guess whether you want to
-parse the instruction, based on whether it is quoted. You can overwrite
-the guess with this parameter; but this may disappear in the future. In
-general, you should note quote, but use {} around your instructions.}
+\item{parse}{By default, simpleCache will guess whether you want to parse the
+instruction, based on whether it is quoted. You can overwrite the guess
+with this parameter; but this may disappear in the future. In general,
+you should note quote, but use {} around your instructions.}
 
 \item{nofail}{By default, simpleCache throws an error if the instructions
-fail. Use this option to convert this error into a warning. No cache
-will be created, but simpleCache will not then hard-stop your processing.
-This is useful, for example, if you are creating a bunch of caches and it's
-ok if some of them do not complete.}
+fail. Use this option to convert this error into a warning. No cache will
+be created, but simpleCache will not then hard-stop your processing. This
+is useful, for example, if you are creating a bunch of caches and it's ok
+if some of them do not complete.}
 
-\item{batch}{Logical indicating whether or not to perform caching operation as a batch process; Default is \code{FALSE}}
+\item{batchRegistry}{A batchtools registry object (built with
+batchtools::makeRegistry()). If provided, this cache will be created on
+the cluster using your batchtools configuration}
 
-\item{batchMethod}{Character vector indicating the method for batch processing}
+\item{batchResources}{A list of variables to provide to batchtools for
+cluster resource managers. Used as the `res` argument to
+batchtools::batchMap()}
 
-\item{batchDir}{Location of Build files (files with instructions for use
-If the instructions argument is not provided). Defaults to
-RBUILD.DIR global option.}
+\item{pepSettings}{Experimental untested feature.}
+
+\item{ignoreLock}{internal parameter used for batch job submission; don't
+touch.}
 }
 \description{
 simpleCache provides a function (simpleCache())
 
-Given an R object with a unique name, and instructions for how to make
-that object, use the simpleCache function to cache the object.
-This should be used for computations that take a long time and generate
-a table or something used repeatedly (in other scripts, for example).
-Because it is tied to the object name, there is some danger of causing troubles
-if you misuse the caching system. The object should be considered static.
-You can pass R code that creates the object either as a string to
-the "instruction" parameter (if the code is short), or you can put an R
-script called object.R in the RBUILD.DIR (the name of the file *must* match
-the name of the object it creates *exactly*). If you don't provide instruction,
-the function sources RBUILD.DIR/object.R and caches the result as the object.
-This source file *must* create an object with the same name of the object.
-If you already have an object with the name of the object to load in your
-current environment, this function will not try to reload the object; instead,
-it returns the local object.
-}
-\details{
-In essence, it assumes that this is a static object, which you will not change.
-You can force it to load the cached version instead with "reload"
-Because R uses lexical scoping and not dynamic scoping...
-because of lexical scope, you may need to pass some environment variables you use in your instruction (function call). You can use this using the parameter env (just provide a list of named variables).
+Given an R object with a unique name, and instructions for how to make that
+object, use the simpleCache function to cache the object. This should be used
+for computations that take a long time and generate a table or something used
+repeatedly (in other scripts, for example). Because it is tied to the object
+name, there is some danger of causing troubles if you misuse the caching
+system. The object should be considered static. You can pass R code that
+creates the object either as a string to the "instruction" parameter (if the
+code is short), or you can put an R script called object.R in the RBUILD.DIR
+(the name of the file *must* match the name of the object it creates
+*exactly*). If you don't provide instruction, the function sources
+RBUILD.DIR/object.R and caches the result as the object. This source file
+*must* create an object with the same name of the object. If you already have
+an object with the name of the object to load in your current environment,
+this function will not try to reload the object; instead, it returns the
+local object.
+In essence, it assumes that this is a static object, which you will not
+change. You can force it to load the cached version instead with "reload"
+Because R uses lexical scoping and not dynamic scoping... because of lexical
+scope, you may need to pass some environment variables you use in your
+instruction (function call). You can use this using the parameter env (just
+provide a list of named variables).
 }
 \references{
 \url{https://github.com/nsheff/}
