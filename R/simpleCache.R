@@ -15,28 +15,31 @@ NULL
 ################################################################################
 #' Create a new cache or load a previously created cache.
 #'
-#' Given an R object with a unique name, and instructions for how to make that
-#' object, use the simpleCache function to cache the object. This should be used
-#' for computations that take a long time and generate a table or something used
-#' repeatedly (in other scripts, for example). Because it is tied to the object
-#' name, there is some danger of causing troubles if you misuse the caching
-#' system. The object should be considered static. You can pass R code that
-#' creates the object either as a string to the "instruction" parameter (if the
-#' code is short), or you can put an R script called object.R in the RBUILD.DIR
-#' (the name of the file *must* match the name of the object it creates
-#' *exactly*). If you don't provide instruction, the function sources
+#' Given a unique name for an  R object, and instructions for how to make that
+#' object, use the simpleCache function to create and cache or load the object.
+#' This should be used for computations that take a long time and generate a
+#' table or something used repeatedly (in other scripts, for example). Because
+#' the cache is tied to the object name, there is some danger of causing
+#' troubles if you misuse the caching system. The object should be considered
+#' static. 
+#' 
+#' You should pass a bracketed R code snippet like `{ rnorm(500) }` as the
+#' instruction, and simpleCache will create the object. Alternatively, if the
+#' code to create the cache is large, you can put an R script called object.R in
+#' the RBUILD.DIR (the name of the file *must* match the name of the object it
+#' creates *exactly*). If you don't provide an instruction, the function sources
 #' RBUILD.DIR/object.R and caches the result as the object. This source file
 #' *must* create an object with the same name of the object. If you already have
 #' an object with the name of the object to load in your current environment,
 #' this function will not try to reload the object; instead, it returns the
-#' local object.
-
-#' In essence, it assumes that this is a static object, which you will not
-#' change. You can force it to load the cached version instead with "reload"
-#' Because R uses lexical scoping and not dynamic scoping... because of lexical
-#' scope, you may need to pass some environment variables you use in your
-#' instruction (function call). You can use this using the parameter env (just
-#' provide a list of named variables).
+#' local object. In essence, it assumes that this is a static object, which you
+#' will not change. You can force it to load the cached version instead with
+#' "reload".
+#' 
+#' Because R uses lexical scope and not dynamic scope, you may need to pass some
+#' environment variables you use in your instruction code. You can use this
+#' using the parameter buildEnvir (just provide a list of named variables).
+#' 
 #' @param cacheName	Unique name for the cache. Be careful.
 #' @param instruction  Quoted R code to be evaluated. The returned value of this
 #'     code is what will be cached under the cacheName.
