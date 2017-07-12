@@ -163,7 +163,7 @@ simpleCache = function(cacheName, instruction = NULL, buildEnvir = NULL,
 				if (is.null(buildDir)) {
 					stop("::Error::\tIf you do not provide an instruction argument, you must set global option RBUILD.DIR with setCacheBuildDir, or specify a buildDir parameter directly to simpleCache().");
 				}
-				RBuildFile = file.path(buildDir, paste0(cacheName, ".R");)
+				RBuildFile = file.path(buildDir, paste0(cacheName, ".R"));
 				if (!file.exists(RBuildFile)) {
 					stop("::Error::\tNo instruction or RBuild file provided.");
 				}
