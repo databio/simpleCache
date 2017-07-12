@@ -104,7 +104,9 @@ simpleCache = function(cacheName, instruction = NULL, buildEnvir = NULL,
 		cacheDir = file.path(cacheDir, cacheSubDir);
 	}
 	if (is.null(cacheDir)) {
-		message("You must set global option RCACHE.DIR with setSharedCacheDir(), or specify a cacheDir parameter directly to simpleCache().");
+		message("You must either set global option RCACHE.DIR with 
+			simpleCache::setCacheDir or specify a cacheDir parameter 
+			directly to simpleCache::simpleCache.");
 		return(NA);
 	}
 	if(! "character" %in% class(cacheName)) {
