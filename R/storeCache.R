@@ -15,9 +15,11 @@
 #' variable. Defaults to NULL.
 #' @param recreate	forces reconstruction of the cache
 #' @export
-storeCache =function(cacheName, cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, recreate=FALSE) {
-	if(!is.null(cacheSubDir)) {
-		cacheDir=paste0(cacheDir, cacheSubDir);
+storeCache = function(cacheName, cacheDir = getOption("RCACHE.DIR"), 
+	cacheSubDir = NULL, recreate = FALSE) {
+	
+	if(!(is.null(cacheSubDir) | identical("", cacheSubDir))) {
+		cacheDir = file.path(cacheDir, cacheSubDir);
 	}
 
 	if (is.null(cacheDir)) {

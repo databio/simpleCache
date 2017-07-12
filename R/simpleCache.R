@@ -113,19 +113,25 @@ simpleCache = function(cacheName, instruction = NULL, buildEnvir = NULL,
 		stop("simpleCache expects the cacheName variable to be a character vector.");
 	}
 
-	cacheDir = enforceTrailingSlash(cacheDir);
 	if (!file.exists(cacheDir)) {
-		dir.create(cacheDir, recursive=TRUE);
+		message("Creating cache directory: ", cacheDir)
+		dir.create(cacheDir, recursive = TRUE);
 	}
+	
 	cacheFile = file.path(cacheDir, paste0(cacheName, ".RData"))
 	lockFile = file.path(cacheDir, paste0(cacheName, ".lock"))
+	
+  message("cacheFile: ", cacheFile)
+
 	if (ignoreLock) { #otherwise use a trycatch... ?
 		on.exit(file.remove(lockFile));
 	}
 	submitted = FALSE;
+	
 	# Check if cache exists in any provided search environment.
 	searchEnvir = append(searchEnvir, ".GlobalEnv");	#assume global env.
-	cacheExists = FALSE; cacheWhere = NULL;
+	cacheExists = FALSE;
+	cacheWhere = NULL;
 	for ( curEnv in searchEnvir ) {
 		if(exists(cacheName, where=get(curEnv))) {
 			cacheExists = TRUE;
@@ -138,7 +144,7 @@ simpleCache = function(cacheName, instruction = NULL, buildEnvir = NULL,
 
 	if(cacheExists & !reload & !recreate) {
 		message("::Object exists (in ", cacheWhere, ")::\t", cacheName);
-		ret = get(cacheName, pos=get(cacheWhere));
+		ret = get(cacheName, pos = get(cacheWhere));
 	} else if (file.exists(lockFile) & !ignoreLock) {
 		message("::Cache processing (lock file exists)::\t", lockFile)
 		# Check for slurm log...
@@ -168,7 +174,7 @@ simpleCache = function(cacheName, instruction = NULL, buildEnvir = NULL,
 					stop("::Error::\tNo instruction or RBuild file provided.");
 				}
 				if (timer) { tic(); }
-				source(paste0(buildDir, cacheName, ".R"), local=FALSE);
+				source(file.path(buildDir, paste0(cacheName, ".R")), local = FALSE);
 				if (timer) { toc(); }
 				ret = get(cacheName);
 		} else {
@@ -298,6 +304,8 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, no
 	# downloadCache will use data.table's fread function for reading
 	# in downloads:
 	requireNamespace("data.table")
+	
+	# Deal with path joins and ensure that the target cache directory exists.
 	if(!is.null(cacheSubDir)) {
 		cacheDir = file.path(cacheDir, cacheSubDir);
 	}
@@ -305,11 +313,12 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, no
 		message("You must set global option(RCACHE.DIR) or specify a local cacheDir parameter.");
 		return(NA);
 	}
-	cacheDir=enforceTrailingSlash(cacheDir);
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir);
 	}
+
 	cacheFile = file.path(cacheDir, object)
+	message("Cache file: ", cacheFile)
 
 	if(exists(object) & !reload & !recreate) {
 		message("::Object exists::\t", object);
@@ -333,9 +342,11 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, no
 			ret = data.table::fread(cacheFile);
 		}
 	}
+
 	if (noload) { rm(ret); gc(); return(); }
 	if(is.null(assignToVariable)) { assignToVariable=object; }
 	assign(assignToVariable, ret, envir=loadEnvir);
+	
 	return(); #used to return ret, but not any more
 }
 
