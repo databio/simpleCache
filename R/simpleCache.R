@@ -13,6 +13,7 @@
 NULL
 
 ################################################################################
+
 #' Create a new cache or load a previously created cache.
 #'
 #' Given a unique name for an  R object, and instructions for how to make that
@@ -28,6 +29,7 @@ NULL
 #' code to create the cache is large, you can put an R script called object.R in
 #' the RBUILD.DIR (the name of the file *must* match the name of the object it
 #' creates *exactly*). If you don't provide an instruction, the function sources
+
 #' RBUILD.DIR/object.R and caches the result as the object. This source file
 #' *must* create an object with the same name of the object. If you already have
 #' an object with the name of the object to load in your current environment,
@@ -82,6 +84,7 @@ NULL
 #' @param  ignoreLock   internal parameter used for batch job submission; don't
 #'     touch.
 #' @export
+
 simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	reload=FALSE, recreate=FALSE, noload=FALSE,
 	cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE,
@@ -89,6 +92,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"),
 	slurmParams=NULL, parse=NULL, nofail=FALSE, batchRegistry=NULL,
 	batchResources=NULL, pepSettings=NULL, ignoreLock=FALSE) {
+
 	# Because R evaluates arguments lazily (only when they are used),
 	# it will not evaluate the instruction if I first wrap it in a
 	# primitive substitute call. Then I can evaluate conditionally
@@ -96,6 +100,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	instruction = substitute(instruction)
 	if (is.null(parse)) {
 		if ("character" %in% class(instruction)) {
+
 			parse = TRUE
 			warning(strwrap("Detected a character instruction; consider wrapping
 			in {} instead of quotes."))
@@ -131,14 +136,16 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	searchEnvir = append(searchEnvir, ".GlobalEnv")  # Assume global env.
 	cacheExists = FALSE
 	cacheWhere = NULL
+
 	for ( curEnv in searchEnvir ) {
 		if(exists(cacheName, where=get(curEnv))) {
 			cacheExists = TRUE
 			cacheWhere = curEnv
 			break
 		}
-	} #for
+	}
 	
+
 	ret = NULL # The default, in case the cache construction fails.
 
 	if(cacheExists & !reload & !recreate) {
@@ -163,6 +170,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 		}
 
 		return()
+
 	} else if(file.exists(cacheFile) & !recreate & !noload) {
 		message("::Loading cache::\t", cacheFile)
 		load(cacheFile)
@@ -181,12 +189,14 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 					with setCacheBuildDir, or specify a buildDir parameter
 					directly to simpleCache()."))
 				}
-				RBuildFile = paste0(buildDir, cacheName, ".R")
+				RBuildFile = file.path(buildDir, paste0(cacheName, ".R"));
+
 				if (!file.exists(RBuildFile)) {
 					stop("::Error::\tNo instruction or RBuild file provided.")
 				}
+
 				if (timer) { tic() }
-				source(paste0(buildDir, cacheName, ".R"), local=FALSE)
+				source(file.path(buildDir, cacheName, ".R"), local=FALSE)
 				if (timer) { toc() }
 				ret = get(cacheName)
 		} else {
@@ -257,7 +267,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 		# tryCatch
 		}, error = function(e) { if (nofail) warning(e) else stop(e) })
 
-		if (submitted=="batch") {
+		if (submitted == "batch") {
 			message("Job submitted, check for cache.")
 			return()
 		} else if (is.null(ret)) {
@@ -279,7 +289,6 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	
 	#return(); #used to return ret, but not any more
 }
-
 
 
 #' Create or load a cache from the web.
@@ -306,19 +315,25 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE,
 	# downloadCache will use data.table's fread function for reading
 	# in downloads:
 	requireNamespace("data.table")
+	
+	# Deal with path joins and ensure that the target cache directory exists.
 	if(!is.null(cacheSubDir)) {
-		cacheDir=paste0(cacheDir, cacheSubDir)
+		cacheDir = file.path(cacheDir, cacheSubDir);
 	}
 	if (is.null(cacheDir)) {
 		message(strwrap("You must set global option(RCACHE.DIR) or specify a
 		local cacheDir parameter."))
 		return(NA)
 	}
-	cacheDir=enforceTrailingSlash(cacheDir)
+
+	cacheDir = enforceTrailingSlash(cacheDir)
+
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir)
 	}
-	cacheFile = paste0(cacheDir, object)
+
+	cacheFile = file.path(cacheDir, object)
+	message("Cache file: ", cacheFile)
 
 	if(exists(object) & !reload & !recreate) {
 		message("::Object exists::\t", object)
@@ -343,6 +358,7 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE,
 			ret = data.table::fread(cacheFile)
 		}
 	}
+
 	if (noload) { 
 		rm(ret)
 		gc()
