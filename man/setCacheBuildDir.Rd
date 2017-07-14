@@ -12,4 +12,3 @@ setCacheBuildDir(cacheBuildDir)
 \description{
 Sets local cache build directory with scripts for building files.
 }
-

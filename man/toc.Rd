@@ -2,11 +2,10 @@
 % Please edit documentation in R/utility.R
 \name{toc}
 \alias{toc}
-\title{Check the time since the current timer was started with tic();}
+\title{Check the time since the current timer was started with tic()}
 \usage{
 toc()
 }
 \description{
-Check the time since the current timer was started with tic();
+Check the time since the current timer was started with tic()
 }
-

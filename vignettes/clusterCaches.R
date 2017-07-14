@@ -1,0 +1,57 @@
+---
+title: "Generating caches on a cluster"
+author: "Nathan Sheffield"
+date: "`r Sys.Date()`"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Generating caches on a cluster}
+output: knitr:::html_vignette
+---
+
+# Sharing caches across projects
+
+By default, `simpleCache` creates caches in the R session you use to call it. If you need to make lots of caches, or very large caches, you may want instead to sub these as jobs to a cluster resource manager (like SLURM). simpleCache can do this using functionality from the `batchtools` package.
+
+To do this, firt, create a `batchtools` registry. You can follow more detailed documentation in the `batchtools` package, but here's some code to get you started:
+
+```{r Try it out}
+library(simpleCache)
+setCacheDir(getwd())
+
+registry = batchtools::makeRegistry(NA)
+templateFile = system.file("templates/slurm-advanced.tmpl", package = "simpleCache")
+registry$cluster.functions = batchtools::makeClusterFunctionsSlurm(
+  template = templateFile)
+registry
+
+```
+
+Notice that I'm using a custom slurm template here. With a registry in hand, we next need to define the resources this cache job will require:
+
+```
+resources = list(ncpus=1, memory= 1000, walltime=60, partition="economy")
+
+```
+
+Then, we simply add these as arguments to `simpleCache()` like so:
+```
+simpleCache("testBatch", {
+  rnorm(1e7, 0,1)
+  }, batchRegistry=registry, batchResources=resources)
+```
+
+This will now create and submit a job to do this. Next time you run this function, it will just load the cache without recreating it, as you would expect simpleCache to do. Now there's a bunch of other stuff you can use `batchtools` to do with these jobs:
+
+```
+
+batchtools::getJobTable(reg=registry)
+batchtools::getJobPars()
+batchtools::getStatus()
+
+batchtools::getJobTable(reg=registry)
+batchtools::getJobPars(1, reg=registry)
+batchtools::loadResult(1, reg=registry)
+# batchtools::testJob(1, reg=registry)
+# killJobs()
+```
+

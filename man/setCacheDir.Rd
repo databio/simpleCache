@@ -2,7 +2,8 @@
 % Please edit documentation in R/cacheDirectories.R
 \name{setCacheDir}
 \alias{setCacheDir}
-\title{Sets a global variable specifying the default cache directory for simpleCache() calls.}
+\title{Sets a global variable specifying the default cache directory for
+simpleCache() calls.}
 \usage{
 setCacheDir(cacheDir)
 }
@@ -10,6 +11,6 @@ setCacheDir(cacheDir)
 \item{cacheDir}{Directory where caches should be stored}
 }
 \description{
-Sets a global variable specifying the default cache directory for simpleCache() calls.
+Sets a global variable specifying the default cache directory for
+simpleCache() calls.
 }
-

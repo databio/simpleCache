@@ -10,6 +10,5 @@ availCaches(cacheSubDir = "")
 \item{cacheSubDir}{Optional parameter to specify a subdirectory of the cache folder.}
 }
 \description{
-Show available caches.
+Lists any cache files in the cache directory.
 }
-

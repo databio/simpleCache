@@ -1,5 +1,6 @@
-#PACKAGE DOCUMENTATION
-#' Provides intuitive functions for caching R objects, encouraging faster reproducible and restartable R analysis 
+## Package documentation
+#' Provides intuitive functions for caching R objects, encouraging faster
+#' reproducible and restartable R analysis
 #'
 #' simpleCache provides a function (simpleCache())
 #' 
@@ -12,80 +13,85 @@
 NULL
 
 ################################################################################
-#FUNCTION DOCUMENTATION - simpleCache() main function
+
 #' Create a new cache or load a previously created cache.
 #'
-#' Given an R object with a unique name, and instructions for how to make that
-#' object, use the simpleCache function to cache the object. This should be used
-#' for computations that take a long time and generate a table or something used
-#' repeatedly (in other scripts, for example). Because it is tied to the object
-#' name, there is some danger of causing troubles if you misuse the caching
-#' system. The object should be considered static. You can pass R code that
-#' creates the object either as a string to the "instruction" parameter (if the
-#' code is short), or you can put an R script called object.R in the RBUILD.DIR
-#' (the name of the file *must* match the name of the object it creates
-#' *exactly*). If you don't provide instruction, the function sources
+#' Given a unique name for an  R object, and instructions for how to make that
+#' object, use the simpleCache function to create and cache or load the object.
+#' This should be used for computations that take a long time and generate a
+#' table or something used repeatedly (in other scripts, for example). Because
+#' the cache is tied to the object name, there is some danger of causing
+#' troubles if you misuse the caching system. The object should be considered
+#' static. 
+#' 
+#' You should pass a bracketed R code snippet like `{ rnorm(500) }` as the
+#' instruction, and simpleCache will create the object. Alternatively, if the
+#' code to create the cache is large, you can put an R script called object.R in
+#' the RBUILD.DIR (the name of the file *must* match the name of the object it
+#' creates *exactly*). If you don't provide an instruction, the function sources
+
 #' RBUILD.DIR/object.R and caches the result as the object. This source file
 #' *must* create an object with the same name of the object. If you already have
 #' an object with the name of the object to load in your current environment,
 #' this function will not try to reload the object; instead, it returns the
-#' local object.
-#'
-#' In essence, it assumes that this is a static object, which you will not change.
-#' You can force it to load the cached version instead with "reload"
-#' Because R uses lexical scoping and not dynamic scoping,
-#' you may need to pass some environment variables you use
-#' in your instruction (function call). You can use this using the parameter
-#' buildEnvir (just provide a list of named variables).
-
-#' @param cacheName    Unique name for the cache. Be careful, make sure this is
-#'	truly unique to avoid collisions.
-#' @param instruction  R code to be evaluated as a code block (delimited by
-#'	{brackets}. The returned value of this
-#'  code is what will be cached under the cacheName.
-#' @param buildEnvir   Any additional variables necessary
-#'  for evaluating the code in instruction.
-#' @param reload   forces re-loading the cache, even if it exists in the environment.
-#' @param recreate forced rebuild of the cache, even if a cache exists
-#' @param noload   create but do not load the cache into memory.
-#' 	noload is useful for: you want to create the caches, but not
-#'  load them if they aren't there (like a cache creation loop).
+#' local object. In essence, it assumes that this is a static object, which you
+#' will not change. You can force it to load the cached version instead with
+#' "reload".
+#' 
+#' Because R uses lexical scope and not dynamic scope, you may need to pass some
+#' environment variables you use in your instruction code. You can use this
+#' using the parameter buildEnvir (just provide a list of named variables).
+#' 
+#' @param cacheName	Unique name for the cache. Be careful.
+#' @param instruction  Quoted R code to be evaluated. The returned value of this
+#'     code is what will be cached under the cacheName.
+#' @param buildEnvir   You may choose to provide additional variables necessary
+#'     for evaluating the code in instruction.
+#' @param reload   forces re-loading the cache, even if it exists in the env.
+#' @param recreate forces reconstruction of the cache
+#' @param noload   noload is useful for: you want to create the caches, but not
+#'     load them if they aren't there (like a cache creation loop).
 #' @param cacheDir The directory where caches are saved (and loaded from).
-#' 		Defaults to the global RCACHE.DIR variable
-#' @param cacheSubDir Optional subdirectory within the cacheDir
+#'			Defaults to the global RCACHE.DIR variable
+#' @param cacheSubDir You can specify a subdirectory within the cacheDir
 #' 			variable. Defaults to NULL.
-#' @param assignToVariable By default, simpleCache assigns the cache to a variable
-#'  named cacheName; you can overrule that here.
-#' @param loadEnvir    Into which environment would you like to load the variable?
+#' @param assignToVariable By default, simpleCache assigns the cache to a
+#'     variable named cacheName; you can overrule that here.
+#' @param loadEnvir    Into which environment would you like to load the
+#'     variable? Defaults to parent.frame.
 #' @param searchEnvir  a vector of environments to search for the already loaded
-#'  cache.
-#' @param  slurmParams **EXPERIMENTAL FEATURE** a list with parameter settings for
-#'  SLURM submission. By default, this is NULL, meaning the cache will be created
-#'  in the current R session. If you provide a slurmParams object, simpleCache
-#'  assumes you want to submit a job to the cluster instead.
-#' @param  ignoreLock   internal parameter used for slurm submission; don't touch.
+#'     cache.
 #' @param timer Report how long it took to create the cache?
-#' @param buildDir Location of Build files (files with instructions for use
-#' 	               if the instructions argument is not provided). Defaults to
-#' 	               \code{RBUILD.DIR} global option.
-#' @param parse By default, simpleCache will guess whether you want to
-#' parse the instruction, based on whether it is quoted. You can overwrite
-#' the guess with this parameter; but this may disappear in the future. In
-#' general, you should not quote, but use {} around your instructions.
+#' @param buildDir Location of Build files (files with instructions for use If
+#'		the instructions argument is not provided). Defaults to RBUILD.DIR
+#'		global option.
+#' @param parse By default, simpleCache will guess whether you want to parse the
+#'     instruction, based on whether it is quoted. You can overwrite the guess
+#'     with this parameter; but this may disappear in the future. In general,
+#'     you should note quote, but use {} around your instructions.
 #' @param nofail By default, simpleCache throws an error if the instructions
-#' fail. Use this option to convert this error into a warning. No cache
-#' will be created, but simpleCache will not then hard-stop your processing.
-#' This is useful, for example, if you are creating a bunch of caches and it's
-#' ok if some of them do not complete.
+#'     fail. Use this option to convert this error into a warning. No cache will
+#'     be created, but simpleCache will not then hard-stop your processing. This
+#'     is useful, for example, if you are creating a bunch of caches and it's ok
+#'     if some of them do not complete.
+#' @param batchRegistry A batchtools registry object (built with
+#'     batchtools::makeRegistry()). If provided, this cache will be created on
+#'     the cluster using your batchtools configuration
+#' @param batchResources A list of variables to provide to batchtools for
+#'     cluster resource managers. Used as the `res` argument to
+#'     batchtools::batchMap()
+#' @param pepSettings Experimental untested feature.
+#' @param  ignoreLock   internal parameter used for batch job submission; don't
+#'     touch.
 #' @export
 
-simpleCache = function(cacheName, instruction = NULL, buildEnvir = NULL,
-  reload = FALSE, recreate = FALSE, noload = FALSE,
-  cacheDir = getOption("RCACHE.DIR"),
-  cacheSubDir = NULL, timer = FALSE, buildDir = getOption("RBUILD.DIR"),
-  assignToVariable = NULL, loadEnvir = parent.frame(),
-  searchEnvir = getOption("SIMPLECACHE.ENV"), slurmParams = NULL,
-  ignoreLock = FALSE, parse = NULL, nofail = FALSE) {
+simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
+	reload=FALSE, recreate=FALSE, noload=FALSE,
+	cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE,
+	buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL,
+	loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"),
+	slurmParams=NULL, parse=NULL, nofail=FALSE, batchRegistry=NULL,
+	batchResources=NULL, pepSettings=NULL, ignoreLock=FALSE) {
 
 	# Because R evaluates arguments lazily (only when they are used),
 	# it will not evaluate the instruction if I first wrap it in a
@@ -94,192 +100,195 @@ simpleCache = function(cacheName, instruction = NULL, buildEnvir = NULL,
 	instruction = substitute(instruction)
 	if (is.null(parse)) {
 		if ("character" %in% class(instruction)) {
-			parse = TRUE;
-			#message("Detected a character instruction; consider wrapping in {} instead of quotes.");
+
+			parse = TRUE
+			warning(strwrap("Detected a character instruction; consider wrapping
+			in {} instead of quotes."))
 		} else {
-			parse = FALSE;
+			parse = FALSE
 		}
 	}
 	if(!is.null(cacheSubDir)) {
-		cacheDir = file.path(cacheDir, cacheSubDir);
+		cacheDir = paste0(cacheDir, cacheSubDir)
 	}
 	if (is.null(cacheDir)) {
-		message("You must either set global option RCACHE.DIR with 
-			simpleCache::setCacheDir or specify a cacheDir parameter 
-			directly to simpleCache::simpleCache.");
-		return(NA);
+		message(strwrap("You must set global option RCACHE.DIR with setSharedCacheDir(),
+		or specify a cacheDir parameter directly to simpleCache()."))
+		return(NA)
 	}
-	if(! "character" %in% class(cacheName)) {
-		stop("simpleCache expects the cacheName variable to be a character vector.");
+	if(!"character" %in% class(cacheName)) {
+		stop("simpleCache expects the cacheName variable to be a character
+		vector.")
 	}
-
+	
+	cacheDir = enforceTrailingSlash(cacheDir)
 	if (!file.exists(cacheDir)) {
-		message("Creating cache directory: ", cacheDir)
-		dir.create(cacheDir, recursive = TRUE);
+		dir.create(cacheDir, recursive=TRUE)
 	}
-	
-	cacheFile = file.path(cacheDir, paste0(cacheName, ".RData"))
-	lockFile = file.path(cacheDir, paste0(cacheName, ".lock"))
-	
-  message("cacheFile: ", cacheFile)
-
-	if (ignoreLock) { #otherwise use a trycatch... ?
-		on.exit(file.remove(lockFile));
+	cacheFile = paste0(cacheDir, cacheName, ".RData")
+	lockFile = paste0(cacheDir, cacheName, ".lock")
+	if (ignoreLock) {
+		# remove the lock file when this function call is complete.
+		on.exit(file.remove(lockFile))
 	}
-	submitted = FALSE;
-	
+	submitted = FALSE
 	# Check if cache exists in any provided search environment.
-	searchEnvir = append(searchEnvir, ".GlobalEnv");	#assume global env.
-	cacheExists = FALSE;
-	cacheWhere = NULL;
+	searchEnvir = append(searchEnvir, ".GlobalEnv")  # Assume global env.
+	cacheExists = FALSE
+	cacheWhere = NULL
+
 	for ( curEnv in searchEnvir ) {
 		if(exists(cacheName, where=get(curEnv))) {
-			cacheExists = TRUE;
-			cacheWhere = curEnv;
-			break;
+			cacheExists = TRUE
+			cacheWhere = curEnv
+			break
 		}
 	}
 	
-	ret = NULL;  # The default; in case the cache construction fails.
+
+	ret = NULL # The default, in case the cache construction fails.
 
 	if(cacheExists & !reload & !recreate) {
-		message("::Object exists (in ", cacheWhere, ")::\t", cacheName);
-		ret = get(cacheName, pos = get(cacheWhere));
+		message("::Object exists (in ", cacheWhere, ")::\t", cacheName)
+		#return(get(cacheName))
+		#return()
+		ret = get(cacheName, pos=get(cacheWhere))
 	} else if (file.exists(lockFile) & !ignoreLock) {
 		message("::Cache processing (lock file exists)::\t", lockFile)
-		# Check for slurm log...
-		if (!is.null(slurmParams)) {
-			slurmLog = file.path(slurmParams$hpcFolder, cacheName, ".log")
-			message(slurmLog)
-			utils::tail(readLines(slurmLog), 10)
+		#check for slurm log...
+
+		if (!is.null(batchRegistry)) {
+			# Grabbing log from batchtools
+			# 1 is the job id.
+			message(paste(batchtools::getLog(1, reg=registry), collapse="\n"))
 		}
-		return ();
+		if (!is.null(pepSettings)) { 
+			# TODO: retrieve log
+			slurmLog = paste0(slurmParams$hpcFolder, "/", cacheName, ".log")
+			message(slurmLog)
+			utils::tail(readLines(slurmLog), 10) 
+		}
+
+		return()
+
 	} else if(file.exists(cacheFile) & !recreate & !noload) {
-		message("::Loading cache::\t", cacheFile);
-		load(cacheFile);
+		message("::Loading cache::\t", cacheFile)
+		load(cacheFile)
 	} else if(file.exists(cacheFile) & !recreate) {
-		message("::Cache exists (no load)::\t", cacheFile);
-		return (NULL);
+		message("::Cache exists (no load)::\t", cacheFile)
+		return(NULL)
 	} else {
-		message("::Creating cache::\t", cacheFile);
+		message("::Creating cache::\t", cacheFile)
 
 		tryCatch( { # Intercept any errors with creating this cache.
 
 		if(is.null(instruction)) {
 				if (is.null(buildDir)) {
-					stop("::Error::\tIf you do not provide an instruction argument, you must set global option RBUILD.DIR with setCacheBuildDir, or specify a buildDir parameter directly to simpleCache().");
+					stop(strwrap("::Error::\tIf you do not provide an
+					instruction argument, you must set global option RBUILD.DIR
+					with setCacheBuildDir, or specify a buildDir parameter
+					directly to simpleCache()."))
 				}
 				RBuildFile = file.path(buildDir, paste0(cacheName, ".R"));
+
 				if (!file.exists(RBuildFile)) {
-					stop("::Error::\tNo instruction or RBuild file provided.");
+					stop("::Error::\tNo instruction or RBuild file provided.")
 				}
-				if (timer) { tic(); }
-				source(file.path(buildDir, paste0(cacheName, ".R")), local = FALSE);
-				if (timer) { toc(); }
-				ret = get(cacheName);
+
+				if (timer) { tic() }
+				source(file.path(buildDir, cacheName, ".R"), local=FALSE)
+				if (timer) { toc() }
+				ret = get(cacheName)
 		} else {
-			#"ret," for return, is the name the cacheName is stored under.
+			
 			if (is.null(buildEnvir)) {
-				if (timer) { tic(); }
-				if (is.null(slurmParams)) {
-					
+				if (timer) { tic() }
+				if ( ! is.null(batchRegistry) ) {
+					# Submit to cluster using batchtools 
+
+					 if (! requireNamespace("batchtools", quietly=TRUE)) {
+						error("Install batchtools for cluster submission...")
+					} 
+					if (is.null(batchResources)) { 
+						error("You must provide both batchRegistry and batchResources.")
+					}
+					message("Submitting job to cluster")
+					# You have to wrap `instruction` in substitute() so it won't be evaluated,
+					# then you have to wrap that in list so it won't be misinterpreted
+					# by batchMap as multiple arguments, causing extra jobs.
+					args = list(cacheName=cacheName,
+											instruction=list(substitute(instruction)),
+						cacheDir=cacheDir, ignoreLock=TRUE)
+
+						ids = batchtools::batchMap(
+												fun = simpleCache, 
+												args = args,
+												reg = batchRegistry)
+
+					# lock cache so it won't be loaded prematurely or double-written
+					file.create(lockFile)
+  					batchtools::submitJobs(ids = ids, reg = batchRegistry, res = batchResources)
+
+					message("Done submitting to cluster")
+					submitted = "batch"
+				} else if ( ! is.null(pepSettings) ) {
+					error("PEP settings submission is not yet implemented")
+					# Build a simpleCache command
+					#simpleCacheCode = paste0("simpleCache('", cacheName, "',
+						# instruction='", paste0(deparse(instruction), collapse="\n"), "',
+						# recreate=", recreate, ", 
+						# cacheDir='", cacheDir,"',
+						# ignoreLock=TRUE)")
+					#if (slurmParams$jobName=="test") { slurmParams$jobName=cacheName } 
+					#with(slurmParams, buildSlurmScript(
+						# simpleCacheCode, preamble, submit, hpcFolder, 
+						# jobName, mem, cores, partition, timeLimit, sourceProjectInit))
+				} else {
+					# No cluster submission request, so just run it here!
+					# "ret," for return, is the name the cacheName is stored under.
 					if (parse) {
-						ret = eval(parse(text=instruction));	
+						ret = eval(parse(text=instruction))
 					} else {
 						ret = eval( instruction )
 					}
-
-				} else {
-					# Submit to slurm!
-					message("Submitting job to cluster");
-					# Build a simpleCache command
-					simpleCacheCode = paste0("simpleCache('", cacheName, "', instruction='", paste0(deparse(instruction), collapse="\n"), "', recreate=", recreate, ", cacheDir='", cacheDir,"', ignoreLock=TRUE)");
-					# Lock
-					if (slurmParams$jobName=="test") { slurmParams$jobName=cacheName; } #change default job name.			
-					file.create(lockFile);
-with(slurmParams, buildSlurmScript(simpleCacheCode, preamble, submit, hpcFolder, jobName, mem, cores, partition, timeLimit, sourceProjectInit))
-#lockregion?
-					submitted = "slurm";
 				}
-				if (timer) { toc(); }
+				if (timer) { toc() }
 			} else {
-				if (timer) { tic(); }
+				# Build environment was provided.
+				if (timer) { tic() }
 				if (parse) {
-					ret = with(buildEnvir, eval(parse(text=instruction)));
+					ret = with(buildEnvir, eval(parse(text=instruction)))
 				} else {
 					ret = with(buildEnvir, eval(instruction))
 				}
-				if (timer) { toc(); }
+				if (timer) { toc() }
 			}
 		}
 		# tryCatch
 		}, error = function(e) { if (nofail) warning(e) else stop(e) })
 
-		if (submitted == "slurm") {
-			#message("Job submitted to Slurm; check for cache.")
-			return();
+		if (submitted == "batch") {
+			message("Job submitted, check for cache.")
+			return()
 		} else if (is.null(ret)) {
-			message("NULL value returned; no cache created");
+			message("NULL value returned, no cache created")
 			return(); #so we don't assign NULL to the object.
 		} else {
-			save(ret, file=cacheFile);
-			#if (ignoreLock) {
-			#	on.exit(file.remove(lockFile));
-			#}
+			save(ret, file=cacheFile)
 		}
 	}
-	if (noload) { rm(ret); gc(); return(); }
-	if(is.null(assignToVariable)) { assignToVariable=cacheName; }
-	assign(assignToVariable, ret, envir=loadEnvir);
-				
+	if (noload) {
+		rm(ret)
+		gc()
+		return()
+	}
+	if(is.null(assignToVariable)) {
+		assignToVariable = cacheName
+	}
+	assign(assignToVariable, ret, envir=loadEnvir)
+	
 	#return(); #used to return ret, but not any more
 }
-
-################################################################################
-# Helper aliases for common options
-
-#' Debugging function... I can probably delete it.
-#' @param instruction R code to run.
-#' @export
-testExec = function(instruction) {
-	eval(parse(text=instruction))
-}
-
-#' Creates or loads caches in a shared directory
-#'
-#' Helper alias for caching across experiments/people.
-#' Just sets the cacheDir to the default SHARE directory 
-#' (instead of the typical default PROJECT directory)
-
-#' 
-#' @param ... Parameters passed to simpleCache().
-#' @export
-simpleCacheShared = function(...) {
-	# Since this is a function calling this, I have to set the loadEnvir here,
-	# otherwise by default simpleCache will load the data into *this* environment,
-	# which then gets prompty discarded -- not good. The downside is that this
-	# function now couldn't take a custom loadEnvir.
-	simpleCache(..., cacheDir=getOption("RESOURCES.RCACHE"), loadEnvir=parent.frame())
-}
-
-#' Helper alias for loading caches into the global environment.
-#' simpleCache normally loads variables into the calling environment; this
-#' ensures that the variables are loaded in the global environment.
-#'
-#' @param ... Parameters passed to simpleCache().
-#' @export
-simpleCacheGlobal = function(...) {
-	simpleCache(..., loadEnvir=globalenv());
-}
-
-#' Helper alias for loading shared caches into the global environment.
-#' 
-#' @param ... Parameters passed to simpleCache().
-#' @export
-simpleCacheSharedGlobal = function(...) {
-	simpleCache(..., cacheDir=getOption("RESOURCES.RCACHE"), loadEnvir=globalenv());
-}
-
 
 
 #' Create or load a cache from the web.
@@ -299,7 +308,9 @@ simpleCacheSharedGlobal = function(...) {
 #' @param loadEnvir See documentation at simpleCache()
 #' @param assignToVariable See documentation at simpleCache()
 #' @export
-downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir="download", loadEnvir=parent.frame(), assignToVariable=NULL) {
+downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE,
+	noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir="download",
+	loadEnvir=parent.frame(), assignToVariable=NULL) {
 
 	# downloadCache will use data.table's fread function for reading
 	# in downloads:
@@ -310,44 +321,54 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE, no
 		cacheDir = file.path(cacheDir, cacheSubDir);
 	}
 	if (is.null(cacheDir)) {
-		message("You must set global option(RCACHE.DIR) or specify a local cacheDir parameter.");
-		return(NA);
+		message(strwrap("You must set global option(RCACHE.DIR) or specify a
+		local cacheDir parameter."))
+		return(NA)
 	}
+
+	cacheDir = enforceTrailingSlash(cacheDir)
+
 	if (!file.exists(cacheDir)) {
-		dir.create(cacheDir);
+		dir.create(cacheDir)
 	}
 
 	cacheFile = file.path(cacheDir, object)
 	message("Cache file: ", cacheFile)
 
 	if(exists(object) & !reload & !recreate) {
-		message("::Object exists::\t", object);
-		return(get(object));
+		message("::Object exists::\t", object)
+		return(get(object))
 	} else if(file.exists(cacheFile) & !recreate & !noload) {
-		message("::Loading cache::\t", cacheFile);
-		ret = data.table::fread(cacheFile);
+		message("::Loading cache::\t", cacheFile)
+		ret = data.table::fread(cacheFile)
 	} else if(file.exists(cacheFile) & !recreate) {
-		message("::Cache exists (no load)::\t", cacheFile);
-		return (NULL);
+		message("::Cache exists (no load)::\t", cacheFile)
+		return (NULL)
 	} else {
-		message("::Creating cache::\t", cacheFile);
+		message(":Creating cache::\t", cacheFile)
 		if(is.null(url)) {
-			message("You must set global option(RBUILD.DIR) or specify a local buildDir parameter (or provide an instruction argument).");
-				return(NA);
+			message(strwrap("You must set global option(RBUILD.DIR) or specify a
+			local buildDir parameter (or provide an instruction argument)."))
+				return(NA)
 		} else {
 			#"ret," for return, is the name the object is stored under.
-			command = paste0("wget -O ", cacheFile, " '", url, "'");
-			sysResult = system(command, intern=TRUE);
-			message(command, sysResult);
-			ret = data.table::fread(cacheFile);
+			command = paste0("wget -O ", cacheFile, " '", url, "'")
+			sysResult = system(command, intern=TRUE)
+			message(command, sysResult)
+			ret = data.table::fread(cacheFile)
 		}
 	}
 
-	if (noload) { rm(ret); gc(); return(); }
-	if(is.null(assignToVariable)) { assignToVariable=object; }
-	assign(assignToVariable, ret, envir=loadEnvir);
-	
-	return(); #used to return ret, but not any more
+	if (noload) { 
+		rm(ret)
+		gc()
+		return()
+	}
+	if(is.null(assignToVariable)) { 
+		assignToVariable=object
+	}
+	assign(assignToVariable, ret, envir=loadEnvir)
+	return() #used to return ret, but not any more
 }
 
 

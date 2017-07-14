@@ -9,4 +9,3 @@ resetCacheSearchEnvironment()
 \description{
 Sets global option of cache search environments to NULL.
 }
-
