@@ -12,12 +12,12 @@
 
 # check for, and fix, trailing slash. if necessary
 enforceTrailingSlash = function(folder) {
-	enforceEdgeCharacter(folder, appendChar="/");
+	enforceEdgeCharacter(folder, appendChar="/")
 }
 
 enforceEdgeCharacter = function(string, prependChar="", appendChar="") {
 	if (string=="" | is.null(string)) {
-		return(string);
+		return(string)
 	}
 	if(!is.null(appendChar)) {
 		if (substr(string,nchar(string), nchar(string)) != appendChar) { # +1 ?
@@ -26,10 +26,10 @@ enforceEdgeCharacter = function(string, prependChar="", appendChar="") {
 	}
 	if (!is.null(prependChar)) {
 		if (substr(string,1,1) != prependChar) { # +1 ?
-			string = paste0(prependChar, string);
+			string = paste0(prependChar, string)
 		}
 	}
-	return(string);
+	return(string)
 }
 
 # MATLAB-style timing functions to start/stop timer.
@@ -44,7 +44,8 @@ secToTime = function(timeInSec) {
 	hr = timeInSec %/% 3600 #hours
 	min = timeInSec %% 3600 %/% 60 #minutes
 	sec = timeInSec %% 60 #seconds
-	return(paste0(sprintf("%02d", hr), "h ", sprintf("%02d", min), "m ", sprintf("%02.01f", signif(sec, 3)), "s"))
+	return(paste0(sprintf("%02d", hr), "h ", sprintf("%02d", min), "m ",
+	sprintf("%02.01f", signif(sec, 3)), "s"))
 }
 
 #' Start a timer
@@ -60,7 +61,7 @@ tic <- function(gcFirst = TRUE, type=c("elapsed", "user.self", "sys.self")) {
 	invisible(tic)
 }
 
-#' Check the time since the current timer was started with tic();
+#' Check the time since the current timer was started with tic()
 toc <- function() {
 	type <- get(".type_simpleCache", envir=baseenv())
 	toc <- proc.time()[type]
@@ -69,39 +70,3 @@ toc <- function() {
 	message("<", secToTime(timeInSec), ">", appendLF=FALSE)
 	invisible(toc)
 }
-
-#' Wrapper function for batchtools integration
-batchWrap = function(cacheName, instruction, cacheDir, batchDir, batchMethod) {
-  
-  batchSwitch = function(batchMethod) {
-    
-    switch(batchMethod,
-           interactive = {
-             tmp = batchtools::makeRegistry(file.dir = batchDir, make.default = FALSE)
-             return(tmp)
-           },
-           slurm = {
-             tmp = batchtools::makeRegistry(NA)
-             tmp$cluster.functions = batchtools::makeClusterFunctionsSlurm(template = system.file("templates/slurm_simple.tmpl", package = "batchtools"))
-             return(tmp)
-           }
-    )
-  }
-  
-  tmp = batchSwitch(batchMethod)
-  
-  args = list(cacheName = cacheName, instruction = instruction, cacheDir = cacheDir)
-  
-  ids = batchtools::batchMap(fun = simpleCache, args = args, reg = tmp)   
-  
-  batchtools::submitJobs(ids = ids, reg = tmp)
-  
-}
-
-
-
-
-
-
-
-

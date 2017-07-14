@@ -42,7 +42,8 @@ storeCache = function(cacheName, cacheDir=getOption("RCACHE.DIR"),
 	}
 	cacheFile = paste0(cacheDir, cacheName, ".RData")
 	if(file.exists(cacheFile) & !recreate) {
-		message("::Cache already exists (use recreate to overwrite)::\t", cacheFile)
+		message("::Cache already exists (use recreate to overwrite)::\t",
+		cacheFile)
 		return (NULL)
 	} else if (!exists(cacheName)) {
 		message("::Object does not exist::\t", cacheName)
