@@ -109,7 +109,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 		}
 	}
 	if(!is.null(cacheSubDir)) {
-		cacheDir = paste0(cacheDir, cacheSubDir)
+		cacheDir = file.path(cacheDir, cacheSubDir)
 	}
 	if (is.null(cacheDir)) {
 		message(strwrap("You must set global option RCACHE.DIR with setSharedCacheDir(),
@@ -125,8 +125,8 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir, recursive=TRUE)
 	}
-	cacheFile = paste0(cacheDir, cacheName, ".RData")
-	lockFile = paste0(cacheDir, cacheName, ".lock")
+	cacheFile = file.path(cacheDir, cacheName, ".RData")
+	lockFile = file.path(cacheDir, cacheName, ".lock")
 	if (ignoreLock) {
 		# remove the lock file when this function call is complete.
 		on.exit(file.remove(lockFile))
@@ -152,7 +152,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 		message("::Object exists (in ", cacheWhere, ")::\t", cacheName)
 		#return(get(cacheName))
 		#return()
-		ret = get(cacheName, pos=get(cacheWhere))
+		ret = get(cacheName, pos = get(cacheWhere))
 	} else if (file.exists(lockFile) & !ignoreLock) {
 		message("::Cache processing (lock file exists)::\t", lockFile)
 		#check for slurm log...
@@ -164,7 +164,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 		}
 		if (!is.null(pepSettings)) { 
 			# TODO: retrieve log
-			slurmLog = paste0(slurmParams$hpcFolder, "/", cacheName, ".log")
+			slurmLog = file.path(slurmParams$hpcFolder, "/", cacheName, ".log")
 			message(slurmLog)
 			utils::tail(readLines(slurmLog), 10) 
 		}
@@ -189,7 +189,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 					with setCacheBuildDir, or specify a buildDir parameter
 					directly to simpleCache()."))
 				}
-				RBuildFile = file.path(buildDir, paste0(cacheName, ".R"));
+				RBuildFile = file.path(buildDir, paste0(cacheName, ".R"))
 
 				if (!file.exists(RBuildFile)) {
 					stop("::Error::\tNo instruction or RBuild file provided.")
@@ -217,17 +217,17 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 					# then you have to wrap that in list so it won't be misinterpreted
 					# by batchMap as multiple arguments, causing extra jobs.
 					args = list(cacheName=cacheName,
-											instruction=list(substitute(instruction)),
+						instruction=list(substitute(instruction)),
 						cacheDir=cacheDir, ignoreLock=TRUE)
 
 						ids = batchtools::batchMap(
-												fun = simpleCache, 
-												args = args,
-												reg = batchRegistry)
+												fun=simpleCache, 
+												args=args,
+												reg=batchRegistry)
 
 					# lock cache so it won't be loaded prematurely or double-written
 					file.create(lockFile)
-  					batchtools::submitJobs(ids = ids, reg = batchRegistry, res = batchResources)
+  					batchtools::submitJobs(ids=ids, reg=batchRegistry, res=batchResources)
 
 					message("Done submitting to cluster")
 					submitted = "batch"
@@ -272,7 +272,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 			return()
 		} else if (is.null(ret)) {
 			message("NULL value returned, no cache created")
-			return(); #so we don't assign NULL to the object.
+			return() #so we don't assign NULL to the object.
 		} else {
 			save(ret, file=cacheFile)
 		}
@@ -287,7 +287,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	}
 	assign(assignToVariable, ret, envir=loadEnvir)
 	
-	#return(); #used to return ret, but not any more
+	#return() #used to return ret, but not any more
 }
 
 
@@ -318,7 +318,7 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE,
 	
 	# Deal with path joins and ensure that the target cache directory exists.
 	if(!is.null(cacheSubDir)) {
-		cacheDir = file.path(cacheDir, cacheSubDir);
+		cacheDir = file.path(cacheDir, cacheSubDir)
 	}
 	if (is.null(cacheDir)) {
 		message(strwrap("You must set global option(RCACHE.DIR) or specify a
