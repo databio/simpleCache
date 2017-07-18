@@ -19,7 +19,7 @@
 #' @export
 
 storeCache = function(cacheName, cacheDir = getOption("RCACHE.DIR"),
-	cacheSubDir = NULL, recreate=FALSE) {
+	cacheSubDir = NULL, recreate=FALSE, trailSlash = TRUE) {
 
 	if(!is.null(cacheSubDir)) {
 		cacheDir = file.path(cacheDir, cacheSubDir)
@@ -38,11 +38,11 @@ storeCache = function(cacheName, cacheDir = getOption("RCACHE.DIR"),
 		character vector."))
 	}
 
-	cacheDir = enforceTrailingSlash(cacheDir)
+	if (trailSlash) { cacheDir = enforceTrailingSlash(cacheDir) }
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir, recursive=TRUE)
 	}
-	cacheFile = paste0(cacheDir, cacheName, ".RData")
+	cacheFile = file.path(cacheDir, paste0(cacheName, ".RData"))
 	if(file.exists(cacheFile) & !recreate) {
 		message("::Cache already exists (use recreate to overwrite)::\t",
 		cacheFile)

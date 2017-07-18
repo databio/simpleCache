@@ -83,6 +83,8 @@ NULL
 #' @param pepSettings Experimental untested feature.
 #' @param  ignoreLock   internal parameter used for batch job submission; don't
 #'     touch.
+#' @param trailSlash Whether to ensure that the path to the cache directory
+#'     ends in a slash.
 #' @export
 
 simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
@@ -91,7 +93,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL,
 	loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"),
 	slurmParams=NULL, parse=NULL, nofail=FALSE, batchRegistry=NULL,
-	batchResources=NULL, pepSettings=NULL, ignoreLock=FALSE) {
+	batchResources=NULL, pepSettings=NULL, ignoreLock=FALSE, trailSlash=TRUE) {
 
 	# Because R evaluates arguments lazily (only when they are used),
 	# it will not evaluate the instruction if I first wrap it in a
@@ -121,7 +123,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 		vector.")
 	}
 	
-	cacheDir = enforceTrailingSlash(cacheDir)
+	if (trailSlash) { cacheDir = enforceTrailingSlash(cacheDir) }
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir, recursive=TRUE)
 	}
@@ -307,10 +309,11 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 #' @param cacheSubDir See documentation at simpleCache()
 #' @param loadEnvir See documentation at simpleCache()
 #' @param assignToVariable See documentation at simpleCache()
+#' @param trailSlash See documentation at simpleCache()
 #' @export
 downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE,
 	noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir="download",
-	loadEnvir=parent.frame(), assignToVariable=NULL) {
+	loadEnvir=parent.frame(), assignToVariable=NULL, trailSlash=TRUE) {
 
 	# downloadCache will use data.table's fread function for reading
 	# in downloads:
@@ -326,7 +329,7 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE,
 		return(NA)
 	}
 
-	cacheDir = enforceTrailingSlash(cacheDir)
+	if (trailSlash) { cacheDir = enforceTrailingSlash(cacheDir) }
 
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir)
