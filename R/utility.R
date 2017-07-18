@@ -10,11 +10,6 @@
 # These functions should probably remain interior to the package (not exported)
 #
 
-# check for, and fix, trailing slash. if necessary
-enforceTrailingSlash = function(folder) {
-	enforceEdgeCharacter(folder, appendChar="/")
-}
-
 enforceEdgeCharacter = function(string, prependChar="", appendChar="") {
 	if (string=="" | is.null(string)) {
 		return(string)
