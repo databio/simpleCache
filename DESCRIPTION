@@ -4,9 +4,9 @@ Date: 2017-03-20
 Title: A Simple Package for Caching R Objects
 Description: An R package for caching results.
 Author: c(person("Nagraj", "VP", email = "vpnagraj@virginia.edu", role =
-    c("aut")), person("Sheffield", "Nathan", email = "sheffien@github.com", role =
+    c("aut")), person("Sheffield", "Nathan", email = "nathan@code.databio.org", role =
     c("aut", "cre")))
-Maintainer: Nathan Sheffield <sheffien@github.com>
+Maintainer: Nathan Sheffield nathan@code.databio.org>
 Imports:
     data.table
 Suggests:
