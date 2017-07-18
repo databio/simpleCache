@@ -6,7 +6,7 @@ simpleCache: R caching for restartable analysis
 
 `simpleCache` is an R package providing functions for caching R objects. Its purpose is to encourage writing reusable, restartable, and reproducible analysis pipelines for projects with massive data and computational requirements.
 
-Like its name indicates, `simpleCache` is intended to be simple. You choose a location to store your caches, and then provide the function with nothing more than a cache name and instructions (R code) for how to produce the R object. While simple, `simpleCache` also provides some advanced options like environment assignments, recreating caches, reloading caches, and even cluster compute bindings (to SLURM) making it flexible enough for use in large-scale data analysis projects.
+Like its name indicates, `simpleCache` is intended to be simple. You choose a location to store your caches, and then provide the function with nothing more than a cache name and instructions (R code) for how to produce the R object. While simple, `simpleCache` also provides some advanced options like environment assignments, recreating caches, reloading caches, and even cluster compute bindings (using the `batchjobs` package) making it flexible enough for use in large-scale data analysis projects.
 
 --------------------------------------------------------------------------------
 ### Installing simpleCache
@@ -19,7 +19,7 @@ install_github("databio/simpleCache") #public
 
 To install a local copy:
 ```
-packageFolder = "~/Rn/simpleCache";
+packageFolder = "~/R/simpleCache";
 install.packages(packageFolder, repos=NULL)
 ```
 
@@ -30,6 +30,7 @@ install.packages(packageFolder, repos=NULL)
 
 * [An introduction to simpleCache](vignettes/simpleCacheIntroduction.Rmd)
 * [Sharing caches across projects](vignettes/sharingCaches.Rmd)
+* [Generating caches on a cluster](vignettes/clusterCaches.Rmd)
 
 --------------------------------------------------------------------------------
 ### simpleCache Philosophy
