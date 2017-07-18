@@ -108,7 +108,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 			parse = FALSE
 		}
 	}
-	if(!is.null(cacheSubDir)) {
+	if (!is.null(cacheSubDir)) {
 		cacheDir = file.path(cacheDir, cacheSubDir)
 	}
 	if (is.null(cacheDir)) {
@@ -116,12 +116,11 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 		or specify a cacheDir parameter directly to simpleCache()."))
 		return(NA)
 	}
-	if(!"character" %in% class(cacheName)) {
+	if (!"character" %in% class(cacheName)) {
 		stop("simpleCache expects the cacheName variable to be a character
 		vector.")
 	}
 	
-	cacheDir = enforceTrailingSlash(cacheDir)
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir, recursive=TRUE)
 	}
@@ -325,8 +324,6 @@ downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE,
 		local cacheDir parameter."))
 		return(NA)
 	}
-
-	cacheDir = enforceTrailingSlash(cacheDir)
 
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir)
