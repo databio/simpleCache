@@ -125,8 +125,8 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir, recursive=TRUE)
 	}
-	cacheFile = file.path(cacheDir, cacheName, ".RData")
-	lockFile = file.path(cacheDir, cacheName, ".lock")
+	cacheFile = file.path(cacheDir, paste0(cacheName, ".RData"))
+	lockFile = file.path(cacheDir, paste0(cacheName, ".lock"))
 	if (ignoreLock) {
 		# remove the lock file when this function call is complete.
 		on.exit(file.remove(lockFile))
@@ -164,7 +164,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 		}
 		if (!is.null(pepSettings)) { 
 			# TODO: retrieve log
-			slurmLog = file.path(slurmParams$hpcFolder, "/", cacheName, ".log")
+			slurmLog = file.path(slurmParams$hpcFolder, paste0(cacheName, ".log"))
 			message(slurmLog)
 			utils::tail(readLines(slurmLog), 10) 
 		}
@@ -196,7 +196,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 				}
 
 				if (timer) { tic() }
-				source(file.path(buildDir, cacheName, ".R"), local=FALSE)
+				source(file.path(buildDir, paste0(cacheName, ".R")), local=FALSE)
 				if (timer) { toc() }
 				ret = get(cacheName)
 		} else {
