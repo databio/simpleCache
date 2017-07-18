@@ -6,7 +6,7 @@ Description: An R package for caching results.
 Author: c(person("Nagraj", "VP", email = "vpnagraj@virginia.edu", role =
     c("aut")), person("Sheffield", "Nathan", email = "nathan@code.databio.org", role =
     c("aut", "cre")))
-Maintainer: Nathan Sheffield nathan@code.databio.org>
+Maintainer: Nathan Sheffield <nathan@code.databio.org>
 Imports:
     data.table
 Suggests:
