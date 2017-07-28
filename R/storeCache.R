@@ -38,11 +38,10 @@ storeCache = function(cacheName, cacheDir = getOption("RCACHE.DIR"),
 		character vector."))
 	}
 
-	cacheDir = enforceTrailingSlash(cacheDir)
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir, recursive=TRUE)
 	}
-	cacheFile = paste0(cacheDir, cacheName, ".RData")
+	cacheFile = file.path(cacheDir, paste0(cacheName, ".RData"))
 	if(file.exists(cacheFile) & !recreate) {
 		message("::Cache already exists (use recreate to overwrite)::\t",
 		cacheFile)
