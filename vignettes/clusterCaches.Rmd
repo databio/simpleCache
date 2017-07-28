@@ -43,7 +43,6 @@ simpleCache("testBatch", {
 This will now create and submit a job script to the cluster. That job script will have R code to create your `testBatch` cache by calling the code in your `simpleCache` call, `rnorm(1e7, 0, 1)`. Next time you run this function, it will just load the cache without recreating it, as you would expect simpleCache to do. Now there's a bunch of other stuff you can use `batchtools` to do with these jobs:
 
 ```
-
 batchtools::getJobTable(reg=registry)
 batchtools::getJobPars()
 batchtools::getStatus()
@@ -55,3 +54,9 @@ batchtools::loadResult(1, reg=registry)
 # killJobs()
 ```
 
+When you're done, you may want to remove your temporary registry:
+```
+batchtools::removeRegistry(reg=registry)
+```
+
+See `batchtools` documentation for more details on using registries.
