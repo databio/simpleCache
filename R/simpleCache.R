@@ -90,7 +90,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE,
 	buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL,
 	loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"),
-	slurmParams=NULL, parse=NULL, nofail=FALSE, batchRegistry=NULL,
+	parse=NULL, nofail=FALSE, batchRegistry=NULL,
 	batchResources=NULL, pepSettings=NULL, ignoreLock=FALSE) {
 
 	# Because R evaluates arguments lazily (only when they are used),
@@ -159,13 +159,12 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 		if (!is.null(batchRegistry)) {
 			# Grabbing log from batchtools
 			# 1 is the job id.
-			message(paste(batchtools::getLog(1, reg=registry), collapse="\n"))
+			message(paste(batchtools::getLog(1, reg=batchRegistry), collapse="\n"))
 		}
 		if (!is.null(pepSettings)) { 
 			# TODO: retrieve log
-			slurmLog = file.path(slurmParams$hpcFolder, paste0(cacheName, ".log"))
-			message(slurmLog)
-			utils::tail(readLines(slurmLog), 10) 
+			stop("PEP settings submission is not yet implemented")
+			
 		}
 
 		return()
@@ -206,10 +205,10 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 					# Submit to cluster using batchtools 
 
 					 if (! requireNamespace("batchtools", quietly=TRUE)) {
-						error("Install batchtools for cluster submission...")
+						stop("Install batchtools for cluster submission...")
 					} 
 					if (is.null(batchResources)) { 
-						error("You must provide both batchRegistry and batchResources.")
+						stop("You must provide both batchRegistry and batchResources.")
 					}
 					message("Submitting job to cluster")
 					# You have to wrap `instruction` in substitute() so it won't be evaluated,
@@ -231,7 +230,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 					message("Done submitting to cluster")
 					submitted = "batch"
 				} else if ( ! is.null(pepSettings) ) {
-					error("PEP settings submission is not yet implemented")
+					stop("PEP settings submission is not yet implemented")
 					# Build a simpleCache command
 					#simpleCacheCode = paste0("simpleCache('", cacheName, "',
 						# instruction='", paste0(deparse(instruction), collapse="\n"), "',

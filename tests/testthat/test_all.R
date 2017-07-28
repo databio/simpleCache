@@ -1,6 +1,6 @@
 library(simpleCache)
 
-context("Context here...")
+context("Test_that")
 
 test_that("Caching respects files existing", {
 	set.seed(1)
@@ -16,17 +16,3 @@ test_that("Caching respects files existing", {
 	expect_equal(signif(normSample[1], 6), -0.229762)
 })
 
-
-# R lazy function evaluation notes:
-#myx = function (yesno, expr) {
-#	if (yesno) expr
-#	else expr = substitute(expr)
-#	return(expr)
-#}
-
-#a = myx (FALSE, {rnorm(1e5)} )
-#a
-#class(a)
-#eval(a)
-
-#expression
