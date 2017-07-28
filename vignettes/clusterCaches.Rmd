@@ -29,7 +29,7 @@ registry
 Notice that I'm using a custom slurm template here. With a registry in hand, we next need to define the resources this cache job will require:
 
 ```
-resources = list(ncpus=1, memory= 1000, walltime=60, partition="economy")
+resources = list(ncpus=1, memory=1000, walltime=60, partition="serial")
 
 ```
 
