@@ -3,7 +3,13 @@ Version: 0.2.0
 Date: 2017-08-03
 Title: Simply Caching R Objects
 Description: Provides intuitive functions for caching R objects, encouraging
-	reproducible, restartable, and distributed R analysis.
+	reproducible, restartable, and distributed R analysis. The user selects a
+	location to store caches, and then provides  nothing more than a cache name
+	and instructions (R code) for how to produce the R object. simpleCache also
+	provides some advanced options like environment assignments, recreating or
+	reloading caches, and cluster compute bindings (using the 'batchtools'
+	package) making it flexible enough for use in large-scale data analysis
+	projects.
 Author: c(person("Nagraj", "VP", email = "vpnagraj@virginia.edu", role =
     c("aut")), person("Sheffield", "Nathan", email = "nathan@code.databio.org",
     role = c("aut", "cre")))
@@ -16,6 +22,7 @@ Suggests:
 Enhances:
 	batchtools
 VignetteBuilder: knitr
-License: GPL
-URL: http://www.github.com/sheffien/simpleCache
+License: GPL-3
+URL: http://www.github.com/databio/simpleCache
+BugReports: http://www.github.com/databio/simpleCache
 RoxygenNote: 6.0.1
