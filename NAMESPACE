@@ -2,7 +2,6 @@
 
 export(addCacheSearchEnvironment)
 export(availCaches)
-export(downloadCache)
 export(loadCaches)
 export(resetCacheSearchEnvironment)
 export(setCacheBuildDir)
@@ -14,4 +13,3 @@ export(simpleCacheShared)
 export(simpleCacheSharedGlobal)
 export(storeCache)
 export(viewCacheDirs)
-import(data.table)

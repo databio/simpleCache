@@ -6,7 +6,6 @@
 #' 
 #' @references \url{https://github.com/nsheff/}
 ## @import if you import any packages; here.
-#' @import data.table
 #' @docType package
 #' @name simpleCache
 #' @author Nathan Sheffield
@@ -287,84 +286,3 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	
 	#return() #used to return ret, but not any more
 }
-
-
-#' Create or load a cache from the web.
-#'
-#' Given a URL, this function will download the file and cache it, or load it if it has been previously downloaded.
-#' BETA -- not finished.
-#' TODO -- update with searchEnvir feature of simpleCache.
-#'
-#' @param object Name of cache.
-#' @param url Web location of the text file to cache.
-#' @param env See documentation at simpleCache()
-#' @param reload See documentation at simpleCache()
-#' @param recreate See documentation at simpleCache()
-#' @param noload See documentation at simpleCache()
-#' @param cacheDir See documentation at simpleCache()
-#' @param cacheSubDir See documentation at simpleCache()
-#' @param loadEnvir See documentation at simpleCache()
-#' @param assignToVariable See documentation at simpleCache()
-#' @export
-downloadCache = function(object, url, env=NULL, reload=FALSE, recreate=FALSE,
-	noload=FALSE, cacheDir=getOption("RCACHE.DIR"), cacheSubDir="download",
-	loadEnvir=parent.frame(), assignToVariable=NULL) {
-
-	# downloadCache will use data.table's fread function for reading
-	# in downloads:
-	requireNamespace("data.table")
-	
-	# Deal with path joins and ensure that the target cache directory exists.
-	if(!is.null(cacheSubDir)) {
-		cacheDir = file.path(cacheDir, cacheSubDir)
-	}
-	if (is.null(cacheDir)) {
-		message(strwrap("You must set global option(RCACHE.DIR) or specify a
-		local cacheDir parameter."))
-		return(NA)
-	}
-
-	if (!file.exists(cacheDir)) {
-		dir.create(cacheDir)
-	}
-
-	cacheFile = file.path(cacheDir, object)
-	message("Cache file: ", cacheFile)
-
-	if(exists(object) & !reload & !recreate) {
-		message("::Object exists::\t", object)
-		return(get(object))
-	} else if(file.exists(cacheFile) & !recreate & !noload) {
-		message("::Loading cache::\t", cacheFile)
-		ret = data.table::fread(cacheFile)
-	} else if(file.exists(cacheFile) & !recreate) {
-		message("::Cache exists (no load)::\t", cacheFile)
-		return (NULL)
-	} else {
-		message(":Creating cache::\t", cacheFile)
-		if(is.null(url)) {
-			message(strwrap("You must set global option(RBUILD.DIR) or specify a
-			local buildDir parameter (or provide an instruction argument)."))
-				return(NA)
-		} else {
-			#"ret," for return, is the name the object is stored under.
-			command = paste0("wget -O ", cacheFile, " '", url, "'")
-			sysResult = system(command, intern=TRUE)
-			message(command, sysResult)
-			ret = data.table::fread(cacheFile)
-		}
-	}
-
-	if (noload) { 
-		rm(ret)
-		gc()
-		return()
-	}
-	if(is.null(assignToVariable)) { 
-		assignToVariable=object
-	}
-	assign(assignToVariable, ret, envir=loadEnvir)
-	return() #used to return ret, but not any more
-}
-
-
