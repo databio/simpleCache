@@ -25,7 +25,11 @@
 *.log
 *.sql
 *.sqlite
- 
+
+# IDEs #
+########
+.idea/
+
 # OS generated files #
 ######################
 .DS_Store
@@ -36,9 +40,10 @@
 ehthumbs.db
 Thumbs.db
 
-
 # Gedit temporary files #
 #########################
 
 *~
 ~
+.Rproj.user
+.Rhistory
