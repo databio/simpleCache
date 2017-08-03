@@ -1,7 +1,7 @@
 Package: simpleCache
 Version: 0.2.0
-Date: 2017-03-20
-Title: Simply caching R objects
+Date: 2017-08-03
+Title: Simply Caching R Objects
 Description: Provides intuitive functions for caching R objects, encouraging
 	reproducible, restartable, and distributed R analysis.
 Author: c(person("Nagraj", "VP", email = "vpnagraj@virginia.edu", role =
