@@ -10,11 +10,13 @@ output: knitr:::html_vignette
 
 # An introduction to simpleCache
 
+## Your first cache
+
 `SimpleCache` has 2 main use cases: First, it can help you pick up where you left off in an R session, and second, it can help you parallelize code by enabling you to share results across R sessions.
 
-The workhorse function of `simpleCache` is the eponymous `simpleCache()`, which in the simplest case requires just two parameters: a cache name, and an instruction string. The cache name should be considered unique and its underlying object immutable, while the instruction is the `R` code that generates the object you wish to cache.
+The workhorse function of `simpleCache` is the eponymous `simpleCache()`, which in the simplest case requires just two parameters: a cache name, and a block of code. The cache name should be considered unique and its underlying object immutable, while the block of code (or *instruction*) is the `R` code that generates the object you wish to cache.
 
-But before we start creating caches, it's important to tell `simpleCache` where to store the caches. SimpleCache sets a global variable (`RCACHE.DIR`) for caches, and provides a setter function (`setCacheDir()`) to change this. To get started, choose a cache directory, and generate some random data. Use the `recreate` flag to ensure that the cache is produced and overwritten even if it already exists:
+But before we start creating caches, it's important to tell `simpleCache` where to store the caches. SimpleCache uses a global variable (`RCACHE.DIR`) for caches, and provides a setter function (`setCacheDir()`) to change this. To get started, choose a cache directory, and generate some random data. Use the `recreate` flag if you want to ensure that the cache is produced and overwritten even if it already exists:
 
 ```{r Try it out}
 library(simpleCache)
@@ -23,47 +25,101 @@ simpleCache("normSample", { rnorm(1e7, 0,1) }, recreate=TRUE)
 simpleCache("normSample", { rnorm(1e7, 0,1) })
 ```
 
+Notice that the second call to simpleCache doesn't re-run the `rnorm` calculation. In fact, it doesn't even re-load the cache, because it notices that it's already in memory. But what if you want to reload it anyway; for example, if you've loaded a cache and then accidentally changed it, and want to reset? By default, a call to `simpleCache()` will not reload an object that already exists in your environment. But you can always force it with the `reload` parameter: 
 
-One advantage of simpleCache over the default `save` and `load()` functions in base R is that we now require only a single function; `simpleCache()` handles both saving and loading. By default, the object will be loaded into a variable with the same name as the cache. You can change this behavior like so:
+```
+normSample = NA  # Oops.
+simpleCache("normSample", { rnorm(1e7, 0,1) }, reload=TRUE)
+```
+
+With just those parameters (cache name, instruction, recreate, and reload), you should be able to make good use of `simpleCache`. But there's more if you want it: read on!
+
+## Comparison to base R save() and load()
+
+Of course, R has base functions that accomplish this (`save()` and `load()`), so what does simpleCache add? Well, `simpleCache` is essentially a convenience wrapper around the base R functions. The first advantage is that we now require only a single function: `simpleCache()` handles both saving and loading. This means your script does not need to be written differently depending on whether it's generating or loading a cache, because the same function can do either, depending on whether the cache exists or not. The second advantage is that caches are keyed by cache name instead of by filename. So instead of putting a whole path to an Rdata file into `load()`, we just pass a unique identifier for the cache, and simpleCache handles the rest. Third, `simpleCache` tries to be smart: if you already have the object in memory, it won't re-load it. For big caches, this can save you time if you accidentally call `simpleCache()` multiple times on the same cache.
+
+Beyond that, `simpleCache` also offers several advanced options that just make it really easy to save and re-load R objects. Let's go into a bit more detail into these features.
+
+## Cache names
+
+By default, the object will be loaded into a variable with the same name as the cache. You can change this behavior with the `assignTo` parameter:
 
 ```{r}
 simpleCache("normSample", { rnorm(1e7, 0,1) }, assignTo="mySamp")
 ```
 
-After doing both of these commands, we have both `normSample` and `mySamp` in the workspace, and these objects are identical:
+After doing both of these commands, we have both `normSample` (from the previous calls, not from this one) and `mySamp` (loaded in this call) in the workspace, and these objects are identical:
 
 ```{r}
 identical(normSample, mySamp)
 ```
+
+This `assignTo` concept is useful if you want to create caches but not load them, or load caches one at a time...
+
+## Creating but not loading caches
+
+It may be that you want to create a bunch of caches that are quite memory intensive, and you don't actually need them all in this particular R workspace at the same time. If you just create each object and save it, you'll end with all those objects in memory at the same time. Instead, you can use the `noload` parameter, which will create the caches but not load them into memory (so the object will be cached, but will not persist in this R environment). I use this frequently in a setup script to build caches that I will need later in individual scripts that will run on each one individually. Let's make 5 caches but not load them:
+
+```{r}
+for (i in 1:5) {
+	cacheName = paste0("normSample_", i)
+	simpleCache(cacheName, { rnorm(1e6, 0,1) }, noload=TRUE, recreate=TRUE)
+}
+```
+
+We've now produced 5 different sample data caches. This could, for example, be done in an initial data-generation or setup script. We then may be interested in using these (same) caches in several downstream scripts, and we could do some iterative operation on them and use `assignTo` to avoid loading more than 1 at a time into memory:
+
+```{r}
+overallMinimum = 1e6  # pick some high number to start
+for (i in 1:5) {
+	cacheName = paste0("normSample_", i)
+	simpleCache(cacheName, assignTo="temp")
+	overallMinimum = min(overallMinimum, temp)
+}
+
+message(overallMinimum)
+```
+
+In this code block, by assigning the caches to the variable `temp`, we only have 1 in memory at a time, because each cache load overwrites the previous one, which is exactly what we want in this case. We keep track of the minimum value of each one independently, and we've effectively calculated an overall minimum while loading only a single cache in memory at a time.
+
+## Loading multiple caches
+
+If you've got a bunch of caches and you want them all in memory, you could just load all the caches into memory with this convenience alias:
+```{r}
+loadCaches(paste0("normSample_", 1:5))
+```
+
+The disadvantage of doing it this way is that you've lost the advantage of using the single `simpleCache()` function for both saving and loading, but this may be desirable in some cases.
 
 Once a cache is created, you no longer need to provide instructions:
 
 ```{r}
 simpleCache("normSample")
 ```
+SimpleCache will load it if it can; if not, it will give you an error saying it requires an `instruction`.
 
-If you want to record how long it takes to create a new cache, you can set `TIMER=TRUE`. It may be that you want to create a bunch of caches that are quite memory intensive, and you don't actually need them all in this particular R workspace. In this case, you can use the `noload` parameter, which will create the caches but not load them. Let's make 5 caches but not load them:
+## Timing cache creating
 
-```{r}
-for (i in 1:5) {
-	cacheName = paste0("normSample_", i);
-	simpleCache(cacheName, { rnorm(1e6, 0,1) }, noload=TRUE, recreate=TRUE, timer=TRUE)
-}
-```
-
-We've now produced 5 different sample data caches. This could, for example, be done in an initial data-generation or setup script. We then may be interested in using these (same) caches in several downstream scripts, and we could do some iterative operation on them without loading more than 1 at a time into memory:
+If you want to record how long it takes to create a new cache, you can set `timer=TRUE`. 
 
 ```{r}
-overallMinimum = 1e6;
-for (i in 1:5) {
-	cacheName = paste0("normSample_", i);
-	simpleCache(cacheName, assignTo="temp")
-	overallMinimum = min(overallMinimum, temp)
-}
-	message(overallMinimum)
+simpleCache("normSample", recreate=TRUE, timer=TRUE)
 ```
 
-You could just load all the caches into memory with this convenience alias:
+## Complicated code
+
+So far, our examples have cached the result of a very simple instruction code block: the `rnorm` call to randomly generate some numbers. But really, simpleCache can be used to cache anything. The code block can be whatever you want; whatever it returns will be cached. For example, let's cache the result of a call to `t.test()`:
+
 ```{r}
-loadCaches(paste0("normSample_", 1:5))
+simpleCache("tResult", { 
+	dat2 = rnorm(1e5, 0.05,2)
+	t.test(normSample, dat2)
+	}, recreate=TRUE)
+
+tResult
+tResult$p.value
 ```
+
+The point is that the code could be quite complicated and time-consuming. You may only want to calculate it once, and then re-use the result in another script.
+
+Well, that's the end of the basics. There are a few more advanced options as well, such as using a shared cache directory, submitting compute requests to a cluster using `batchtools`, tweaking the loading environment with the `loadEnvir` parameter (if you need to call `simpleCache()` from within a function), and tweaking the cache building resources with the `buildEnvir` parameter. But these options are more advanced and probably not needed for 95% of `simpleCache` use cases. If you do need more information, you can find further help in the other vignettes or in the detailed R function documentation (see `?simpleCache`).

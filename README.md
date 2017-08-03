@@ -13,8 +13,7 @@ Like its name indicates, `simpleCache` is intended to be simple. You choose a lo
 Install the development version directly from github with devtools
 
 ```
-require(devtools)
-install_github("databio/simpleCache") #public
+devtools::install_github("databio/simpleCache")
 ```
 
 To install a local copy:
@@ -34,7 +33,7 @@ simpleCache("normSample", { rnorm(1e7, 0,1) }, recreate=TRUE)
 simpleCache("normSample", { rnorm(1e7, 0,1) })
 ```
 
-I have produced some [R vignettes](vignettes/) to get you started. 
+`simpleCache` also interfaces with the `batchtools` package to let you build caches on any cluster resource manager. I have produced some [R vignettes](vignettes/) to get you started. 
 
 * [An introduction to simpleCache](vignettes/simpleCacheIntroduction.Rmd)
 * [Sharing caches across projects](vignettes/sharingCaches.Rmd)
