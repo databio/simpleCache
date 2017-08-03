@@ -1,11 +1,12 @@
 Package: simpleCache
 Version: 0.2.0
 Date: 2017-03-20
-Title: A Simple Package for Caching R Objects
-Description: An R package for caching results.
+Title: Simply caching R objects
+Description: Provides intuitive functions for caching R objects, encouraging
+	reproducible, restartable, and distributed R analysis.
 Author: c(person("Nagraj", "VP", email = "vpnagraj@virginia.edu", role =
-    c("aut")), person("Sheffield", "Nathan", email = "nathan@code.databio.org", role =
-    c("aut", "cre")))
+    c("aut")), person("Sheffield", "Nathan", email = "nathan@code.databio.org",
+    role = c("aut", "cre")))
 Maintainer: Nathan Sheffield <nathan@code.databio.org>
 Imports:
     data.table
