@@ -10,12 +10,11 @@ Description: Provides intuitive functions for caching R objects, encouraging
 	reloading caches, and cluster compute bindings (using the 'batchtools'
 	package) making it flexible enough for use in large-scale data analysis
 	projects.
-Author: c(person("Nagraj", "VP", email = "vpnagraj@virginia.edu", role =
-    c("aut")), person("Sheffield", "Nathan", email = "nathan@code.databio.org",
+Authors@R: c(person("VP", "Nagraj", email = "vpnagraj@virginia.edu", role =
+    c("aut")), person("Nathan", "Sheffield", email = "nathan@code.databio.org",
     role = c("aut", "cre")))
 Maintainer: Nathan Sheffield <nathan@code.databio.org>
 Imports:
-    data.table
 Suggests:
     knitr,
     testthat
