@@ -103,7 +103,7 @@ SimpleCache will load it if it can; if not, it will give you an error saying it 
 If you want to record how long it takes to create a new cache, you can set `timer=TRUE`. 
 
 ```{r}
-simpleCache("normSample", recreate=TRUE, timer=TRUE)
+simpleCache("normSample", { rnorm(1e6, 0,1) }, recreate=TRUE, timer=TRUE)
 ```
 
 ## Complicated code
