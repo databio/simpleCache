@@ -83,6 +83,10 @@ NULL
 #' @param  ignoreLock   internal parameter used for batch job submission; don't
 #'     touch.
 #' @export
+#' @examples
+#' setCacheDir("~")
+#' simpleCache("normSample", { rnorm(5e6, 0,1) }, recreate=TRUE, timer=TRUE)
+#' simpleCache("normSample", { rnorm(5e6, 0,1) }, reload=TRUE)
 
 simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	reload=FALSE, recreate=FALSE, noload=FALSE,

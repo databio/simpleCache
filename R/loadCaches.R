@@ -22,6 +22,8 @@ loadCaches = function(cacheNames, ...) {
 #'
 #' @param cacheSubDir Optional parameter to specify a subdirectory of the cache folder.
 #' @export
+#' @examples
+#' availCaches()
 availCaches = function(cacheSubDir="") {
 	list.files(paste0(getOption("RCACHE.DIR"), cacheSubDir))
 }
