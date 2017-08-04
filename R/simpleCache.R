@@ -80,8 +80,21 @@ NULL
 #'     cluster resource managers. Used as the `res` argument to
 #'     batchtools::batchMap()
 #' @param pepSettings Experimental untested feature.
-#' @param  ignoreLock   internal parameter used for batch job submission; don't
+#' @param ignoreLock   internal parameter used for batch job submission; don't
 #'     touch.
+#'     
+#' @examples 
+#' # speciy directory for cache
+#' setCacheDir("~")
+#' 
+#'# create cache and object
+#' simpleCache("normSample", { rnorm(1e7, 0,1) })
+#' 
+#' # remove object
+#' rm(normSample)
+#' 
+#' # reload object from cache
+#' simpleCache("normSample")
 #' @export
 
 simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,

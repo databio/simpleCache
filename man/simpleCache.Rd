@@ -106,6 +106,19 @@ Because R uses lexical scope and not dynamic scope, you may need to pass some
 environment variables you use in your instruction code. You can use this
 using the parameter buildEnvir (just provide a list of named variables).
 }
+\examples{
+# speciy directory for cache
+setCacheDir("~")
+
+# create cache and object
+simpleCache("normSample", { rnorm(1e7, 0,1) })
+
+# remove object
+rm(normSample)
+
+# reload object from cache
+simpleCache("normSample")
+}
 \references{
 \url{https://github.com/nsheff/}
 }
