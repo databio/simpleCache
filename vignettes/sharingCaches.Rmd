@@ -16,7 +16,8 @@ To solve this problem, `simpleCache` uses a second global option, `SHARE.RCACHE.
 
 ```{r Try it out}
 library(simpleCache)
-setSharedCacheDir("sharedRCache/")
+cacheDir = system.file("cache", package="simpleCache")
+setSharedCacheDir(cacheDir)
 simpleCacheShared("normSample", "rnorm(1e7, 0,1)", recreate=TRUE)
 simpleCacheShared("normSample", "rnorm(1e7, 0,1)")
 ```
