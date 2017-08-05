@@ -10,6 +10,8 @@
 #'
 #' @param cacheDir Directory where caches should be stored
 #' @export
+#' @example
+#' R/examples/example.R
 setCacheDir = function(cacheDir) {
 	options(RCACHE.DIR=cacheDir)
 }

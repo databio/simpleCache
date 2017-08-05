@@ -6,6 +6,8 @@
 #' @param cacheNames Vector of caches to load.
 #' @param ... Additional parameters passed to simpleCache.
 #' @export
+#' @example
+#' R/examples/example.R
 loadCaches = function(cacheNames, ...) {
 	for (i in 1:length(cacheNames)) {
 		# By default, load these caches into the environment that
@@ -22,8 +24,9 @@ loadCaches = function(cacheNames, ...) {
 #'
 #' @param cacheSubDir Optional parameter to specify a subdirectory of the cache folder.
 #' @export
+#' @example
+#' R/examples/example.R
 availCaches = function(cacheSubDir="") {
 	list.files(paste0(getOption("RCACHE.DIR"), cacheSubDir))
 }
-
 

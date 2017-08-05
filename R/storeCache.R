@@ -17,7 +17,8 @@
 #'     variable. Defaults to NULL.
 #' @param recreate	Forces reconstruction of the cache
 #' @export
-
+#' @example
+#' R/examples/example.R
 storeCache = function(cacheName, cacheDir = getOption("RCACHE.DIR"),
 	cacheSubDir = NULL, recreate=FALSE) {
 

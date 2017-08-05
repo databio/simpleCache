@@ -83,7 +83,8 @@ NULL
 #' @param  ignoreLock   internal parameter used for batch job submission; don't
 #'     touch.
 #' @export
-
+#' @example
+#' R/examples/example.R
 simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	reload=FALSE, recreate=FALSE, noload=FALSE,
 	cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE,
