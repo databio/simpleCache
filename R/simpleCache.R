@@ -245,9 +245,9 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 					# No cluster submission request, so just run it here!
 					# "ret," for return, is the name the cacheName is stored under.
 					if (parse) {
-						ret = eval(parse(text=instruction))
+						ret = eval(parse(text=instruction), envir=globalenv())
 					} else {
-						ret = eval( instruction )
+						ret = eval(substitute(instruction), envir=globalenv())
 					}
 				}
 				if (timer) { toc() }
@@ -255,9 +255,9 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 				# Build environment was provided.
 				if (timer) { tic() }
 				if (parse) {
-					ret = with(buildEnvir, eval(parse(text=instruction)))
+					ret = with(buildEnvir, eval(parse(text=instruction)), envir=globalenv())
 				} else {
-					ret = with(buildEnvir, eval(instruction))
+					ret = with(buildEnvir, eval(substitute(instruction), envir=globalenv()))
 				}
 				if (timer) { toc() }
 			}
