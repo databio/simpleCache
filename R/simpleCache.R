@@ -247,21 +247,38 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 					if (parse) {
 						ret = eval(parse(text=instruction), envir=globalenv())
 					} else {
-						ret = eval(substitute(instruction), envir=globalenv())
+						# Here we do the evaluation in the global environment so that 
+						# it will have access to any packages the user has loaded
+						# that may be required to run the code. Otherwise, it will
+						# run in the simpleCache namespace which could lack these
+						# packages (or have a different search path hierarchy),
+						# leading to failures. The `substitute` call here ensures
+						# the code isn't evaluated at argument stage, but is retained
+						# until it makes it to the `eval` call.
+						ret = eval(instruction, envir=globalenv())
 					}
 				}
 				if (timer) { toc() }
 			} else {
 				# Build environment was provided.
+				# we must place the instruction in the environment to build from
+				buildEnvir$instruction = instruction
+				be = as.environment(buildEnvir)
+				# As described above, this puts global package functions into 
+				# scope so instructions can use them.
+				parent.env(be) = globalenv()
 				if (timer) { tic() }
 				if (parse) {
-					ret = with(buildEnvir, eval(parse(text=instruction)), envir=globalenv())
+					ret = with(be, eval(parse(text=instruction)))
 				} else {
-					ret = with(buildEnvir, eval(substitute(instruction), envir=globalenv()))
+					#ret = with(buildEnvir, evalq(instruction))
+					ret = with(be, eval(instruction))
+
 				}
 				if (timer) { toc() }
 			}
 		}
+
 		# tryCatch
 		}, error = function(e) { if (nofail) warning(e) else stop(e) })
 
