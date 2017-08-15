@@ -122,7 +122,7 @@ normSample2 = rnorm(10, 0, 1)
 storeCache("normSample2")
 
 # what's available?
-availCaches()
+listCaches()
 
 # load a cache
 simpleCache("normSample")
