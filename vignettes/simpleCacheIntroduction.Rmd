@@ -22,31 +22,31 @@ But before we start creating caches, it's important to tell `simpleCache` where 
 library(simpleCache)
 cacheDir = tempdir()
 setCacheDir(cacheDir)
-simpleCache("normSample", { rnorm(1e7, 0,1) })
+simpleCache("normSamp", { rnorm(1e7, 0,1) })
 ```
 
 Now, watch what happens when we run that same function call again:
 
-```
-simpleCache("normSample", { rnorm(1e7, 0,1) })
+```{r}
+simpleCache("normSamp", { rnorm(1e7, 0,1) })
 ```
 
 Notice that the second call to `simpleCache()` doesn't re-run the `rnorm` calculation. In fact, it doesn't even re-load the cache, because it notices that it's already in memory. If the cache weren't already in memory, this call would load it from disk. This means you can put this code in multiple scripts and pull the same randomized data, without re-doing the compute work. 
 
 You can also force a cache to reload using the `reload` option. This could be useful, for example, if you've loaded a cache and then accidentally changed it, and want to reset. By default, a call to `simpleCache()` will not reload an object that already exists in your environment. But you can always force it with the `reload` parameter: 
 
-```
-normSample = NA  # Oops broke my object in memory.
-# Regular call won't reload because we have an object called normSample already:
-simpleCache("normSample", { rnorm(1e7, 0,1) })
+```{r}
+normSamp = NA  # Oops broke my object in memory.
+# Regular call won't reload because we have an object called normSamp already:
+simpleCache("normSamp", { rnorm(1e7, 0,1) })
 # But we can force reload and get it back with reload=TRUE
-simpleCache("normSample", { rnorm(1e7, 0,1) }, reload=TRUE)
+simpleCache("normSamp", { rnorm(1e7, 0,1) }, reload=TRUE)
 ```
 
 What if we want to start over and blow that cache, getting a new random set? Use the `recreate` flag if you want to ensure that the cache is produced and overwritten even if it already exists:
 
-```
-simpleCache("normSample", { rnorm(1e7, 0,1) }, recreate=TRUE)
+```{r}
+simpleCache("normSamp", { rnorm(1e7, 0,1) }, recreate=TRUE)
 ```
 
 With just those parameters (cache name, instruction, recreate, and reload), you should be able to make good use of `simpleCache`. The essence is: if the object exists in memory already: do nothing. If it does not exist in memory, but exists on disk: load it into memory. If it exists neither in memory or on disk: create it and store it to disk and memory. Now you've got the basics.
@@ -64,13 +64,13 @@ Beyond that, `simpleCache` also offers several convenient options that just make
 By default, the object will be loaded into a variable with the same name as the cache. You can change this behavior with the `assignTo` parameter:
 
 ```{r}
-simpleCache("normSample", { rnorm(1e7, 0,1) }, assignTo="mySamp")
+simpleCache("normSamp", { rnorm(1e7, 0,1) }, assignTo="mySamp")
 ```
 
-After doing this command, we have both `normSample` (from the previous calls, not from this one) and `mySamp` (loaded in this call) in the workspace, and these objects are identical:
+After doing this command, we have both `normSamp` (from the previous calls, not from this one) and `mySamp` (loaded in this call) in the workspace, and these objects are identical:
 
 ```{r}
-identical(normSample, mySamp)
+identical(normSamp, mySamp)
 ```
 
 This `assignTo` concept is useful if you want to create caches but not load them, or load caches one at a time. Which leads us to...
@@ -81,7 +81,7 @@ It may be that you want to create a bunch of caches that are quite memory intens
 
 ```{r}
 for (i in 1:5) {
-	cacheName = paste0("normSample_", i)
+	cacheName = paste0("normSamp_", i)
 	simpleCache(cacheName, { rnorm(1e6, 0,1) }, recreate=TRUE, noload=TRUE)
 }
 ```
@@ -91,7 +91,7 @@ We've now produced 5 different sample data caches. They exist on disk, but not i
 ```{r}
 overallMinimum = 1e6  # pick some high number to start
 for (i in 1:5) {
-	cacheName = paste0("normSample_", i)
+	cacheName = paste0("normSamp_", i)
 	simpleCache(cacheName, assignTo="temp")
 	overallMinimum = min(overallMinimum, temp)
 }
@@ -105,7 +105,7 @@ In this code block, by assigning the caches to the variable `temp`, we only have
 
 If you've got a bunch of caches and you want them all in memory, you could just load all the caches into memory with this convenience alias:
 ```{r}
-loadCaches(paste0("normSample_", 1:5))
+loadCaches(paste0("normSamp_", 1:5))
 ```
 
 The disadvantage of doing it this way is that you've lost the advantage of using the single `simpleCache()` function for both saving and loading, but this may be desirable in some cases.
@@ -113,7 +113,7 @@ The disadvantage of doing it this way is that you've lost the advantage of using
 By the way, once a cache is created, you no longer need to provide instructions:
 
 ```{r}
-simpleCache("normSample")
+simpleCache("normSamp")
 ```
 
 `simpleCache` will load it if it can; if not, it will give you an error saying it requires an `instruction`.
@@ -123,7 +123,7 @@ simpleCache("normSample")
 If you want to record how long it takes to create a new cache, you can set `timer=TRUE`. 
 
 ```{r}
-simpleCache("normSample", { rnorm(1e6, 0,1) }, recreate=TRUE, timer=TRUE)
+simpleCache("normSamp", { rnorm(1e6, 0,1) }, recreate=TRUE, timer=TRUE)
 ```
 
 ## Complicated code
@@ -133,7 +133,7 @@ So far, our examples have cached the result of a very simple instruction code bl
 ```{r}
 simpleCache("tResult", { 
 	dat2 = rnorm(1e5, 0.05,2)
-	t.test(normSample, dat2)
+	t.test(normSamp, dat2)
 	}, recreate=TRUE)
 
 tResult
