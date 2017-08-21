@@ -108,7 +108,7 @@ using the parameter buildEnvir (just provide a list of named variables).
 }
 \examples{
 # choose location to store caches
-cacheDir = system.file("cache", package="simpleCache")
+cacheDir = tempdir()
 cacheDir
 setCacheDir(cacheDir)
 

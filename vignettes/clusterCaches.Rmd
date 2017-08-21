@@ -18,7 +18,7 @@ To do this, first, create a `batchtools` registry. You can follow more detailed 
 
 ```{r Try it out, eval=FALSE}
 library(simpleCache)
-setCacheDir(getwd())
+setCacheDir(tempdir())
 
 registry = batchtools::makeRegistry(NA)
 templateFile = system.file("templates/slurm-advanced.tmpl", package = "simpleCache")

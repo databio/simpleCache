@@ -112,9 +112,11 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 		cacheDir = file.path(cacheDir, cacheSubDir)
 	}
 	if (is.null(cacheDir)) {
-		message(strwrap("You must set global option RCACHE.DIR with setSharedCacheDir(),
-		or specify a cacheDir parameter directly to simpleCache()."))
-		return(NA)
+		message(strwrap("No cacheDir specified. You should set global option
+		RCACHE.DIR with setCacheDir(), or specify a cacheDir parameter directly
+		to simpleCache(). With no other option, simpleCache will use tempdir():
+		", initial="", prefix=" "), tempdir())
+		cacheDir = tempdir()
 	}
 	if (!"character" %in% class(cacheName)) {
 		stop("simpleCache expects the cacheName variable to be a character

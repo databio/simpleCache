@@ -1,5 +1,5 @@
 # choose location to store caches
-cacheDir = system.file("cache", package="simpleCache")
+cacheDir = tempdir()
 cacheDir
 setCacheDir(cacheDir)
 

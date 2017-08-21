@@ -17,7 +17,7 @@ for stuff you already cached previously, so it won't build any caches.
 }
 \examples{
 # choose location to store caches
-cacheDir = system.file("cache", package="simpleCache")
+cacheDir = tempdir()
 cacheDir
 setCacheDir(cacheDir)
 

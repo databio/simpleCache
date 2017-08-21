@@ -20,7 +20,7 @@ But before we start creating caches, it's important to tell `simpleCache` where 
 
 ```{r Try it out}
 library(simpleCache)
-cacheDir = system.file("cache", package="simpleCache")
+cacheDir = tempdir()
 setCacheDir(cacheDir)
 simpleCache("normSample", { rnorm(1e7, 0,1) })
 ```
