@@ -25,14 +25,12 @@ templateFile = system.file("templates/slurm-advanced.tmpl", package = "simpleCac
 registry$cluster.functions = batchtools::makeClusterFunctionsSlurm(
   template = templateFile)
 registry
-
 ```
 
 Notice that I'm using a custom slurm template here. With a registry in hand, we next need to define the resources this cache job will require:
 
-```
+```{r}
 resources = list(ncpus=1, memory=1000, walltime=60, partition="serial")
-
 ```
 
 Then, we simply add these as arguments to `simpleCache()` like so:
