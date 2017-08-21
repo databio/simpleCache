@@ -43,9 +43,12 @@ packageFolder = "~/R/simpleCache"; install.packages(packageFolder, repos=NULL)
 
 `simpleCache` comes with a single primary function that will do almost
 everything you need. In short, you run it with a few lines like this:
+
 ```
-library(simpleCache) setCacheDir(tempdir()) simpleCache("normSample", {
-rnorm(1e7, 0,1) }, recreate=TRUE) simpleCache("normSample", { rnorm(1e7, 0,1) })
+library(simpleCache) 
+setCacheDir(tempdir())
+simpleCache("normSample", {	rnorm(1e7, 0,1) }, recreate=TRUE)
+simpleCache("normSample", { rnorm(1e7, 0,1) })
 ```
 
 `simpleCache` also interfaces with the `batchtools` package to let you build
