@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 	- Switched default cache dir to tempdir()
 	- changed availCaches() to listCaches()
-	- changes cache building to happen in globalenv(), so that any loaded
+	- changes cache building to happen in parent.frame(), so that any loaded
 	  packages are available for cache building
 
 

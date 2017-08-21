@@ -247,9 +247,9 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 					# No cluster submission request, so just run it here!
 					# "ret," for return, is the name the cacheName is stored under.
 					if (parse) {
-						ret = eval(parse(text=instruction), envir=globalenv())
+						ret = eval(parse(text=instruction), envir=parent.frame())
 					} else {
-						# Here we do the evaluation in the global environment so that 
+						# Here we do the evaluation in the parent frame so that 
 						# it will have access to any packages the user has loaded
 						# that may be required to run the code. Otherwise, it will
 						# run in the simpleCache namespace which could lack these
@@ -257,18 +257,21 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 						# leading to failures. The `substitute` call here ensures
 						# the code isn't evaluated at argument stage, but is retained
 						# until it makes it to the `eval` call.
-						ret = eval(instruction, envir=globalenv())
+						ret = eval(instruction, envir=parent.frame())
 					}
 				}
 				if (timer) { toc() }
 			} else {
 				# Build environment was provided.
 				# we must place the instruction in the environment to build from
+				if (exists("instruction", buildEnvir)) {
+					stop("Can't provide a variable named 'instruction' in buildEnvir")
+				}
 				buildEnvir$instruction = instruction
 				be = as.environment(buildEnvir)
 				# As described above, this puts global package functions into 
 				# scope so instructions can use them.
-				parent.env(be) = globalenv()
+				parent.env(be) = parent.frame()
 				if (timer) { tic() }
 				if (parse) {
 					ret = with(be, eval(parse(text=instruction)))
