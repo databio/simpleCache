@@ -18,21 +18,19 @@ To do this, first, create a `batchtools` registry. You can follow more detailed 
 
 ```{r Try it out, eval=FALSE}
 library(simpleCache)
-setCacheDir(getwd())
+setCacheDir(tempdir())
 
 registry = batchtools::makeRegistry(NA)
 templateFile = system.file("templates/slurm-advanced.tmpl", package = "simpleCache")
 registry$cluster.functions = batchtools::makeClusterFunctionsSlurm(
   template = templateFile)
 registry
-
 ```
 
 Notice that I'm using a custom slurm template here. With a registry in hand, we next need to define the resources this cache job will require:
 
-```
+```{r}
 resources = list(ncpus=1, memory=1000, walltime=60, partition="serial")
-
 ```
 
 Then, we simply add these as arguments to `simpleCache()` like so:

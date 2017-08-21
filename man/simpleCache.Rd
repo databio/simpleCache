@@ -108,7 +108,7 @@ using the parameter buildEnvir (just provide a list of named variables).
 }
 \examples{
 # choose location to store caches
-cacheDir = system.file("cache", package="simpleCache")
+cacheDir = tempdir()
 cacheDir
 setCacheDir(cacheDir)
 
@@ -122,7 +122,7 @@ normSample2 = rnorm(10, 0, 1)
 storeCache("normSample2")
 
 # what's available?
-availCaches()
+listCaches()
 
 # load a cache
 simpleCache("normSample")

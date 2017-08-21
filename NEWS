@@ -1,19 +1,23 @@
 # Change log
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] -- 2017-08-21
+
+	- Switched default cache dir to tempdir()
+	- changed availCaches() to listCaches()
+	- changes cache building to happen in parent.frame(), so that any loaded
+	  packages are available for cache building
+
+
 ## [0.2.1] -- 2017-07-30
 
-### Added
-
-	- Added examples.
+	- Added examples
 
 ## [0.2.0] -- 2017-07-30
-
-### Added
 
 	- support for batchjobs parallel processing
 	- docs, prep for submission to CRAN
 
 ## [0.0.1]
 
-Long-term stable version
+	- Long-term stable version

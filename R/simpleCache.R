@@ -112,9 +112,11 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 		cacheDir = file.path(cacheDir, cacheSubDir)
 	}
 	if (is.null(cacheDir)) {
-		message(strwrap("You must set global option RCACHE.DIR with setSharedCacheDir(),
-		or specify a cacheDir parameter directly to simpleCache()."))
-		return(NA)
+		message(strwrap("No cacheDir specified. You should set global option
+		RCACHE.DIR with setCacheDir(), or specify a cacheDir parameter directly
+		to simpleCache(). With no other option, simpleCache will use tempdir():
+		", initial="", prefix=" "), tempdir())
+		cacheDir = tempdir()
 	}
 	if (!"character" %in% class(cacheName)) {
 		stop("simpleCache expects the cacheName variable to be a character
@@ -245,23 +247,43 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 					# No cluster submission request, so just run it here!
 					# "ret," for return, is the name the cacheName is stored under.
 					if (parse) {
-						ret = eval(parse(text=instruction))
+						ret = eval(parse(text=instruction), envir=parent.frame())
 					} else {
-						ret = eval( instruction )
+						# Here we do the evaluation in the parent frame so that 
+						# it will have access to any packages the user has loaded
+						# that may be required to run the code. Otherwise, it will
+						# run in the simpleCache namespace which could lack these
+						# packages (or have a different search path hierarchy),
+						# leading to failures. The `substitute` call here ensures
+						# the code isn't evaluated at argument stage, but is retained
+						# until it makes it to the `eval` call.
+						ret = eval(instruction, envir=parent.frame())
 					}
 				}
 				if (timer) { toc() }
 			} else {
 				# Build environment was provided.
+				# we must place the instruction in the environment to build from
+				if (exists("instruction", buildEnvir)) {
+					stop("Can't provide a variable named 'instruction' in buildEnvir")
+				}
+				buildEnvir$instruction = instruction
+				be = as.environment(buildEnvir)
+				# As described above, this puts global package functions into 
+				# scope so instructions can use them.
+				parent.env(be) = parent.frame()
 				if (timer) { tic() }
 				if (parse) {
-					ret = with(buildEnvir, eval(parse(text=instruction)))
+					ret = with(be, eval(parse(text=instruction)))
 				} else {
-					ret = with(buildEnvir, eval(instruction))
+					#ret = with(buildEnvir, evalq(instruction))
+					ret = with(be, eval(instruction))
+
 				}
 				if (timer) { toc() }
 			}
 		}
+
 		# tryCatch
 		}, error = function(e) { if (nofail) warning(e) else stop(e) })
 
