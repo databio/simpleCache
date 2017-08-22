@@ -1,7 +1,7 @@
 simpleCache: R caching for restartable analysis
 -----------------------------------------------
 
-<a href="https://travis-ci.org/databio/simpleCache"><img src="https://travis-ci.org/databio/simpleCache.svg?branch=master" alt="Travis CI status"></img></a> <img src="https://www.r-pkg.org/badges/version/simpleCache"></img>
+<a href="https://travis-ci.org/databio/simpleCache"><img src="https://travis-ci.org/databio/simpleCache.svg?branch=master" alt="Travis CI status"></img></a><a href="https://cran.r-project.org/package=simpleCache"><img src="https://www.r-pkg.org/badges/version/simpleCache"></img></a>
 
 `simpleCache` is an R package providing functions for caching R objects. Its
 purpose is to encourage writing reusable, restartable, and reproducible analysis
