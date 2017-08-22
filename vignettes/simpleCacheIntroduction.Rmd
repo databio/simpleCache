@@ -143,3 +143,9 @@ tResult$p.value
 The point is that the code could be quite complicated and time-consuming. You may only want to calculate it once, and then re-use the result in another script -- or in this same script next time you run it. `simpleCache` makes that, well, simple.
 
 That's the end of the basics. There are a few more advanced options as well, such as using a shared cache directory, submitting compute requests to a cluster using `batchtools`, tweaking the loading environment with the `loadEnvir` parameter (if you need to call `simpleCache()` from within a function), and tweaking the cache building resources with the `buildEnvir` parameter. But these options are more advanced and probably not needed for 95% of `simpleCache` use cases. If you do need more information, you can find further help in the other vignettes or in the detailed R function documentation (see `?simpleCache`).
+
+```{r Clean up}
+deleteCaches("normSamp", force=TRUE)
+deleteCaches(paste0("normSamp_", 1:5), force=TRUE)
+deleteCaches("tResult", force=TRUE)
+```

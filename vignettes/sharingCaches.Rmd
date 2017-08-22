@@ -18,6 +18,10 @@ To solve this problem, `simpleCache` uses a second global option, `SHARE.RCACHE.
 library(simpleCache)
 cacheDir = tempdir()
 setSharedCacheDir(cacheDir)
-simpleCacheShared("normSample", "rnorm(1e7, 0,1)", recreate=TRUE)
-simpleCacheShared("normSample", "rnorm(1e7, 0,1)")
+simpleCacheShared("normSample", { rnorm(1e7, 0,1) }, recreate=TRUE)
+simpleCacheShared("normSample", { rnorm(1e7, 0,1) })
+```
+
+```{r Clean up}
+deleteCaches("normSample", force=TRUE)
 ```

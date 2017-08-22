@@ -19,7 +19,7 @@ large-scale data analysis projects.
 ### Installing simpleCache
 
 `simpleCache` is on
-[CRAN](https://cran.r-project.org/web/packages/simpleCache/index.html) and can
+[CRAN](https://cran.r-project.org/package=simpleCache) and can
 be installed as usual:
 
 ```
