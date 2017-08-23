@@ -90,7 +90,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE,
 	buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL,
 	loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"),
-	parse=NULL, nofail=FALSE, batchRegistry=NULL,
+	parse=FALSE, nofail=FALSE, batchRegistry=NULL,
 	batchResources=NULL, pepSettings=NULL, ignoreLock=FALSE) {
 
 	# Because R evaluates arguments lazily (only when they are used),
@@ -98,14 +98,11 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	# primitive substitute call. Then I can evaluate conditionally
 	# (if the cache needs to be recreated)
 	instruction = substitute(instruction)
-	if (is.null(parse)) {
-		if ("character" %in% class(instruction)) {
-
+	if ("character" %in% class(instruction)) {
+		warning(strwrap("Character instruction; consider wrapping in braces."))
+		if (!parse) {
+			warning("Toggling parse flag to TRUE for character instruction")
 			parse = TRUE
-			warning(strwrap("Detected a character instruction; consider wrapping
-			in {} instead of quotes."))
-		} else {
-			parse = FALSE
 		}
 	}
 	if (!is.null(cacheSubDir)) {
