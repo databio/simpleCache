@@ -64,10 +64,6 @@ NULL
 #' @param buildDir Location of Build files (files with instructions for use If
 #'		the instructions argument is not provided). Defaults to RBUILD.DIR
 #'		global option.
-#' @param parse By default, simpleCache will guess whether you want to parse the
-#'     instruction, based on whether it is quoted. You can overwrite the guess
-#'     with this parameter; but this may disappear in the future. In general,
-#'     you should note quote, but use {} around your instructions.
 #' @param nofail By default, simpleCache throws an error if the instructions
 #'     fail. Use this option to convert this error into a warning. No cache will
 #'     be created, but simpleCache will not then hard-stop your processing. This
@@ -90,8 +86,12 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE,
 	buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL,
 	loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"),
-	parse=FALSE, nofail=FALSE, batchRegistry=NULL,
-	batchResources=NULL, pepSettings=NULL, ignoreLock=FALSE) {
+	nofail=FALSE, batchRegistry=NULL, batchResources=NULL, pepSettings=NULL, 
+	ignoreLock=FALSE) {
+
+	if (!"character" %in% class(cacheName)) {
+		stop("simpleCache expects the cacheName variable to be a character vector.")
+	}
 
 	# Because R evaluates arguments lazily (only when they are used),
 	# it will not evaluate the instruction if I first wrap it in a
@@ -99,25 +99,18 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	# (if the cache needs to be recreated)
 	instruction = substitute(instruction)
 	if ("character" %in% class(instruction)) {
-		warning(strwrap("Character instruction; consider wrapping in braces."))
-		if (!parse) {
-			warning("Toggling parse flag to TRUE for character instruction")
-			parse = TRUE
-		}
-	}
-	if (!is.null(cacheSubDir)) {
-		cacheDir = file.path(cacheDir, cacheSubDir)
-	}
+		message("Character instruction; consider wrapping in braces.")
+		parse = TRUE
+	} else { parse = FALSE }
+	
+	# Handle directory paths.
+	if (!is.null(cacheSubDir)) { cacheDir = file.path(cacheDir, cacheSubDir) }
 	if (is.null(cacheDir)) {
 		message(strwrap("No cacheDir specified. You should set global option
 		RCACHE.DIR with setCacheDir(), or specify a cacheDir parameter directly
 		to simpleCache(). With no other option, simpleCache will use tempdir():
 		", initial="", prefix=" "), tempdir())
 		cacheDir = tempdir()
-	}
-	if (!"character" %in% class(cacheName)) {
-		stop("simpleCache expects the cacheName variable to be a character
-		vector.")
 	}
 	
 	if (!file.exists(cacheDir)) {
