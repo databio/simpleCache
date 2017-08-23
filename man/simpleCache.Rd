@@ -13,8 +13,8 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   cacheDir = getOption("RCACHE.DIR"), cacheSubDir = NULL, timer = FALSE,
   buildDir = getOption("RBUILD.DIR"), assignToVariable = NULL,
   loadEnvir = parent.frame(), searchEnvir = getOption("SIMPLECACHE.ENV"),
-  parse = FALSE, nofail = FALSE, batchRegistry = NULL,
-  batchResources = NULL, pepSettings = NULL, ignoreLock = FALSE)
+  nofail = FALSE, batchRegistry = NULL, batchResources = NULL,
+  pepSettings = NULL, ignoreLock = FALSE)
 }
 \arguments{
 \item{cacheName}{Unique name for the cache. Be careful.}
@@ -52,11 +52,6 @@ variable? Defaults to parent.frame.}
 
 \item{searchEnvir}{a vector of environments to search for the already loaded
 cache.}
-
-\item{parse}{By default, simpleCache will guess whether you want to parse the
-instruction, based on whether it is quoted. You can overwrite the guess
-with this parameter; but this may disappear in the future. In general,
-you should note quote, but use {} around your instructions.}
 
 \item{nofail}{By default, simpleCache throws an error if the instructions
 fail. Use this option to convert this error into a warning. No cache will
