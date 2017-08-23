@@ -13,7 +13,7 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   cacheDir = getOption("RCACHE.DIR"), cacheSubDir = NULL, timer = FALSE,
   buildDir = getOption("RBUILD.DIR"), assignToVariable = NULL,
   loadEnvir = parent.frame(), searchEnvir = getOption("SIMPLECACHE.ENV"),
-  parse = NULL, nofail = FALSE, batchRegistry = NULL,
+  parse = FALSE, nofail = FALSE, batchRegistry = NULL,
   batchResources = NULL, pepSettings = NULL, ignoreLock = FALSE)
 }
 \arguments{
