@@ -1,17 +1,25 @@
 # Change log
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] -- 2017-08-21
+
+	- fixed a bug in unit tests that left behind a test cache in user home dir.
+	- changes cache building to happen in parent.frame()
+	- repaired vignette so R code is displayed properly
+	- added deleteCaches() function and docs
+	- reduced size of unit test cache for speed increase
+
 ## [0.3.0] -- 2017-08-21
 
-	- Switched default cache dir to tempdir()
+	- switched default cache dir to tempdir()
 	- changed availCaches() to listCaches()
-	- changes cache building to happen in parent.frame(), so that any loaded
+	- changes cache building to happen in globalenv(), so that any loaded
 	  packages are available for cache building
 
 
 ## [0.2.1] -- 2017-07-30
 
-	- Added examples
+	- added examples
 
 ## [0.2.0] -- 2017-07-30
 
@@ -20,4 +28,4 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1]
 
-	- Long-term stable version
+	- long-term stable version
