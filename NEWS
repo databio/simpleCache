@@ -1,6 +1,10 @@
 # Change log
 All notable changes to this project will be documented in this file.
 
+## [0.3.2] -- Unreleased
+
+	- remove unnecessary parse argument to simpleCache()
+	
 ## [0.3.1] -- 2017-08-21
 
 	- fixed a bug in unit tests that left behind a test cache in user home dir.
