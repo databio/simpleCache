@@ -1,0 +1,22 @@
+
+template:
+  params:
+    bootswatch: yeti
+
+navbar:
+  left:
+  - text: Vignettes
+    icon: fa-play-circle
+    href: articles/index.html
+  - text: Documentation
+    icon: fa-pencil
+    href: reference/index.html
+  - text: GitHub
+    icon: fa-github fa-lg
+    href: https://github.com/databio/simpleCache
+  
+  right:
+  - text: Databio.org
+    href: http://databio.org
+  - text: Software & Data
+    href: http://databio.org/software/
