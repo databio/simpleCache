@@ -14,7 +14,7 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   buildDir = getOption("RBUILD.DIR"), assignToVariable = NULL,
   loadEnvir = parent.frame(), searchEnvir = getOption("SIMPLECACHE.ENV"),
   nofail = FALSE, batchRegistry = NULL, batchResources = NULL,
-  pepSettings = NULL, ignoreLock = FALSE)
+  pepSettings = NULL, ignoreLock = FALSE, maxStaleness = NULL)
 }
 \arguments{
 \item{cacheName}{Unique name for the cache. Be careful.}
@@ -69,8 +69,11 @@ batchtools::batchMap()}
 
 \item{pepSettings}{Experimental untested feature.}
 
-\item{ignoreLock}{internal parameter used for batch job submission; don't
+\item{ignoreLock}{Internal parameter used for batch job submission; don't
 touch.}
+
+\item{maxStaleness}{Maximum age of cache, in days, to allow before 
+automatically triggering \code{recreate=TRUE}.}
 }
 \description{
 simpleCache provides a function (simpleCache())

@@ -76,8 +76,10 @@ NULL
 #'     cluster resource managers. Used as the `res` argument to
 #'     batchtools::batchMap()
 #' @param pepSettings Experimental untested feature.
-#' @param  ignoreLock   internal parameter used for batch job submission; don't
+#' @param ignoreLock Internal parameter used for batch job submission; don't
 #'     touch.
+#' @param maxStaleness Maximum age of cache, in days, to allow before 
+#'                     automatically triggering \code{recreate=TRUE}.
 #' @export
 #' @example
 #' R/examples/example.R
@@ -87,7 +89,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL,
 	loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"),
 	nofail=FALSE, batchRegistry=NULL, batchResources=NULL, pepSettings=NULL, 
-	ignoreLock=FALSE) {
+	ignoreLock=FALSE, maxStaleness=NULL) {
 
 	if (!"character" %in% class(cacheName)) {
 		stop("simpleCache expects the cacheName variable to be a character vector.")
@@ -138,6 +140,12 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	
 
 	ret = NULL # The default, in case the cache construction fails.
+
+	if (!recreate && .isStale(cacheFile, maxStaleness)) {
+		message(sprintf(
+			"Stale cache: '%s' (age > %d day(s))", cacheFile, maxStaleness))
+		recreate = TRUE
+	}
 
 	if(cacheExists & !reload & !recreate) {
 		message("::Object exists (in ", cacheWhere, ")::\t", cacheName)
