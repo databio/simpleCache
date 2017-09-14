@@ -48,7 +48,7 @@ enforceEdgeCharacter = function(string, prependChar="", appendChar="") {
 	if (!file_test("-f", pathCacheFile)) { return(FALSE) }
 	if (is.null(stalenessThreshold)) { stalenessThreshold = getOption("MAX.CACHE.AGE") }
 	if (is.null(stalenessThreshold)) { return(FALSE) }
-	cacheTime = file.info(pathCacheFile)$cacheTime
+	cacheTime = file.info(pathCacheFile)$ctime
 	cacheAge = difftime(Sys.time(), cacheTime, units="days")
 	as.numeric(cacheAge) > as.numeric(stalenessThreshold)
 }
