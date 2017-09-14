@@ -30,7 +30,7 @@ enforceEdgeCharacter = function(string, prependChar="", appendChar="") {
 
 #' Determine if a cache file is sufficiently old to warrant refresh.
 #' 
-#' \code{.isStale} accepts a maximum cache age and checks for an option with 
+#' \code{.tooOld} accepts a maximum cache age and checks for an option with 
 #' that setting under \code{MAX.CACHE.AGE} if such an argument isn't passed.
 #' If the indicated file exists and is older than the threshold passed or 
 #' set as an option, the file is deemed "stale." If an age threshold is 
@@ -39,18 +39,18 @@ enforceEdgeCharacter = function(string, prependChar="", appendChar="") {
 #' the result is \code{FALSE}.
 #' 
 #' @param pathCacheFile Path to file to ask about staleness.
-#' @param stalenessThreshold Maximum file age before it's "stale."
+#' @param lifespan Maximum file age before it's "stale."
 #' @return \code{TRUE} if the file exists and its age exceeds 
-#'         \code{stalenessThreshold} if given or 
+#'         \code{lifespan} if given or 
 #'         \code{getOption("MAX.CACHE.AGE")} if no age threshold is passed 
 #'         and that option exists; \code{FALSE} otherwise.
-.isStale = function(pathCacheFile, stalenessThreshold=NULL) {
+.tooOld = function(pathCacheFile, lifespan=NULL) {
 	if (!file_test("-f", pathCacheFile)) { return(FALSE) }
-	if (is.null(stalenessThreshold)) { stalenessThreshold = getOption("MAX.CACHE.AGE") }
-	if (is.null(stalenessThreshold)) { return(FALSE) }
+	if (is.null(lifespan)) { lifespan = getOption("MAX.CACHE.AGE") }
+	if (is.null(lifespan)) { return(FALSE) }
 	cacheTime = file.info(pathCacheFile)$ctime
 	cacheAge = difftime(Sys.time(), cacheTime, units="days")
-	as.numeric(cacheAge) > as.numeric(stalenessThreshold)
+	as.numeric(cacheAge) > as.numeric(lifespan)
 }
 
 
