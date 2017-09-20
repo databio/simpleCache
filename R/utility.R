@@ -27,6 +27,33 @@ enforceEdgeCharacter = function(string, prependChar="", appendChar="") {
 	return(string)
 }
 
+
+#' Determine if a cache file is sufficiently old to warrant refresh.
+#' 
+#' \code{.tooOld} accepts a maximum cache age and checks for an option with 
+#' that setting under \code{MAX.CACHE.AGE} if such an argument isn't passed.
+#' If the indicated file exists and is older than the threshold passed or 
+#' set as an option, the file is deemed "stale." If an age threshold is 
+#' provided, no check for an option is performed. If the file does not 
+#' exist or there's not an age threshold directly passed or set as an option, 
+#' the result is \code{FALSE}.
+#' 
+#' @param pathCacheFile Path to file to ask about staleness.
+#' @param lifespan Maximum file age before it's "stale."
+#' @return \code{TRUE} if the file exists and its age exceeds 
+#'         \code{lifespan} if given or 
+#'         \code{getOption("MAX.CACHE.AGE")} if no age threshold is passed 
+#'         and that option exists; \code{FALSE} otherwise.
+.tooOld = function(pathCacheFile, lifespan=NULL) {
+	if (!file_test("-f", pathCacheFile)) { return(FALSE) }
+	if (is.null(lifespan)) { lifespan = getOption("MAX.CACHE.AGE") }
+	if (is.null(lifespan)) { return(FALSE) }
+	cacheTime = file.info(pathCacheFile)$ctime
+	cacheAge = difftime(Sys.time(), cacheTime, units="days")
+	as.numeric(cacheAge) > as.numeric(lifespan)
+}
+
+
 # MATLAB-style timing functions to start/stop timer.
 # These functions were based on an idea by some helpful soul on
 # Stackoverflow that I can no longer recall...
