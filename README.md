@@ -79,10 +79,10 @@ will check for a cache and load it if it exists, or create it if it does not.
 With the base R `save` and `load` functions, you can't just write a single
 function call and then run the same thing every time you start the script --
 even this simple use case requires additional logic to check for an existing
-cache. SimpleCache just does all this for you.
+cache. `simpleCache` just does all this for you.
 
-They thing to keep in mind with simpleCache is that **the cache name is
-paramount**. SimpleCache assumes that your name for an object is a perfect
+The thing to keep in mind with `simpleCache` is that **the cache name is
+paramount**. `simpleCache` assumes that your name for an object is a perfect
 identifier for that object; in other words, don't cache things that you plan to
 change.
 
