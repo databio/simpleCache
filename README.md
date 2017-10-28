@@ -86,6 +86,9 @@ paramount**. `simpleCache` assumes that your name for an object is a perfect
 identifier for that object; in other words, don't cache things that you plan to
 change.
 
+### Contributing
+
+`simpleCache` is licensed under the [GNU General Public License Version 3](https://www.gnu.org/licenses/gpl-3.0.txt). Questions, feature requests and bug reports are welcome via the [issue queue](https://github.com/databio/simpleCache/issues). The maintainer will review pull requests and incorporate contributions at his discretion.
 
 
 
