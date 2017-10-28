@@ -1,5 +1,5 @@
 ---
-title: 'simpleCache: R caching for restartable analysis'
+title: 'simpleCache: R caching for reproducible big data projects'
 authors:
  - name: Nathan Sheffield
    orcid: 0000-0001-5643-4068
