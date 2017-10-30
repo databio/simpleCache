@@ -19,7 +19,8 @@ Suggests:
     testthat
 Enhances: batchtools
 VignetteBuilder: knitr
-License: GPL-3
+License: BSD_2_clause + file LICENSE
+Encoding: UTF-8
 URL: http://www.github.com/databio/simpleCache
 BugReports: http://www.github.com/databio/simpleCache
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000
