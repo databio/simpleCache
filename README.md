@@ -88,7 +88,7 @@ change.
 
 ### Contributing
 
-`simpleCache` is licensed under the [GNU General Public License Version 3](https://www.gnu.org/licenses/gpl-3.0.txt). Questions, feature requests and bug reports are welcome via the [issue queue](https://github.com/databio/simpleCache/issues). The maintainer will review pull requests and incorporate contributions at his discretion.
+`simpleCache` is licensed under the [The 2-Clause BSD License](https://opensource.org/licenses/BSD-2-Clause). Questions, feature requests and bug reports are welcome via the [issue queue](https://github.com/databio/simpleCache/issues). The maintainer will review pull requests and incorporate contributions at his discretion.
 
 
 
