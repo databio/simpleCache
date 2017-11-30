@@ -90,6 +90,8 @@ change.
 
 `simpleCache` is licensed under the [2-Clause BSD License](https://opensource.org/licenses/BSD-2-Clause). Questions, feature requests and bug reports are welcome via the [issue queue](https://github.com/databio/simpleCache/issues). The maintainer will review pull requests and incorporate contributions at his discretion.
 
+For more information refer to the contributing document and pull request / issue templates in the [.github folder](https://github.com/databio/simpleCache/tree/master/.github) of this repository.
+
 
 
 
