@@ -10,22 +10,22 @@
 # These functions should probably remain interior to the package (not exported)
 #
 
-enforceEdgeCharacter = function(string, prependChar="", appendChar="") {
-	if (string=="" | is.null(string)) {
-		return(string)
-	}
-	if(!is.null(appendChar)) {
-		if (substr(string,nchar(string), nchar(string)) != appendChar) { # +1 ?
-			string = paste0(string, appendChar);
-			}
-	}
-	if (!is.null(prependChar)) {
-		if (substr(string,1,1) != prependChar) { # +1 ?
-			string = paste0(prependChar, string)
-		}
-	}
-	return(string)
-}
+# enforceEdgeCharacter = function(string, prependChar="", appendChar="") {
+# 	if (string=="" | is.null(string)) {
+# 		return(string)
+# 	}
+# 	if(!is.null(appendChar)) {
+# 		if (substr(string,nchar(string), nchar(string)) != appendChar) { # +1 ?
+# 			string = paste0(string, appendChar);
+# 			}
+# 	}
+# 	if (!is.null(prependChar)) {
+# 		if (substr(string,1,1) != prependChar) { # +1 ?
+# 			string = paste0(prependChar, string)
+# 		}
+# 	}
+# 	return(string)
+# }
 
 # MATLAB-style timing functions to start/stop timer.
 # These functions were based on an idea by some helpful soul on
