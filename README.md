@@ -86,6 +86,14 @@ paramount**. `simpleCache` assumes that your name for an object is a perfect
 identifier for that object; in other words, don't cache things that you plan to
 change.
 
+### Highlights of exported functions
+
+- `simpleCache()`: Caches and reloads objects created based on instruction
+- `listCaches()`: Liosts all of the caches available in the `cacheDir`
+- `deleteCaches()`: Deletes cache(s) from the `cacheDir`
+- `setCacheDir()`: Sets a global option for a cache directory so you don't have to specify one in each `simpleCache` call
+- `viewCacheDirs()`: Views all of the `simpleCache` global options that have been set
+
 ### Contributing
 
 `simpleCache` is licensed under the [2-Clause BSD License](https://opensource.org/licenses/BSD-2-Clause). Questions, feature requests and bug reports are welcome via the [issue queue](https://github.com/databio/simpleCache/issues). The maintainer will review pull requests and incorporate contributions at his discretion.
