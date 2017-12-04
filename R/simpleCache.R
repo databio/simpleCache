@@ -1,11 +1,8 @@
 ## Package documentation
 #' Provides intuitive functions for caching R objects, encouraging faster
 #' reproducible and restartable R analysis
-#'
-#' simpleCache provides a function (simpleCache())
 #' 
-#' @references \url{https://github.com/nsheff/}
-## @import if you import any packages; here.
+#' @references \url{https://github.com/databio/simpleCache}
 #' @docType package
 #' @name simpleCache
 #' @author Nathan Sheffield
@@ -23,10 +20,10 @@ NULL
 #' troubles if you misuse the caching system. The object should be considered
 #' static. 
 #' 
-#' You should pass a bracketed R code snippet like `{ rnorm(500) }` as the
+#' You should pass a bracketed R code snippet like \code{rnorm(500)} as the
 #' instruction, and simpleCache will create the object. Alternatively, if the
 #' code to create the cache is large, you can put an R script called object.R in
-#' the RBUILD.DIR (the name of the file *must* match the name of the object it
+#' the \code{\link[=setCacheBuildDir]{RBUILD.DIR}} (the name of the file *must* match the name of the object it
 #' creates *exactly*). If you don't provide an instruction, the function sources
 
 #' RBUILD.DIR/object.R and caches the result as the object. This source file
@@ -51,34 +48,33 @@ NULL
 #' @param noload   noload is useful for: you want to create the caches, but not
 #'     load them if they aren't there (like a cache creation loop).
 #' @param cacheDir The directory where caches are saved (and loaded from).
-#'			Defaults to the global RCACHE.DIR variable
-#' @param cacheSubDir You can specify a subdirectory within the cacheDir
-#' 			variable. Defaults to NULL.
-#' @param assignToVariable By default, simpleCache assigns the cache to a
-#'     variable named cacheName; you can overrule that here.
+#'			Defaults to the global \code{\link[=setCacheDir]{RCACHE.DIR}} RCACHE.DIR variable
+#' @param cacheSubDir You can specify a subdirectory within the \code{cacheDir}
+#' 			variable. Defaults to \code{NULL}.
+#' @param assignToVariable By default, \code{simpleCache} assigns the cache to a
+#'     variable named \code{cacheName}; you can overrule that here.
 #' @param loadEnvir    Into which environment would you like to load the
-#'     variable? Defaults to parent.frame.
+#'     variable? Defaults to \code{\link[base]{parent.frame}}.
 #' @param searchEnvir  a vector of environments to search for the already loaded
 #'     cache.
 #' @param timer Report how long it took to create the cache?
 #' @param buildDir Location of Build files (files with instructions for use If
-#'		the instructions argument is not provided). Defaults to RBUILD.DIR
-#'		global option.
-#' @param parse By default, simpleCache will guess whether you want to parse the
+#'		the instructions argument is not provided). Defaults to \code{\link[=setCacheBuildDir]{RBUILD.DIR}} global option.
+#' @param parse By default, \code{simpleCache} will guess whether you want to parse the
 #'     instruction, based on whether it is quoted. You can overwrite the guess
 #'     with this parameter; but this may disappear in the future. In general,
-#'     you should note quote, but use {} around your instructions.
-#' @param nofail By default, simpleCache throws an error if the instructions
+#'     you should note quote, but use \{ \} around your instructions.
+#' @param nofail By default, \code{simpleCache} throws an error if the instructions
 #'     fail. Use this option to convert this error into a warning. No cache will
 #'     be created, but simpleCache will not then hard-stop your processing. This
 #'     is useful, for example, if you are creating a bunch of caches and it's ok
 #'     if some of them do not complete.
-#' @param batchRegistry A batchtools registry object (built with
-#'     batchtools::makeRegistry()). If provided, this cache will be created on
+#' @param batchRegistry A \code{batchtools} registry object (built with
+#'      \code{\link[batchtools]{makeRegistry}}). If provided, this cache will be created on
 #'     the cluster using your batchtools configuration
 #' @param batchResources A list of variables to provide to batchtools for
-#'     cluster resource managers. Used as the `res` argument to
-#'     batchtools::batchMap()
+#'     cluster resource managers. Used as the \code{res} argument to
+#'     \code{\link[batchtools]{batchMap}}
 #' @param pepSettings Experimental untested feature.
 #' @param  ignoreLock   internal parameter used for batch job submission; don't
 #'     touch.
