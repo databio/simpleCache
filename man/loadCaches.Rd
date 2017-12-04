@@ -9,7 +9,7 @@ loadCaches(cacheNames, ...)
 \arguments{
 \item{cacheNames}{Vector of caches to load.}
 
-\item{...}{Additional parameters passed to simpleCache.}
+\item{...}{Additional parameters passed to \code{\link{simpleCache}}.}
 }
 \description{
 This function just takes a list of caches, and loads them. It's designed

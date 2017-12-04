@@ -8,7 +8,7 @@
 #' (instead of the typical default PROJECT directory)
 
 #' 
-#' @param ... Parameters passed to simpleCache().
+#' @param ... Parameters passed to \code{\link{simpleCache}}.
 #' @export
 simpleCacheShared = function(...) {
 	# Since this is a function calling this, I have to set the loadEnvir here,
@@ -22,7 +22,7 @@ simpleCacheShared = function(...) {
 #' simpleCache normally loads variables into the calling environment; this
 #' ensures that the variables are loaded in the global environment.
 #'
-#' @param ... Parameters passed to simpleCache().
+#' @param ... Parameters passed to \code{\link{simpleCache}}.
 #' @export
 simpleCacheGlobal = function(...) {
 	simpleCache(..., loadEnvir=globalenv())
@@ -30,7 +30,7 @@ simpleCacheGlobal = function(...) {
 
 #' Helper alias for loading shared caches into the global environment.
 #' 
-#' @param ... Parameters passed to simpleCache().
+#' @param ... Parameters passed to \code{\link{simpleCache}}.
 #' @export
 simpleCacheSharedGlobal = function(...) {
 	simpleCache(..., cacheDir=getOption("RESOURCES.RCACHE"), loadEnvir=globalenv())

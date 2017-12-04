@@ -4,7 +4,7 @@
 #' for stuff you already cached previously, so it won't build any caches.
 #'
 #' @param cacheNames Vector of caches to load.
-#' @param ... Additional parameters passed to simpleCache.
+#' @param ... Additional parameters passed to \code{\link{simpleCache}}.
 #' @export
 #' @example
 #' R/examples/example.R

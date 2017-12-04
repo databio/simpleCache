@@ -6,7 +6,7 @@
 # caches.
 
 #' Sets a global variable specifying the default cache directory for
-#' simpleCache() calls.
+#' \code{\link{simpleCache}} calls.
 #'
 #' @param cacheDir Directory where caches should be stored
 #' @export
@@ -19,7 +19,7 @@ setCacheDir = function(cacheDir) {
 #' Set shared cache directory
 #'
 #' Sets global variable specifying the default cache directory for
-#' simpleCacheShared() calls; this function is simply a helper alias for caching
+#' \code{\link{simpleCacheShared}} calls; this function is simply a helper alias for caching
 #' results that will be used across projects.
 #'
 #' @param sharedCacheDir Directory where shared caches should be stored
@@ -59,7 +59,7 @@ addCacheSearchEnvironment = function(addEnv) {
 	options(SIMPLECACHE.ENV=append(addEnv, getOption("SIMPLECACHE.ENV")))
 }
 
-#' Sets global option of cache search environments to NULL.
+#' Sets global option of cache search environments to \code{NULL}.
 #' 
 #' @export
 resetCacheSearchEnvironment = function() {

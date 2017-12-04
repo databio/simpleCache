@@ -48,7 +48,7 @@ NULL
 #' @param noload   noload is useful for: you want to create the caches, but not
 #'     load them if they aren't there (like a cache creation loop).
 #' @param cacheDir The directory where caches are saved (and loaded from).
-#'			Defaults to the global \code{\link[=setCacheDir]{RCACHE.DIR}} RCACHE.DIR variable
+#'			Defaults to the global \code{\link[=setCacheDir]{RCACHE.DIR}} variable
 #' @param cacheSubDir You can specify a subdirectory within the \code{cacheDir}
 #' 			variable. Defaults to \code{NULL}.
 #' @param assignToVariable By default, \code{simpleCache} assigns the cache to a

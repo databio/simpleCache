@@ -32,7 +32,7 @@ for evaluating the code in instruction.}
 load them if they aren't there (like a cache creation loop).}
 
 \item{cacheDir}{The directory where caches are saved (and loaded from).
-Defaults to the global \code{\link[=setCacheDir]{RCACHE.DIR}} RCACHE.DIR variable}
+Defaults to the global \code{\link[=setCacheDir]{RCACHE.DIR}} variable}
 
 \item{cacheSubDir}{You can specify a subdirectory within the \code{cacheDir}
 variable. Defaults to \code{NULL}.}
