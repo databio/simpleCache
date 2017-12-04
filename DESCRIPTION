@@ -13,7 +13,6 @@ Description: Provides intuitive functions for caching R objects, encouraging
 Authors@R: c(person("VP", "Nagraj", email = "vpnagraj@virginia.edu", role =
     c("aut")), person("Nathan", "Sheffield", email = "nathan@code.databio.org",
     role = c("aut", "cre")))
-Maintainer: Nathan Sheffield <nathan@code.databio.org>
 Suggests:
     knitr,
     testthat
@@ -21,6 +20,6 @@ Enhances: batchtools
 VignetteBuilder: knitr
 License: BSD_2_clause + file LICENSE
 Encoding: UTF-8
-URL: http://www.github.com/databio/simpleCache
-BugReports: http://www.github.com/databio/simpleCache
+URL: https://www.github.com/databio/simpleCache
+BugReports: https://www.github.com/databio/simpleCache
 RoxygenNote: 6.0.1.9000
