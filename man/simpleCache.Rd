@@ -12,8 +12,8 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   cacheDir = getOption("RCACHE.DIR"), cacheSubDir = NULL, timer = FALSE,
   buildDir = getOption("RBUILD.DIR"), assignToVariable = NULL,
   loadEnvir = parent.frame(), searchEnvir = getOption("SIMPLECACHE.ENV"),
-  parse = NULL, nofail = FALSE, batchRegistry = NULL,
-  batchResources = NULL, pepSettings = NULL, ignoreLock = FALSE)
+  nofail = FALSE, batchRegistry = NULL, batchResources = NULL,
+  pepSettings = NULL, ignoreLock = FALSE, lifespan = NULL)
 }
 \arguments{
 \item{cacheName}{Unique name for the cache. Be careful.}
@@ -51,12 +51,8 @@ variable? Defaults to \code{\link[base]{parent.frame}}.}
 \item{searchEnvir}{a vector of environments to search for the already loaded
 cache.}
 
-\item{parse}{By default, \code{simpleCache} will guess whether you want to parse the
-instruction, based on whether it is quoted. You can overwrite the guess
-with this parameter; but this may disappear in the future. In general,
-you should note quote, but use \{ \} around your instructions.}
+\item{nofail}{By default, simpleCache throws an error if the instructions
 
-\item{nofail}{By default, \code{simpleCache} throws an error if the instructions
 fail. Use this option to convert this error into a warning. No cache will
 be created, but simpleCache will not then hard-stop your processing. This
 is useful, for example, if you are creating a bunch of caches and it's ok
@@ -72,8 +68,11 @@ cluster resource managers. Used as the \code{res} argument to
 
 \item{pepSettings}{Experimental untested feature.}
 
-\item{ignoreLock}{internal parameter used for batch job submission; don't
+\item{ignoreLock}{Internal parameter used for batch job submission; don't
 touch.}
+
+\item{lifespan}{Maximum age of cache, in days, to allow before 
+automatically triggering \code{recreate=TRUE}.}
 }
 \description{
 Given a unique name for an  R object, and instructions for how to make that

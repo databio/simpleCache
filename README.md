@@ -52,12 +52,7 @@ simpleCache("normSample", { rnorm(1e7, 0,1) })
 ```
 
 `simpleCache` also interfaces with the `batchtools` package to let you build
-caches on any cluster resource manager. I have produced some [R
-vignettes](vignettes/) to get you started.
-
-* [An introduction to simpleCache](vignettes/simpleCacheIntroduction.Rmd)
-* [Sharing caches across projects](vignettes/sharingCaches.Rmd)
-* [Generating caches on a cluster](vignettes/clusterCaches.Rmd)
+caches on any cluster resource manager.
 
 --------------------------------------------------------------------------------
 ### simpleCache Philosophy

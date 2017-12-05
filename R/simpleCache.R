@@ -59,12 +59,9 @@ NULL
 #'     cache.
 #' @param timer Report how long it took to create the cache?
 #' @param buildDir Location of Build files (files with instructions for use If
-#'		the instructions argument is not provided). Defaults to \code{\link[=setCacheBuildDir]{RBUILD.DIR}} global option.
-#' @param parse By default, \code{simpleCache} will guess whether you want to parse the
-#'     instruction, based on whether it is quoted. You can overwrite the guess
-#'     with this parameter; but this may disappear in the future. In general,
-#'     you should note quote, but use \{ \} around your instructions.
-#' @param nofail By default, \code{simpleCache} throws an error if the instructions
+#'		the instructions argument is not provided). Defaults to RBUILD.DIR
+#'		global option.
+#' @param nofail By default, simpleCache throws an error if the instructions
 #'     fail. Use this option to convert this error into a warning. No cache will
 #'     be created, but simpleCache will not then hard-stop your processing. This
 #'     is useful, for example, if you are creating a bunch of caches and it's ok
@@ -76,8 +73,10 @@ NULL
 #'     cluster resource managers. Used as the \code{res} argument to
 #'     \code{\link[batchtools]{batchMap}}
 #' @param pepSettings Experimental untested feature.
-#' @param  ignoreLock   internal parameter used for batch job submission; don't
+#' @param ignoreLock Internal parameter used for batch job submission; don't
 #'     touch.
+#' @param lifespan Maximum age of cache, in days, to allow before 
+#'                 automatically triggering \code{recreate=TRUE}.
 #' @export
 #' @example
 #' R/examples/example.R
@@ -86,37 +85,31 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE,
 	buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL,
 	loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"),
-	parse=NULL, nofail=FALSE, batchRegistry=NULL,
-	batchResources=NULL, pepSettings=NULL, ignoreLock=FALSE) {
+	nofail=FALSE, batchRegistry=NULL, batchResources=NULL, pepSettings=NULL, 
+	ignoreLock=FALSE, lifespan=NULL) {
+
+	if (!"character" %in% class(cacheName)) {
+		stop("simpleCache expects the cacheName variable to be a character vector.")
+	}
 
 	# Because R evaluates arguments lazily (only when they are used),
 	# it will not evaluate the instruction if I first wrap it in a
 	# primitive substitute call. Then I can evaluate conditionally
 	# (if the cache needs to be recreated)
 	instruction = substitute(instruction)
-	if (is.null(parse)) {
-		if ("character" %in% class(instruction)) {
-
-			parse = TRUE
-			warning(strwrap("Detected a character instruction; consider wrapping
-			in {} instead of quotes."))
-		} else {
-			parse = FALSE
-		}
-	}
-	if (!is.null(cacheSubDir)) {
-		cacheDir = file.path(cacheDir, cacheSubDir)
-	}
+	if ("character" %in% class(instruction)) {
+		message("Character instruction; consider wrapping in braces.")
+		parse = TRUE
+	} else { parse = FALSE }
+	
+	# Handle directory paths.
+	if (!is.null(cacheSubDir)) { cacheDir = file.path(cacheDir, cacheSubDir) }
 	if (is.null(cacheDir)) {
 		message(strwrap("No cacheDir specified. You should set global option
 		RCACHE.DIR with setCacheDir(), or specify a cacheDir parameter directly
 		to simpleCache(). With no other option, simpleCache will use tempdir():
 		", initial="", prefix=" "), tempdir())
 		cacheDir = tempdir()
-	}
-	if (!"character" %in% class(cacheName)) {
-		stop("simpleCache expects the cacheName variable to be a character
-		vector.")
 	}
 	
 	if (!file.exists(cacheDir)) {
@@ -144,6 +137,12 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	
 
 	ret = NULL # The default, in case the cache construction fails.
+
+	if (!recreate && .tooOld(cacheFile, lifespan)) {
+		message(sprintf(
+			"Stale cache: '%s' (age > %d day(s))", cacheFile, lifespan))
+		recreate = TRUE
+	}
 
 	if(cacheExists & !reload & !recreate) {
 		message("::Object exists (in ", cacheWhere, ")::\t", cacheName)

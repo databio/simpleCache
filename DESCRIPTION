@@ -1,5 +1,5 @@
 Package: simpleCache
-Version: 0.3.1
+Version: 0.3.2
 Date: 2017-08-21
 Title: Simply Caching R Objects
 Description: Provides intuitive functions for caching R objects, encouraging

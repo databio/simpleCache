@@ -4,12 +4,15 @@
 \alias{loadCaches}
 \title{Loads pre-made caches}
 \usage{
-loadCaches(cacheNames, ...)
+loadCaches(cacheNames, loadEnvir = NULL, ...)
 }
 \arguments{
 \item{cacheNames}{Vector of caches to load.}
 
-\item{...}{Additional parameters passed to \code{\link{simpleCache}}.}
+
+\item{loadEnvir}{Environment into which to load each cache.}
+
+\item{...}{Additional parameters passed to simpleCache.}
 }
 \description{
 This function just takes a list of caches, and loads them. It's designed
