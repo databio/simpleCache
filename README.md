@@ -83,8 +83,8 @@ change.
 
 ### Highlights of exported functions
 
-- `simpleCache()`: Caches and reloads objects created based on instruction
-- `listCaches()`: Liosts all of the caches available in the `cacheDir`
+- `simpleCache()`: Creates and caches or reloads cached results of provided R instruction code
+- `listCaches()`: Lists all of the caches available in the `cacheDir`
 - `deleteCaches()`: Deletes cache(s) from the `cacheDir`
 - `setCacheDir()`: Sets a global option for a cache directory so you don't have to specify one in each `simpleCache` call
 - `viewCacheDirs()`: Views all of the `simpleCache` global options that have been set
