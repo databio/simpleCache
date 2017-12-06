@@ -26,7 +26,7 @@
 #'         \code{getOption("MAX.CACHE.AGE")} if no age threshold is passed 
 #'         and that option exists; \code{FALSE} otherwise.
 .tooOld = function(pathCacheFile, lifespan=NULL) {
-	if (!file_test("-f", pathCacheFile)) { return(FALSE) }
+	if (!utils::file_test("-f", pathCacheFile)) { return(FALSE) }
 	if (is.null(lifespan)) { lifespan = getOption("MAX.CACHE.AGE") }
 	if (is.null(lifespan)) { return(FALSE) }
 	cacheTime = file.info(pathCacheFile)$ctime
