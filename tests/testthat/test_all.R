@@ -107,7 +107,7 @@ test_that("option setting works", {
   addCacheSearchEnvironment("cacheEnv")
   
   # capture output and check
-  options_out <- capture_messages(viewCacheDirs())
+  options_out <- capture_messages(simpleCacheOptions())
   
   expect_true(grepl(tempdir(), options_out[1]))
   expect_true(grepl(tempdir(), options_out[2]))
@@ -118,7 +118,7 @@ test_that("option setting works", {
   resetCacheSearchEnvironment()
   
   # check to make sure it is gone
-  options_out <- capture_messages(viewCacheDirs())
+  options_out <- capture_messages(simpleCacheOptions())
   expect_true(!grepl("cacheEnv", options_out[4]))
   
 })
