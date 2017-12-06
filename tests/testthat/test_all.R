@@ -21,9 +21,6 @@ test_that("notifications and messages as expected", {
   # error when buildEnvir includes "instruction"
   expect_error(simpleCache("normSample", { rnorm(5e3, 0,1) }, buildEnvir = list(instruction="foo"), recreate=TRUE, cacheDir = tempdir()), "Can't provide a variable named 'instruction' in buildEnvir")
   
-  # warning when instruction is not expression
-  expect_warning(simpleCache("normSample", instruction = "rnorm(5e3, 0,1)", cacheDir = tempdir(), recreate=TRUE))
-  
   # error when instruction and buildDir are null
   expect_error(simpleCache("normSample", instruction = NULL, buildDir = NULL, cacheDir = tempdir(), recreate=TRUE))
   
