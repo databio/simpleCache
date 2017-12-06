@@ -5,3 +5,4 @@
 ^CONDUCT\.md$
 ^paper$
 .github
+^_pkgdown\.yml$
