@@ -9,7 +9,6 @@ loadCaches(cacheNames, loadEnvir = NULL, ...)
 \arguments{
 \item{cacheNames}{Vector of caches to load.}
 
-
 \item{loadEnvir}{Environment into which to load each cache.}
 
 \item{...}{Additional parameters passed to simpleCache.}

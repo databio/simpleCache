@@ -40,7 +40,8 @@ variable. Defaults to \code{NULL}.}
 \item{timer}{Report how long it took to create the cache?}
 
 \item{buildDir}{Location of Build files (files with instructions for use If
-the instructions argument is not provided). Defaults to \code{\link[=setCacheBuildDir]{RBUILD.DIR}} global option.}
+the instructions argument is not provided). Defaults to RBUILD.DIR
+global option.}
 
 \item{assignToVariable}{By default, \code{simpleCache} assigns the cache to a
 variable named \code{cacheName}; you can overrule that here.}
@@ -52,7 +53,6 @@ variable? Defaults to \code{\link[base]{parent.frame}}.}
 cache.}
 
 \item{nofail}{By default, simpleCache throws an error if the instructions
-
 fail. Use this option to convert this error into a warning. No cache will
 be created, but simpleCache will not then hard-stop your processing. This
 is useful, for example, if you are creating a bunch of caches and it's ok

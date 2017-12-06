@@ -36,11 +36,11 @@ setCacheBuildDir = function(cacheBuildDir) {
 	options(RBUILD.DIR=cacheBuildDir)
 }
 
-#' View cache directories
+#' View simpleCache options
 #'
-#' Views cache directory global variables
+#' Views simpleCache global variables
 #' @export
-viewCacheDirs = function() {
+simpleCacheOptions = function() {
 	message("RESOURCES.RCACHE:\t", getOption("RESOURCES.RCACHE"))
 	message("RCACHE.DIR:\t", getOption("RCACHE.DIR"))
 	message("RBUILD.DIR:\t", getOption("RBUILD.DIR"))
