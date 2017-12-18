@@ -39,7 +39,7 @@ NULL
 #' using the parameter buildEnvir (just provide a list of named variables).
 #' 
 #' @param cacheName	A character vector for a unique name for the cache. Be careful.
-#' @param instruction  R expression (bracketed) to be evaluated. The returned value of this
+#' @param instruction  R expression (in braces) to be evaluated. The returned value of this
 #'     code is what will be cached under the cacheName.
 #' @param buildEnvir   An environment (or list) providing additional variables
 #'     necessary for evaluating the code in instruction.
