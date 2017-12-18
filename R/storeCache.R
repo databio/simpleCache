@@ -1,20 +1,20 @@
 #' Stores as a cache an already-produced R object
 #'
 #' Sometimes you use significant computational power to create an object, but
-#' you didn't cache it with simpleCache. Oops, maybe you wish you had, after the
+#' you didn't cache it with \code{\link{simpleCache}}. Oops, maybe you wish you had, after the
 #' fact. This function lets you store an object in the environment so it could
-#' be loaded by future calls to simpleCache.
+#' be loaded by future calls to \code{simpleCache}.
 #'
 #' This can be used in interactive sessions, but could also be used for another
 #' use case: you have a complicated set of instructions (too much to pass as the
-#' instruction argument to simpleCache), so you could just stick a call to
-#' storeCache at the end.
+#' instruction argument to \code{simpleCache}), so you could just stick a call to
+#' \code{storeCache} at the end.
 #' 
 #' @param cacheName    Unique name for the cache (and R object to be cached).
 #' @param cacheDir 	The directory where caches are saved (and loaded from).
-#'     Defaults to the global RCACHE.DIR variable
+#'     Defaults to the global \code{\link[=setCacheDir]{RCACHE.DIR}} variable
 #' @param cacheSubDir You can specify a subdirectory within the cacheDir
-#'     variable. Defaults to NULL.
+#'     variable. Defaults to \code{NULL}.
 #' @param recreate	Forces reconstruction of the cache
 #' @export
 #' @example
