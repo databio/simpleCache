@@ -4,9 +4,9 @@
 #' 
 #' @references \url{https://github.com/databio/simpleCache}
 #' @docType package
-#' @name simpleCache
 #' @author Nathan Sheffield
-NULL
+#' @aliases simpleCache-package
+"_PACKAGE"
 
 ################################################################################
 
