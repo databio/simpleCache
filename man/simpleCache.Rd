@@ -4,7 +4,6 @@
 \name{simpleCache}
 \alias{simpleCache}
 \alias{simpleCache-package}
-\alias{simpleCache}
 \title{Provides intuitive functions for caching R objects, encouraging faster
 reproducible and restartable R analysis}
 \usage{
@@ -33,10 +32,10 @@ for evaluating the code in instruction.}
 load them if they aren't there (like a cache creation loop).}
 
 \item{cacheDir}{The directory where caches are saved (and loaded from).
-Defaults to the global RCACHE.DIR variable}
+Defaults to the global \code{\link[=setCacheDir]{RCACHE.DIR}} variable}
 
-\item{cacheSubDir}{You can specify a subdirectory within the cacheDir
-variable. Defaults to NULL.}
+\item{cacheSubDir}{You can specify a subdirectory within the \code{cacheDir}
+variable. Defaults to \code{NULL}.}
 
 \item{timer}{Report how long it took to create the cache?}
 
@@ -44,11 +43,11 @@ variable. Defaults to NULL.}
 the instructions argument is not provided). Defaults to RBUILD.DIR
 global option.}
 
-\item{assignToVariable}{By default, simpleCache assigns the cache to a
-variable named cacheName; you can overrule that here.}
+\item{assignToVariable}{By default, \code{simpleCache} assigns the cache to a
+variable named \code{cacheName}; you can overrule that here.}
 
 \item{loadEnvir}{Into which environment would you like to load the
-variable? Defaults to parent.frame.}
+variable? Defaults to \code{\link[base]{parent.frame}}.}
 
 \item{searchEnvir}{a vector of environments to search for the already loaded
 cache.}
@@ -59,13 +58,13 @@ be created, but simpleCache will not then hard-stop your processing. This
 is useful, for example, if you are creating a bunch of caches and it's ok
 if some of them do not complete.}
 
-\item{batchRegistry}{A batchtools registry object (built with
-batchtools::makeRegistry()). If provided, this cache will be created on
+\item{batchRegistry}{A \code{batchtools} registry object (built with
+ \code{\link[batchtools]{makeRegistry}}). If provided, this cache will be created on
 the cluster using your batchtools configuration}
 
 \item{batchResources}{A list of variables to provide to batchtools for
-cluster resource managers. Used as the `res` argument to
-batchtools::batchMap()}
+cluster resource managers. Used as the \code{res} argument to
+\code{\link[batchtools]{batchMap}}}
 
 \item{pepSettings}{Experimental untested feature.}
 
@@ -76,8 +75,6 @@ touch.}
 automatically triggering \code{recreate=TRUE}.}
 }
 \description{
-simpleCache provides a function (simpleCache())
-
 Given a unique name for an  R object, and instructions for how to make that
 object, use the simpleCache function to create and cache or load the object.
 This should be used for computations that take a long time and generate a
@@ -87,10 +84,10 @@ troubles if you misuse the caching system. The object should be considered
 static.
 }
 \details{
-You should pass a bracketed R code snippet like `{ rnorm(500) }` as the
+You should pass a bracketed R code snippet like \code{rnorm(500)} as the
 instruction, and simpleCache will create the object. Alternatively, if the
 code to create the cache is large, you can put an R script called object.R in
-the RBUILD.DIR (the name of the file *must* match the name of the object it
+the \code{\link[=setCacheBuildDir]{RBUILD.DIR}} (the name of the file *must* match the name of the object it
 creates *exactly*). If you don't provide an instruction, the function sources
 RBUILD.DIR/object.R and caches the result as the object. This source file
 *must* create an object with the same name of the object. If you already have
@@ -129,7 +126,7 @@ simpleCache("normSample")
 loadCaches(c("normSample", "normSample2"), reload=TRUE)
 }
 \references{
-\url{https://github.com/nsheff/}
+\url{https://github.com/databio/simpleCache}
 }
 \author{
 Nathan Sheffield
