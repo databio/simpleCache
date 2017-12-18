@@ -55,6 +55,14 @@ simpleCache("normSample", { rnorm(1e7, 0,1) })
 caches on any cluster resource manager.
 
 --------------------------------------------------------------------------------
+### Highlights of exported functions
+
+- `simpleCache()`: Creates and caches or reloads cached results of provided R instruction code
+- `listCaches()`: Lists all of the caches available in the `cacheDir`
+- `deleteCaches()`: Deletes cache(s) from the `cacheDir`
+- `setCacheDir()`: Sets a global option for a cache directory so you don't have to specify one in each `simpleCache` call
+- `simpleCacheOptions()`: Views all of the `simpleCache` global options that have been set
+
 ### simpleCache Philosophy
 
 The use case I had in mind for `simpleCache` is that you find yourself
@@ -80,14 +88,6 @@ The thing to keep in mind with `simpleCache` is that **the cache name is
 paramount**. `simpleCache` assumes that your name for an object is a perfect
 identifier for that object; in other words, don't cache things that you plan to
 change.
-
-### Highlights of exported functions
-
-- `simpleCache()`: Creates and caches or reloads cached results of provided R instruction code
-- `listCaches()`: Lists all of the caches available in the `cacheDir`
-- `deleteCaches()`: Deletes cache(s) from the `cacheDir`
-- `setCacheDir()`: Sets a global option for a cache directory so you don't have to specify one in each `simpleCache` call
-- `simpleCacheOptions()`: Views all of the `simpleCache` global options that have been set
 
 ### Contributing
 
