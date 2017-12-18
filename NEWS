@@ -1,8 +1,9 @@
 # Change log
 All notable changes to this project will be documented in this file.
 
-## [0.3.2] -- Unreleased
+## [0.4.0] -- Unreleased
 
+	- adds a lifespan arg to simpleCache() to create auto-expiring caches
 	- remove unnecessary parse argument to simpleCache()
 	- viewCacheDirs() renamed to simpleCacheOptions()
 	
