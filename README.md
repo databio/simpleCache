@@ -26,28 +26,16 @@ be installed as usual:
 install.packages("simpleCache")
 ```
 
-If you like, you may install the development version directly from github with
-devtools
-
-```
-devtools::install_github("databio/simpleCache")
-```
-
-To install a local copy:
-```
-packageFolder = "~/R/simpleCache"; install.packages(packageFolder, repos=NULL)
-```
-
 --------------------------------------------------------------------------------
 ### Running simpleCache
 
-`simpleCache` comes with a single primary function that will do almost
+`simpleCache` comes with a single primary function (`simpleCache()`) that will do almost
 everything you need. In short, you run it with a few lines like this:
 
 ```
 library(simpleCache) 
 setCacheDir(tempdir())
-simpleCache("normSample", {	rnorm(1e7, 0,1) }, recreate=TRUE)
+simpleCache("normSample", { rnorm(1e7, 0,1) }, recreate=TRUE)
 simpleCache("normSample", { rnorm(1e7, 0,1) })
 ```
 
