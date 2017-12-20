@@ -44,7 +44,7 @@ my_test_that("Cache file is replaced if no lifespan is specified and recreate=TR
   expect_equal(1, countCacheItems())
   expect_true(file_test("-f", fp))
   t0 = file.info(fp)$ctime
-  Sys.sleep(0.5)    # Delay so that our time comparison can work.
+  Sys.sleep(1)    # Delay so that our time comparison can work.
   mySimpleCache("testDF", recreate=TRUE, instruction={ buildTestFrame() })
   expect_equal(1, countCacheItems())
   t1 = file.info(fp)$ctime
@@ -75,7 +75,7 @@ my_test_that("Cache is replaced if older than explicit lifespan", {
   expect_equal(1, countCacheItems())
   expect_true(file_test("-f", fp))
   t0 = file.info(fp)$ctime
-  Sys.sleep(0.5)    # Time difference comparison reliability.
+  Sys.sleep(1)    # Time difference comparison reliability.
   mySimpleCache("testDF", lifespan=0, instruction={ buildTestFrame() })
   expect_equal(1, countCacheItems())
   t1 = file.info(fp)$ctime
@@ -90,7 +90,7 @@ my_test_that("Cache is replaced if recreate=TRUE even if cache is fresh", {
   expect_true(file_test("-f", fp))
   expect_equal(1, countCacheItems())
   t0 = file.info(fp)$ctime
-  Sys.sleep(0.5)    # Time difference comparison reliability.
+  Sys.sleep(1)    # Time difference comparison reliability.
   mySimpleCache("testDF", recreate=TRUE, lifespan=0, instruction={ buildTestFrame() })
   expect_equal(1, countCacheItems())
   t1 = file.info(fp)$ctime
