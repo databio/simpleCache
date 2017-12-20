@@ -84,6 +84,9 @@ my_test_that("Cache is replaced if recreate=TRUE even if cache is fresh", {
   expect_equal(1, countCacheItems())
   t0 = file.info(fp)$ctime
   Sys.sleep(0.25)    # Time difference comparison reliability.
+  deltaT = difftime(Sys.time(), file.info(fp)$ctime, units="days")
+  expect_true(deltaT > 0)
+  expect_true(deltaT < 1)
   mySimpleCache("testDF", recreate=TRUE, lifespan=0, instruction={ buildTestFrame() })
   expect_equal(1, countCacheItems())
   t1 = file.info(fp)$ctime
