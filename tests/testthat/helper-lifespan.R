@@ -18,6 +18,3 @@ setupLSTest = function() {
   if (!file_test("-d", testdir)) { dir.create(testdir) }
   setCacheDir(lifespanTestsTmpdir())
 }
-
-# Check that a path is in the temporary folder.
-.inTmpdir = function(path) { substr(path, 1, length(tempdir())) == tempdir() }
