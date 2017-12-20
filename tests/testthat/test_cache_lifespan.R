@@ -38,10 +38,13 @@ my_test_that("Cache file isn't replaced if no lifespan is specified and recreate
 # Another sort of control
 my_test_that("Cache file is replaced if no lifespan is specified and recreate=TRUE", {
   expect_equal(0, countCacheItems())
+  fp = file.path(getOption("RCACHE.DIR"), "testDF.RData")
+  expect_false(file_test("-f", fp))
   mySimpleCache("testDF", instruction={ buildTestFrame() })
   expect_equal(1, countCacheItems())
-  fp = file.path(getOption("RCACHE.DIR"), "testDF.RData")
+  expect_true(file_test("-f", fp))
   t0 = file.info(fp)$ctime
+  Sys.sleep(1)    # Delay so that our time comparison can work.
   mySimpleCache("testDF", recreate=TRUE, instruction={ buildTestFrame() })
   expect_equal(1, countCacheItems())
   t1 = file.info(fp)$ctime
@@ -51,9 +54,11 @@ my_test_that("Cache file is replaced if no lifespan is specified and recreate=TR
 # Specificity
 my_test_that("Cache remains unchanged if younger than explicit lifespan", {
   expect_equal(0, countCacheItems())
+  fp = file.path(getOption("RCACHE.DIR"), "testDF.RData")
+  expect_false(file_test("-f", fp))
   mySimpleCache("testDF", instruction={ buildTestFrame() })
   expect_equal(1, countCacheItems())
-  fp = file.path(getOption("RCACHE.DIR"), "testDF.RData")
+  expect_true(file_test("-f", fp))
   t0 = file.info(fp)$ctime
   mySimpleCache("testDF", lifespan=0.5, instruction={ buildTestFrame() })
   expect_equal(1, countCacheItems())
@@ -64,10 +69,13 @@ my_test_that("Cache remains unchanged if younger than explicit lifespan", {
 # Sensitivity
 my_test_that("Cache is replaced if older than explicit lifespan", {
   expect_equal(0, countCacheItems())
-  mySimpleCache("testDF", instruction={ buildTestFrame() })
   fp = file.path(getOption("RCACHE.DIR"), "testDF.RData")
+  expect_false(file_test("-f", fp))
+  mySimpleCache("testDF", instruction={ buildTestFrame() })
   expect_equal(1, countCacheItems())
+  expect_true(file_test("-f", fp))
   t0 = file.info(fp)$ctime
+  Sys.sleep(1)    # Time difference comparison reliability.
   mySimpleCache("testDF", lifespan=0, instruction={ buildTestFrame() })
   expect_equal(1, countCacheItems())
   t1 = file.info(fp)$ctime
@@ -77,12 +85,44 @@ my_test_that("Cache is replaced if older than explicit lifespan", {
 # Explicit recreate argument trumps cache lifespan to determine recreation.
 my_test_that("Cache is replaced if recreate=TRUE even if cache is fresh", {
   expect_equal(0, countCacheItems())
-  mySimpleCache("testDF", instruction={ buildTestFrame() })
   fp = file.path(getOption("RCACHE.DIR"), "testDF.RData")
+  expect_false(file_test("-f", fp))
+  mySimpleCache("testDF", instruction={ buildTestFrame() })
+  expect_true(file_test("-f", fp))
   expect_equal(1, countCacheItems())
   t0 = file.info(fp)$ctime
+  Sys.sleep(1)    # Time difference comparison reliability.
   mySimpleCache("testDF", recreate=TRUE, lifespan=0, instruction={ buildTestFrame() })
   expect_equal(1, countCacheItems())
   t1 = file.info(fp)$ctime
   expect_true(t1 > t0)
+})
+
+my_test_that("simpleCache can pick up option specifying max cache age.", {
+  options(MAX.CACHE.AGE = 0)
+  fp = file.path(getOption("RCACHE.DIR"), "testDF.RData")
+  expect_false(file_test("-f", fp))
+  mySimpleCache("testDF", instruction={ buildTestFrame() })
+  expect_true(file_test("-f", fp))
+  t0 = file.info(fp)$ctime
+  Sys.sleep(1)    # Time difference comparison reliability.
+  mySimpleCache("testDF", instruction={ buildTestFrame() })
+  t1 = file.info(fp)$ctime
+  expect_true(t1 > t0)
+})
+
+my_test_that("Direct lifespan specification is preferred to background option", {
+  options(MAX.CACHE.AGE = 1)
+  fp = file.path(getOption("RCACHE.DIR"), "testDF.RData")
+  expect_false(file_test("-f", fp))
+  mySimpleCache("testDF", instruction={ buildTestFrame() })
+  expect_true(file_test("-f", fp))
+  t0 = file.info(fp)$ctime
+  Sys.sleep(1)
+  mySimpleCache("testDF", instruction={ buildTestFrame() })
+  expect_equal(t0, file.info(fp)$ctime)    # Cache is fresh via MAX.CACHE.AGE.
+  Sys.sleep(1)    # Time difference comparison reliability.
+  mySimpleCache("testDF", lifespan=0, instruction={ buildTestFrame() })
+  t1 = file.info(fp)$ctime
+  expect_true(t1 > t0)    # Cache is stale via lifespan.
 })
