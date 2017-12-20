@@ -14,7 +14,8 @@ lifespanTestsTmpdir = function() { file.path(tempdir(), "lifespan") }
 
 # Establish a temp folder and set the cache home location to it.
 setupLSTest = function() {
-  dir.create(lifespanTestsTmpdir())
+  testdir = lifespanTestsTmpdir()
+  if (!file.test("-d", testdir)) { dir.create(testdir) }
   setCacheDir(lifespanTestsTmpdir())
 }
 
