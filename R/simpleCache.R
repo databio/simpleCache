@@ -144,7 +144,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 
 	ret = NULL # The default, in case the cache construction fails.
 
-	if (!recreate && .tooOld(cacheFile, lifespan)) {
+	if (.tooOld(cacheFile, lifespan)) {
 		message(sprintf(
 			"Stale cache: '%s' (age > %d day(s))", cacheFile, lifespan))
 		recreate = TRUE
