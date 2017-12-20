@@ -70,7 +70,7 @@ my_test_that("Cache is replaced if older than explicit lifespan", {
   expect_equal(1, countCacheItems())
   t0 = file.info(fp)$ctime
   Sys.sleep(0.25)    # Time difference comparison reliability.
-  mySimpleCache("testDF", lifespan=-1, instruction={ buildTestFrame() })
+  mySimpleCache("testDF", lifespan=0, instruction={ buildTestFrame() })
   expect_equal(1, countCacheItems())
   t1 = file.info(fp)$ctime
   expect_true(t1 > t0)
