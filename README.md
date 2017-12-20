@@ -26,40 +26,31 @@ be installed as usual:
 install.packages("simpleCache")
 ```
 
-If you like, you may install the development version directly from github with
-devtools
-
-```
-devtools::install_github("databio/simpleCache")
-```
-
-To install a local copy:
-```
-packageFolder = "~/R/simpleCache"; install.packages(packageFolder, repos=NULL)
-```
-
 --------------------------------------------------------------------------------
 ### Running simpleCache
 
-`simpleCache` comes with a single primary function that will do almost
+`simpleCache` comes with a single primary function (`simpleCache()`) that will do almost
 everything you need. In short, you run it with a few lines like this:
 
 ```
 library(simpleCache) 
 setCacheDir(tempdir())
-simpleCache("normSample", {	rnorm(1e7, 0,1) }, recreate=TRUE)
+simpleCache("normSample", { rnorm(1e7, 0,1) }, recreate=TRUE)
 simpleCache("normSample", { rnorm(1e7, 0,1) })
 ```
 
 `simpleCache` also interfaces with the `batchtools` package to let you build
-caches on any cluster resource manager. I have produced some [R
-vignettes](vignettes/) to get you started.
-
-* [An introduction to simpleCache](vignettes/simpleCacheIntroduction.Rmd)
-* [Sharing caches across projects](vignettes/sharingCaches.Rmd)
-* [Generating caches on a cluster](vignettes/clusterCaches.Rmd)
+caches on any cluster resource manager.
 
 --------------------------------------------------------------------------------
+### Highlights of exported functions
+
+- `simpleCache()`: Creates and caches or reloads cached results of provided R instruction code
+- `listCaches()`: Lists all of the caches available in the `cacheDir`
+- `deleteCaches()`: Deletes cache(s) from the `cacheDir`
+- `setCacheDir()`: Sets a global option for a cache directory so you don't have to specify one in each `simpleCache` call
+- `simpleCacheOptions()`: Views all of the `simpleCache` global options that have been set
+
 ### simpleCache Philosophy
 
 The use case I had in mind for `simpleCache` is that you find yourself
@@ -89,6 +80,8 @@ change.
 ### Contributing
 
 `simpleCache` is licensed under the [2-Clause BSD License](https://opensource.org/licenses/BSD-2-Clause). Questions, feature requests and bug reports are welcome via the [issue queue](https://github.com/databio/simpleCache/issues). The maintainer will review pull requests and incorporate contributions at his discretion.
+
+For more information refer to the contributing document and pull request / issue templates in the [.github folder](https://github.com/databio/simpleCache/tree/master/.github) of this repository.
 
 
 

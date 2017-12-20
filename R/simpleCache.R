@@ -1,15 +1,12 @@
 ## Package documentation
 #' Provides intuitive functions for caching R objects, encouraging faster
 #' reproducible and restartable R analysis
-#'
-#' simpleCache provides a function (simpleCache())
 #' 
-#' @references \url{https://github.com/nsheff/}
-## @import if you import any packages; here.
+#' @references \url{https://github.com/databio/simpleCache}
 #' @docType package
-#' @name simpleCache
 #' @author Nathan Sheffield
-NULL
+#' @aliases simpleCache-package
+"_PACKAGE"
 
 ################################################################################
 
@@ -23,10 +20,10 @@ NULL
 #' troubles if you misuse the caching system. The object should be considered
 #' static. 
 #' 
-#' You should pass a bracketed R code snippet like `{ rnorm(500) }` as the
+#' You should pass a bracketed R code snippet like \code{rnorm(500)} as the
 #' instruction, and simpleCache will create the object. Alternatively, if the
 #' code to create the cache is large, you can put an R script called object.R in
-#' the RBUILD.DIR (the name of the file *must* match the name of the object it
+#' the \code{\link[=setCacheBuildDir]{RBUILD.DIR}} (the name of the file *must* match the name of the object it
 #' creates *exactly*). If you don't provide an instruction, the function sources
 
 #' RBUILD.DIR/object.R and caches the result as the object. This source file
@@ -41,46 +38,50 @@ NULL
 #' environment variables you use in your instruction code. You can use this
 #' using the parameter buildEnvir (just provide a list of named variables).
 #' 
-#' @param cacheName	Unique name for the cache. Be careful.
-#' @param instruction  Quoted R code to be evaluated. The returned value of this
+#' @param cacheName	A character vector for a unique name for the cache. Be careful.
+#' @param instruction  R expression (in braces) to be evaluated. The returned value of this
 #'     code is what will be cached under the cacheName.
-#' @param buildEnvir   You may choose to provide additional variables necessary
-#'     for evaluating the code in instruction.
-#' @param reload   forces re-loading the cache, even if it exists in the env.
-#' @param recreate forces reconstruction of the cache
-#' @param noload   noload is useful for: you want to create the caches, but not
-#'     load them if they aren't there (like a cache creation loop).
-#' @param cacheDir The directory where caches are saved (and loaded from).
-#'			Defaults to the global RCACHE.DIR variable
-#' @param cacheSubDir You can specify a subdirectory within the cacheDir
-#' 			variable. Defaults to NULL.
-#' @param assignToVariable By default, simpleCache assigns the cache to a
-#'     variable named cacheName; you can overrule that here.
-#' @param loadEnvir    Into which environment would you like to load the
-#'     variable? Defaults to parent.frame.
+#' @param buildEnvir   An environment (or list) providing additional variables
+#'     necessary for evaluating the code in instruction.
+#' @param reload   Logical indicating whether to force re-loading the cache,
+#'     even if it exists in the env.
+#' @param recreate Logical indicating whether to force reconstruction of the
+#'     cache
+#' @param noload   Logical indicating whether to create but not load the cache.
+#'     noload is useful for: you want to create the caches, but not load (like a
+#'     cache creation loop).
+#' @param cacheDir Character vector specifying the directory where caches are
+#'			saved (and loaded from). Defaults to the variable set by
+#'			\code{\link[=setCacheDir]{setCacheDir()}}.
+#' @param cacheSubDir Character vector specifying a subdirectory within the
+#' 			\code{cacheDir} variable. Defaults to \code{NULL}.
+#' @param assignToVariable Character vector for a variable name to load the
+#'     cache into. By default, \code{simpleCache} assigns the cache to a
+#'     variable named \code{cacheName}; you can overrule that here.
+#' @param loadEnvir    An environment. Into which environment would you like to
+#'     load the variable? Defaults to \code{\link[base]{parent.frame}}.
 #' @param searchEnvir  a vector of environments to search for the already loaded
 #'     cache.
-#' @param timer Report how long it took to create the cache?
+#' @param timer Logical indicating whether to report how long it took to create
+#'     the cache.
 #' @param buildDir Location of Build files (files with instructions for use If
 #'		the instructions argument is not provided). Defaults to RBUILD.DIR
 #'		global option.
-#' @param parse By default, simpleCache will guess whether you want to parse the
-#'     instruction, based on whether it is quoted. You can overwrite the guess
-#'     with this parameter; but this may disappear in the future. In general,
-#'     you should note quote, but use {} around your instructions.
 #' @param nofail By default, simpleCache throws an error if the instructions
 #'     fail. Use this option to convert this error into a warning. No cache will
 #'     be created, but simpleCache will not then hard-stop your processing. This
-#'     is useful, for example, if you are creating a bunch of caches and it's ok
-#'     if some of them do not complete.
-#' @param batchRegistry A batchtools registry object (built with
-#'     batchtools::makeRegistry()). If provided, this cache will be created on
+#'     is useful, for example, if you are creating a bunch of caches (for
+#'     example using \code{lapply}) and it's ok if some of them do not complete.
+#' @param batchRegistry A \code{batchtools} registry object (built with
+#'      \code{\link[batchtools]{makeRegistry}}). If provided, this cache will be created on
 #'     the cluster using your batchtools configuration
 #' @param batchResources A list of variables to provide to batchtools for
-#'     cluster resource managers. Used as the `res` argument to
-#'     batchtools::batchMap()
+#'     cluster resource managers. Used as the \code{res} argument to
+#'     \code{\link[batchtools]{batchMap}}
+#' @param lifespan Numeric specifying the maximum age of cache, in days, to
+#'                 allow before automatically triggering \code{recreate=TRUE}.
 #' @param pepSettings Experimental untested feature.
-#' @param  ignoreLock   internal parameter used for batch job submission; don't
+#' @param ignoreLock Internal parameter used for batch job submission; don't
 #'     touch.
 #' @export
 #' @example
@@ -90,37 +91,31 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE,
 	buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL,
 	loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"),
-	parse=NULL, nofail=FALSE, batchRegistry=NULL,
-	batchResources=NULL, pepSettings=NULL, ignoreLock=FALSE) {
+	nofail=FALSE, batchRegistry=NULL, batchResources=NULL, pepSettings=NULL, 
+	ignoreLock=FALSE, lifespan=NULL) {
+
+	if (!"character" %in% class(cacheName)) {
+		stop("simpleCache expects the cacheName variable to be a character vector.")
+	}
 
 	# Because R evaluates arguments lazily (only when they are used),
 	# it will not evaluate the instruction if I first wrap it in a
 	# primitive substitute call. Then I can evaluate conditionally
 	# (if the cache needs to be recreated)
 	instruction = substitute(instruction)
-	if (is.null(parse)) {
-		if ("character" %in% class(instruction)) {
-
-			parse = TRUE
-			warning(strwrap("Detected a character instruction; consider wrapping
-			in {} instead of quotes."))
-		} else {
-			parse = FALSE
-		}
-	}
-	if (!is.null(cacheSubDir)) {
-		cacheDir = file.path(cacheDir, cacheSubDir)
-	}
+	if ("character" %in% class(instruction)) {
+		message("Character instruction; consider wrapping in braces.")
+		parse = TRUE
+	} else { parse = FALSE }
+	
+	# Handle directory paths.
+	if (!is.null(cacheSubDir)) { cacheDir = file.path(cacheDir, cacheSubDir) }
 	if (is.null(cacheDir)) {
 		message(strwrap("No cacheDir specified. You should set global option
 		RCACHE.DIR with setCacheDir(), or specify a cacheDir parameter directly
 		to simpleCache(). With no other option, simpleCache will use tempdir():
 		", initial="", prefix=" "), tempdir())
 		cacheDir = tempdir()
-	}
-	if (!"character" %in% class(cacheName)) {
-		stop("simpleCache expects the cacheName variable to be a character
-		vector.")
 	}
 	
 	if (!file.exists(cacheDir)) {
@@ -148,6 +143,12 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	
 
 	ret = NULL # The default, in case the cache construction fails.
+
+	if (.tooOld(cacheFile, lifespan)) {
+		message(sprintf(
+			"Stale cache: '%s' (age > %d day(s))", cacheFile, lifespan))
+		recreate = TRUE
+	}
 
 	if(cacheExists & !reload & !recreate) {
 		message("::Object exists (in ", cacheWhere, ")::\t", cacheName)

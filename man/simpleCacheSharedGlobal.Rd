@@ -7,7 +7,7 @@
 simpleCacheSharedGlobal(...)
 }
 \arguments{
-\item{...}{Parameters passed to simpleCache().}
+\item{...}{Parameters passed to \code{\link{simpleCache}}.}
 }
 \description{
 Helper alias for loading shared caches into the global environment.

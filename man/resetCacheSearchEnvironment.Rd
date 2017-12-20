@@ -2,10 +2,10 @@
 % Please edit documentation in R/cacheDirectories.R
 \name{resetCacheSearchEnvironment}
 \alias{resetCacheSearchEnvironment}
-\title{Sets global option of cache search environments to NULL.}
+\title{Sets global option of cache search environments to \code{NULL}.}
 \usage{
 resetCacheSearchEnvironment()
 }
 \description{
-Sets global option of cache search environments to NULL.
+Sets global option of cache search environments to \code{NULL}.
 }

@@ -9,7 +9,7 @@ ensures that the variables are loaded in the global environment.}
 simpleCacheGlobal(...)
 }
 \arguments{
-\item{...}{Parameters passed to simpleCache().}
+\item{...}{Parameters passed to \code{\link{simpleCache}}.}
 }
 \description{
 Helper alias for loading caches into the global environment.
