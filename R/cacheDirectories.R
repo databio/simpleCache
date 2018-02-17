@@ -61,8 +61,8 @@ resetCacheSearchEnvironment = function() {
 }
 
 
-.setDir <- function(optname, dirpath=NULL) {
-  diropts <- list(ifelse(is.null(dirpath), getwd(), dirpath))
-  names(diropts) <- optname
+.setDir = function(optname, dirpath=NULL) {
+  diropts = list(ifelse(is.null(dirpath), getwd(), dirpath))
+  names(diropts) = optname
   do.call(options, diropts)
 }

@@ -4,11 +4,11 @@ context("error checking")
 
 
 # Map option name to its setter.
-kSetters <- list(RCACHE.DIR=setCacheDir, RESOURCES.RCACHE=setSharedCacheDir, RBUILD.DIR=setCacheBuildDir)
+kSetters = list(RCACHE.DIR=setCacheDir, RESOURCES.RCACHE=setSharedCacheDir, RBUILD.DIR=setCacheBuildDir)
 
 
 # Test a cache dir setting in managed context fashion, resetting before and after test.
-test_dir_default <- function(cacheDirOptname) {
+test_dir_default = function(cacheDirOptname) {
   resetCacheSearchEnvironment()
   test_that(sprintf("%s setter uses current folder for argument-less call", cacheDirOptname), {
     do.call(kSetters[[cacheDirOptname]], args=list())
