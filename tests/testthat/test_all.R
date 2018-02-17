@@ -2,6 +2,19 @@ library(simpleCache)
 
 context("error checking")
 
+
+kSetters <- list(RCACHE.DIR=setCacheDir, RESOURCES.RCACHE=setSharedCacheDir, RBUILD.DIR=setCacheBuildDir)
+
+test_dir_default <- function(cacheDirOptname) {
+  expect_false(getwd() == getOption(cacheDirOptname))
+  test_that(sprintf("%s setter uses current folder for argument-less call", cacheDirOptname), {
+    do.call(kSetters[[cacheDirOptname]], args=list())
+    expect_equal(getwd(), getOption(cacheDirOptname))
+  })
+  resetCacheSearchEnvironment()
+}
+
+
 test_that("notifications and messages as expected", {
   
   # message if cache exists
@@ -122,6 +135,10 @@ test_that("option setting works", {
   expect_true(!grepl("cacheEnv", options_out[4]))
   
 })
+
+
+for (optname in names(kSetters)) { test_dir_default(optname) }
+
 
 test_that("objects pass through in buildEnvir", {
   
