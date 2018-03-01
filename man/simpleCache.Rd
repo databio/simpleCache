@@ -13,38 +13,44 @@ simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   pepSettings = NULL, ignoreLock = FALSE, lifespan = NULL)
 }
 \arguments{
-\item{cacheName}{Unique name for the cache. Be careful.}
+\item{cacheName}{A character vector for a unique name for the cache. Be careful.}
 
-\item{instruction}{Quoted R code to be evaluated. The returned value of this
+\item{instruction}{R expression (in braces) to be evaluated. The returned value of this
 code is what will be cached under the cacheName.}
 
-\item{buildEnvir}{You may choose to provide additional variables necessary
-for evaluating the code in instruction.}
+\item{buildEnvir}{An environment (or list) providing additional variables
+necessary for evaluating the code in instruction.}
 
-\item{reload}{forces re-loading the cache, even if it exists in the env.}
+\item{reload}{Logical indicating whether to force re-loading the cache,
+even if it exists in the env.}
 
-\item{recreate}{forces reconstruction of the cache}
+\item{recreate}{Logical indicating whether to force reconstruction of the
+cache}
 
-\item{noload}{noload is useful for: you want to create the caches, but not
-load them if they aren't there (like a cache creation loop).}
+\item{noload}{Logical indicating whether to create but not load the cache.
+noload is useful for: you want to create the caches, but not load (like a
+cache creation loop).}
 
-\item{cacheDir}{The directory where caches are saved (and loaded from).
-Defaults to the global \code{\link[=setCacheDir]{RCACHE.DIR}} variable}
+\item{cacheDir}{Character vector specifying the directory where caches are
+saved (and loaded from). Defaults to the variable set by
+\code{\link[=setCacheDir]{setCacheDir()}}.}
 
-\item{cacheSubDir}{You can specify a subdirectory within the \code{cacheDir}
-variable. Defaults to \code{NULL}.}
+\item{cacheSubDir}{Character vector specifying a subdirectory within the
+\code{cacheDir} variable. Defaults to \code{NULL}.}
 
-\item{timer}{Report how long it took to create the cache?}
+\item{timer}{Logical indicating whether to report how long it took to create
+the cache.}
 
 \item{buildDir}{Location of Build files (files with instructions for use If
 the instructions argument is not provided). Defaults to RBUILD.DIR
 global option.}
 
-\item{assignToVariable}{By default, \code{simpleCache} assigns the cache to a
+\item{assignToVariable}{Character vector for a variable name to load the
+cache into. By default, \code{simpleCache} assigns the cache to a
 variable named \code{cacheName}; you can overrule that here.}
 
-\item{loadEnvir}{Into which environment would you like to load the
-variable? Defaults to \code{\link[base]{parent.frame}}.}
+\item{loadEnvir}{An environment. Into which environment would you like to
+load the variable? Defaults to \code{\link[base]{parent.frame}}.}
 
 \item{searchEnvir}{a vector of environments to search for the already loaded
 cache.}
@@ -52,8 +58,8 @@ cache.}
 \item{nofail}{By default, simpleCache throws an error if the instructions
 fail. Use this option to convert this error into a warning. No cache will
 be created, but simpleCache will not then hard-stop your processing. This
-is useful, for example, if you are creating a bunch of caches and it's ok
-if some of them do not complete.}
+is useful, for example, if you are creating a bunch of caches (for
+example using \code{lapply}) and it's ok if some of them do not complete.}
 
 \item{batchRegistry}{A \code{batchtools} registry object (built with
  \code{\link[batchtools]{makeRegistry}}). If provided, this cache will be created on
@@ -68,8 +74,8 @@ cluster resource managers. Used as the \code{res} argument to
 \item{ignoreLock}{Internal parameter used for batch job submission; don't
 touch.}
 
-\item{lifespan}{Maximum age of cache, in days, to allow before 
-automatically triggering \code{recreate=TRUE}.}
+\item{lifespan}{Numeric specifying the maximum age of cache, in days, to
+allow before automatically triggering \code{recreate=TRUE}.}
 }
 \description{
 Given a unique name for an  R object, and instructions for how to make that
