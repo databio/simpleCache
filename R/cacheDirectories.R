@@ -12,9 +12,7 @@
 #' @export
 #' @example
 #' R/examples/example.R
-setCacheDir = function(cacheDir) {
-	options(RCACHE.DIR=cacheDir)
-}
+setCacheDir = function(cacheDir=NULL) { .setDir("RCACHE.DIR", cacheDir) }
 
 #' Set shared cache directory
 #'
@@ -24,17 +22,13 @@ setCacheDir = function(cacheDir) {
 #'
 #' @param sharedCacheDir Directory where shared caches should be stored
 #' @export
-setSharedCacheDir = function(sharedCacheDir) {
-	options(RESOURCES.RCACHE=sharedCacheDir)
-}
+setSharedCacheDir = function(sharedCacheDir=NULL) { .setDir("RESOURCES.RCACHE", sharedCacheDir) }
 
 #' Sets local cache build directory with scripts for building files.
 #'
 #' @param cacheBuildDir Directory where build scripts are stored.
 #' @export
-setCacheBuildDir = function(cacheBuildDir) {
-	options(RBUILD.DIR=cacheBuildDir)
-}
+setCacheBuildDir = function(cacheBuildDir=NULL) { .setDir("RBUILD.DIR", cacheBuildDir) }
 
 #' View simpleCache options
 #'
@@ -66,3 +60,9 @@ resetCacheSearchEnvironment = function() {
 	options(SIMPLECACHE.ENV=NULL)
 }
 
+
+.setDir = function(optname, dirpath=NULL) {
+  diropts = list(ifelse(is.null(dirpath), getwd(), dirpath))
+  names(diropts) = optname
+  do.call(options, diropts)
+}
