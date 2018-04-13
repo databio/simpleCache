@@ -9,6 +9,7 @@
 #' @example
 #' R/examples/example.R
 listCaches = function(cacheSubDir="") {
-	list.files(paste0(getOption("RCACHE.DIR"), cacheSubDir))
+	cacheDirFiles = list.files(paste0(getOption("RCACHE.DIR"), cacheSubDir))
+	cacheDirFiles[which(sapply(cacheDirFiles, function(f) endsWith(f, ".RData")))]
 }
 
