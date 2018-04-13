@@ -14,7 +14,7 @@ output: knitr:::html_vignette
 
 `simpleCache` has 2 main use cases: First, it can help you pick up where you left off in an R session, and second, it can help you parallelize code by enabling you to share results across R sessions.
 
-The workhorse `simpleCache` is the eponymous `simpleCache()` function, which in the simplest case requires just two parameters: a cache name, and a block of code. The cache name should be considered unique and its underlying object immutable, while the block of code (or *instruction*) is the `R` code that generates the object you wish to cache.
+The workhorse of `simpleCache` is the eponymous `simpleCache()` function, which in the simplest case requires just two parameters: a cache name, and a block of code. The cache name should be considered unique and its underlying object immutable, while the block of code (or *instruction*) is the `R` code that generates the object you wish to cache.
 
 But before we start creating caches, it's important to tell `simpleCache` where to store the caches. `simpleCache` uses a global variable (`RCACHE.DIR`) for caches, and provides a setter function (`setCacheDir()`) to change this. To get started, choose a cache directory, and generate some random data.
 
