@@ -2,6 +2,22 @@ library(simpleCache)
 
 context("error checking")
 
+
+# Map option name to its setter.
+kSetters = list(RCACHE.DIR=setCacheDir, RESOURCES.RCACHE=setSharedCacheDir, RBUILD.DIR=setCacheBuildDir)
+
+
+# Test a cache dir setting in managed context fashion, resetting before and after test.
+test_dir_default = function(cacheDirOptname) {
+  resetCacheSearchEnvironment()
+  test_that(sprintf("%s setter uses current folder for argument-less call", cacheDirOptname), {
+    do.call(kSetters[[cacheDirOptname]], args=list())
+    expect_equal(getwd(), getOption(cacheDirOptname))
+  })
+  resetCacheSearchEnvironment()
+}
+
+
 test_that("notifications and messages as expected", {
   
   # message if cache exists
@@ -122,6 +138,11 @@ test_that("option setting works", {
   expect_true(!grepl("cacheEnv", options_out[4]))
   
 })
+
+
+# Test each cache directory option setter.
+for (optname in names(kSetters)) { test_dir_default(optname) }
+
 
 test_that("objects pass through in buildEnvir", {
   
