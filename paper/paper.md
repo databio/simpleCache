@@ -1,7 +1,7 @@
 ---
 title: 'simpleCache: R caching for reproducible, distributed, large-scale projects'
 authors:
- - name: Nathan Sheffield
+ - name: Nathan C. Sheffield
    orcid: 0000-0001-5643-4068
    affiliation: 1
  - name: VP Nagraj
