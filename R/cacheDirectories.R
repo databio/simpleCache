@@ -14,6 +14,15 @@
 #' R/examples/example.R
 setCacheDir = function(cacheDir=NULL) { .setDir("RCACHE.DIR", cacheDir) }
 
+#' Fetcher of the currently set cache directory.
+#'
+#' \code{getCacheDir} retrieves the value of the option that stores the currently 
+#' set cache directory path.
+#'
+#' @return If the option is set, the path to the currently set cache directory; otherwise, \code{NULL}.
+#' @export
+getCacheDir = function() { getOption("RCACHE.DIR") }
+
 #' Set shared cache directory
 #'
 #' Sets global variable specifying the default cache directory for
