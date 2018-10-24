@@ -140,6 +140,7 @@ test_that("option setting works", {
 })
 
 test_that("Cache dir fetch works", {
+  options(RCACHE.DIR = NULL)
   expect_true(is.null(getCacheDir()))
   setCacheDir(tempdir())
   expect_false(is.null(getCacheDir()))
