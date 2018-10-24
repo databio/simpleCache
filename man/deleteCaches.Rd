@@ -4,7 +4,8 @@
 \alias{deleteCaches}
 \title{Deletes caches}
 \usage{
-deleteCaches(cacheNames, cacheDir = getOption("RCACHE.DIR"), force = FALSE)
+deleteCaches(cacheNames, cacheDir = getOption("RCACHE.DIR"),
+  force = FALSE)
 }
 \arguments{
 \item{cacheNames}{Name(s) of the cache to delete}

@@ -4,7 +4,7 @@
 \alias{setCacheBuildDir}
 \title{Sets local cache build directory with scripts for building files.}
 \usage{
-setCacheBuildDir(cacheBuildDir)
+setCacheBuildDir(cacheBuildDir = NULL)
 }
 \arguments{
 \item{cacheBuildDir}{Directory where build scripts are stored.}
