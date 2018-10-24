@@ -134,7 +134,9 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	cacheWhere = NULL
 
 	for ( curEnv in searchEnvir ) {
-		if(exists(cacheName, where=get(curEnv))) {
+		if(! ( exists(curEnv) && is.environment(get(curEnv))) ) {
+			warning(curEnv, " is not an environment.")
+		} else if( exists(cacheName, where=get(curEnv))) {
 			cacheExists = TRUE
 			cacheWhere = curEnv
 			break
