@@ -6,9 +6,9 @@
 \usage{
 simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
   reload = FALSE, recreate = FALSE, noload = FALSE,
-  cacheDir = getOption("RCACHE.DIR"), cacheSubDir = NULL,
-  timer = FALSE, buildDir = getOption("RBUILD.DIR"),
-  assignToVariable = NULL, loadEnvir = parent.frame(),
+  cacheDir = getCacheDir(), cacheSubDir = NULL, timer = FALSE,
+  buildDir = getOption("RBUILD.DIR"), assignToVariable = NULL,
+  loadEnvir = parent.frame(),
   searchEnvir = getOption("SIMPLECACHE.ENV"), nofail = FALSE,
   batchRegistry = NULL, batchResources = NULL, pepSettings = NULL,
   ignoreLock = FALSE, lifespan = NULL)
