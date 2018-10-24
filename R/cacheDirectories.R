@@ -45,7 +45,7 @@ setCacheBuildDir = function(cacheBuildDir=NULL) { .setDir("RBUILD.DIR", cacheBui
 #' @export
 simpleCacheOptions = function() {
 	message("RESOURCES.RCACHE:\t", getOption("RESOURCES.RCACHE"))
-	message("RCACHE.DIR:\t", getOption("RCACHE.DIR"))
+	message("RCACHE.DIR:\t", getCacheDir())
 	message("RBUILD.DIR:\t", getOption("RBUILD.DIR"))
 	message("SIMPLECACHE.ENV:\t", getOption("SIMPLECACHE.ENV"))
 }

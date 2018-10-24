@@ -8,7 +8,7 @@
 #' @export
 #' @example
 #' R/examples/example.R
-deleteCaches = function(cacheNames, cacheDir=getOption("RCACHE.DIR"),
+deleteCaches = function(cacheNames, cacheDir=getCacheDir(),
 	force=FALSE) {
 	
 	if (force) {
