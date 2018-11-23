@@ -20,3 +20,12 @@ navbar:
     href: http://databio.org
   - text: Software & Data
     href: http://databio.org/software/
+
+articles: 
+  - title: Introduction
+    contents:
+      - simpleCacheIntroduction
+  - title: Advanced features
+    contents:
+      - clusterCaches
+      - sharingCaches
