@@ -19,7 +19,7 @@
 #' @export
 #' @example
 #' R/examples/example.R
-storeCache = function(cacheName, cacheDir = getOption("RCACHE.DIR"),
+storeCache = function(cacheName, cacheDir = getCacheDir(),
 	cacheSubDir = NULL, recreate=FALSE) {
 
 	if(!is.null(cacheSubDir)) {

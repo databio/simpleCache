@@ -12,9 +12,16 @@
 #' @export
 #' @example
 #' R/examples/example.R
-setCacheDir = function(cacheDir) {
-	options(RCACHE.DIR=cacheDir)
-}
+setCacheDir = function(cacheDir=NULL) { .setDir("RCACHE.DIR", cacheDir) }
+
+#' Fetcher of the currently set cache directory.
+#'
+#' \code{getCacheDir} retrieves the value of the option that stores the currently 
+#' set cache directory path.
+#'
+#' @return If the option is set, the path to the currently set cache directory; otherwise, \code{NULL}.
+#' @export
+getCacheDir = function() { getOption("RCACHE.DIR") }
 
 #' Set shared cache directory
 #'
@@ -24,17 +31,13 @@ setCacheDir = function(cacheDir) {
 #'
 #' @param sharedCacheDir Directory where shared caches should be stored
 #' @export
-setSharedCacheDir = function(sharedCacheDir) {
-	options(RESOURCES.RCACHE=sharedCacheDir)
-}
+setSharedCacheDir = function(sharedCacheDir=NULL) { .setDir("RESOURCES.RCACHE", sharedCacheDir) }
 
 #' Sets local cache build directory with scripts for building files.
 #'
 #' @param cacheBuildDir Directory where build scripts are stored.
 #' @export
-setCacheBuildDir = function(cacheBuildDir) {
-	options(RBUILD.DIR=cacheBuildDir)
-}
+setCacheBuildDir = function(cacheBuildDir=NULL) { .setDir("RBUILD.DIR", cacheBuildDir) }
 
 #' View simpleCache options
 #'
@@ -42,7 +45,7 @@ setCacheBuildDir = function(cacheBuildDir) {
 #' @export
 simpleCacheOptions = function() {
 	message("RESOURCES.RCACHE:\t", getOption("RESOURCES.RCACHE"))
-	message("RCACHE.DIR:\t", getOption("RCACHE.DIR"))
+	message("RCACHE.DIR:\t", getCacheDir())
 	message("RBUILD.DIR:\t", getOption("RBUILD.DIR"))
 	message("SIMPLECACHE.ENV:\t", getOption("SIMPLECACHE.ENV"))
 }
@@ -66,3 +69,9 @@ resetCacheSearchEnvironment = function() {
 	options(SIMPLECACHE.ENV=NULL)
 }
 
+
+.setDir = function(optname, dirpath=NULL) {
+  diropts = list(ifelse(is.null(dirpath), getwd(), dirpath))
+  names(diropts) = optname
+  do.call(options, diropts)
+}

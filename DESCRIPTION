@@ -1,6 +1,6 @@
 Package: simpleCache
 Version: 0.4.1
-Date: 2018-03-01
+Date: 2019-02-26
 Title: Simply Caching R Objects
 Description: Provides intuitive functions for caching R objects, encouraging
     reproducible, restartable, and distributed R analysis. The user selects a
@@ -22,4 +22,4 @@ License: BSD_2_clause + file LICENSE
 Encoding: UTF-8
 URL: https://www.github.com/databio/simpleCache
 BugReports: https://www.github.com/databio/simpleCache
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.0

@@ -4,8 +4,8 @@
 \alias{storeCache}
 \title{Stores as a cache an already-produced R object}
 \usage{
-storeCache(cacheName, cacheDir = getOption("RCACHE.DIR"),
-  cacheSubDir = NULL, recreate = FALSE)
+storeCache(cacheName, cacheDir = getCacheDir(), cacheSubDir = NULL,
+  recreate = FALSE)
 }
 \arguments{
 \item{cacheName}{Unique name for the cache (and R object to be cached).}

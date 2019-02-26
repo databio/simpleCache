@@ -88,7 +88,7 @@
 #' R/examples/example.R
 simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	reload=FALSE, recreate=FALSE, noload=FALSE,
-	cacheDir=getOption("RCACHE.DIR"), cacheSubDir=NULL, timer=FALSE,
+	cacheDir=getCacheDir(), cacheSubDir=NULL, timer=FALSE,
 	buildDir=getOption("RBUILD.DIR"), assignToVariable=NULL,
 	loadEnvir=parent.frame(), searchEnvir=getOption("SIMPLECACHE.ENV"),
 	nofail=FALSE, batchRegistry=NULL, batchResources=NULL, pepSettings=NULL, 
@@ -134,7 +134,9 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	cacheWhere = NULL
 
 	for ( curEnv in searchEnvir ) {
-		if(exists(cacheName, where=get(curEnv))) {
+		if(! ( exists(curEnv) && is.environment(get(curEnv))) ) {
+			warning(curEnv, " is not an environment.")
+		} else if( exists(cacheName, where=get(curEnv))) {
 			cacheExists = TRUE
 			cacheWhere = curEnv
 			break

@@ -2,6 +2,22 @@ library(simpleCache)
 
 context("error checking")
 
+
+# Map option name to its setter.
+kSetters = list(RCACHE.DIR=setCacheDir, RESOURCES.RCACHE=setSharedCacheDir, RBUILD.DIR=setCacheBuildDir)
+
+
+# Test a cache dir setting in managed context fashion, resetting before and after test.
+test_dir_default = function(cacheDirOptname) {
+  resetCacheSearchEnvironment()
+  test_that(sprintf("%s setter uses current folder for argument-less call", cacheDirOptname), {
+    do.call(kSetters[[cacheDirOptname]], args=list())
+    expect_equal(getwd(), getOption(cacheDirOptname))
+  })
+  resetCacheSearchEnvironment()
+}
+
+
 test_that("notifications and messages as expected", {
   
   # message if cache exists
@@ -106,12 +122,16 @@ test_that("option setting works", {
   setCacheBuildDir(tempdir())
   addCacheSearchEnvironment("cacheEnv")
   
+  # Windows uses double slashes, which get consumed weirdly by grep;
+  # This command will replace double slashes with quadruple slashes,
+  # which behave correctly in grep.
+  grep_tempdir = gsub("\\\\", "\\\\\\\\", tempdir())
   # capture output and check
   options_out <- capture_messages(simpleCacheOptions())
   
-  expect_true(grepl(tempdir(), options_out[1]))
-  expect_true(grepl(tempdir(), options_out[2]))
-  expect_true(grepl(tempdir(), options_out[3]))
+  expect_true(grepl(grep_tempdir, options_out[1]))
+  expect_true(grepl(grep_tempdir, options_out[2]))
+  expect_true(grepl(grep_tempdir, options_out[3]))
   expect_true(grepl("cacheEnv", options_out[4]))
   
   # reset the cache search option
@@ -122,6 +142,18 @@ test_that("option setting works", {
   expect_true(!grepl("cacheEnv", options_out[4]))
   
 })
+
+test_that("Cache dir fetch works", {
+  options(RCACHE.DIR = NULL)
+  expect_true(is.null(getCacheDir()))
+  setCacheDir(tempdir())
+  expect_false(is.null(getCacheDir()))
+  expect_equal(getCacheDir(), tempdir())
+})
+
+# Test each cache directory option setter.
+for (optname in names(kSetters)) { test_dir_default(optname) }
+
 
 test_that("objects pass through in buildEnvir", {
   
