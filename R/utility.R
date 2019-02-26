@@ -29,7 +29,7 @@
 	if (!utils::file_test("-f", pathCacheFile)) { return(FALSE) }
 	if (is.null(lifespan)) { lifespan = getOption("MAX.CACHE.AGE") }
 	if (is.null(lifespan)) { return(FALSE) }
-	cacheTime = file.info(pathCacheFile)$ctime
+	cacheTime = file.info(pathCacheFile)$mtime
 	cacheAge = difftime(Sys.time(), cacheTime, units="days")
 	as.numeric(cacheAge) > as.numeric(lifespan)
 }
