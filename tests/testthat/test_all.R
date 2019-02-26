@@ -122,12 +122,16 @@ test_that("option setting works", {
   setCacheBuildDir(tempdir())
   addCacheSearchEnvironment("cacheEnv")
   
+  # Windows uses double slashes, which get consumed weirdly by grep;
+  # This command will replace double slashes with quadruple slashes,
+  # which behave correctly in grep.
+  grep_tempdir = gsub("\\\\", "\\\\\\\\", tempdir())
   # capture output and check
   options_out <- capture_messages(simpleCacheOptions())
   
-  expect_true(grepl(tempdir(), options_out[1]))
-  expect_true(grepl(tempdir(), options_out[2]))
-  expect_true(grepl(tempdir(), options_out[3]))
+  expect_true(grepl(grep_tempdir, options_out[1]))
+  expect_true(grepl(grep_tempdir, options_out[2]))
+  expect_true(grepl(grep_tempdir, options_out[3]))
   expect_true(grepl("cacheEnv", options_out[4]))
   
   # reset the cache search option
