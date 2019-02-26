@@ -5,7 +5,7 @@
 \title{Sets a global variable specifying the default cache directory for
 \code{\link{simpleCache}} calls.}
 \usage{
-setCacheDir(cacheDir)
+setCacheDir(cacheDir = NULL)
 }
 \arguments{
 \item{cacheDir}{Directory where caches should be stored}

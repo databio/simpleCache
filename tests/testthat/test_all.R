@@ -139,6 +139,13 @@ test_that("option setting works", {
   
 })
 
+test_that("Cache dir fetch works", {
+  options(RCACHE.DIR = NULL)
+  expect_true(is.null(getCacheDir()))
+  setCacheDir(tempdir())
+  expect_false(is.null(getCacheDir()))
+  expect_equal(getCacheDir(), tempdir())
+})
 
 # Test each cache directory option setter.
 for (optname in names(kSetters)) { test_dir_default(optname) }

@@ -2,6 +2,7 @@
 
 export(addCacheSearchEnvironment)
 export(deleteCaches)
+export(getCacheDir)
 export(listCaches)
 export(loadCaches)
 export(resetCacheSearchEnvironment)

@@ -4,7 +4,7 @@
 \alias{setSharedCacheDir}
 \title{Set shared cache directory}
 \usage{
-setSharedCacheDir(sharedCacheDir)
+setSharedCacheDir(sharedCacheDir = NULL)
 }
 \arguments{
 \item{sharedCacheDir}{Directory where shared caches should be stored}
