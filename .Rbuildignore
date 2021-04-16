@@ -6,3 +6,5 @@
 ^paper$
 .github
 ^_pkgdown\.yaml$
+^doc$
+^Meta$

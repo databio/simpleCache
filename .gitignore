@@ -47,3 +47,5 @@ Thumbs.db
 ~
 .Rproj.user
 .Rhistory
+/doc/
+/Meta/
