@@ -21,6 +21,6 @@ Enhances: batchtools
 VignetteBuilder: knitr
 License: BSD_2_clause + file LICENSE
 Encoding: UTF-8
-URL: https://www.github.com/databio/simpleCache
-BugReports: https://www.github.com/databio/simpleCache
+URL: https://github.com/databio/simpleCache
+BugReports: https://github.com/databio/simpleCache
 RoxygenNote: 7.1.1
