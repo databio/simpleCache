@@ -22,8 +22,8 @@ Provides intuitive functions for caching R objects, encouraging
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://www.github.com/databio/simpleCache}
-  \item Report bugs at \url{https://www.github.com/databio/simpleCache}
+  \item \url{https://github.com/databio/simpleCache}
+  \item Report bugs at \url{https://github.com/databio/simpleCache}
 }
 
 }

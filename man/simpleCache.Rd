@@ -4,14 +4,27 @@
 \alias{simpleCache}
 \title{Create a new cache or load a previously created cache.}
 \usage{
-simpleCache(cacheName, instruction = NULL, buildEnvir = NULL,
-  reload = FALSE, recreate = FALSE, noload = FALSE,
-  cacheDir = getCacheDir(), cacheSubDir = NULL, timer = FALSE,
-  buildDir = getOption("RBUILD.DIR"), assignToVariable = NULL,
+simpleCache(
+  cacheName,
+  instruction = NULL,
+  buildEnvir = NULL,
+  reload = FALSE,
+  recreate = FALSE,
+  noload = FALSE,
+  cacheDir = getCacheDir(),
+  cacheSubDir = NULL,
+  timer = FALSE,
+  buildDir = getOption("RBUILD.DIR"),
+  assignToVariable = NULL,
   loadEnvir = parent.frame(),
-  searchEnvir = getOption("SIMPLECACHE.ENV"), nofail = FALSE,
-  batchRegistry = NULL, batchResources = NULL, pepSettings = NULL,
-  ignoreLock = FALSE, lifespan = NULL)
+  searchEnvir = getOption("SIMPLECACHE.ENV"),
+  nofail = FALSE,
+  batchRegistry = NULL,
+  batchResources = NULL,
+  pepSettings = NULL,
+  ignoreLock = FALSE,
+  lifespan = NULL
+)
 }
 \arguments{
 \item{cacheName}{A character vector for a unique name for the cache. Be careful.}

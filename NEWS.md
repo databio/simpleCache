@@ -1,6 +1,10 @@
 # Change log
 All notable changes to this project will be documented in this file.
 
+## simpleCache [0.4.2] -- 2021-04-16
+
+	- updates to accommodate latest knitr for vignettes
+
 ## simpleCache [0.4.1] -- 2019-02-26
 
 	- fixes unit tests on windows

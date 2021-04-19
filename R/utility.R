@@ -51,24 +51,26 @@ secToTime = function(timeInSec) {
 	sprintf("%02.01f", signif(sec, 3)), "s"))
 }
 
+ticTocEnv = new.env()
+
 #' Start a timer
 #' @param gcFirst Garbage Collect before starting the timer?
 #' @param type Type of time to return, 
 #' can be 'elapsed', 'user.self', or 'sys.self'
 tic = function(gcFirst = TRUE, type=c("elapsed", "user.self", "sys.self")) {
 	type <- match.arg(type)
-	assign(".type_simpleCache", type, envir=baseenv())
+	assign(".type_simpleCache", type, envir=ticTocEnv)
 	if(gcFirst) gc(FALSE)
 	tic <- proc.time()[type]         
-	assign(".tic_simpleCache", tic, envir=baseenv())
+	assign(".tic_simpleCache", tic, envir=ticTocEnv)
 	invisible(tic)
 }
 
 #' Check the time since the current timer was started with tic()
 toc = function() {
-	type <- get(".type_simpleCache", envir=baseenv())
+	type <- get(".type_simpleCache", envir=ticTocEnv)
 	toc <- proc.time()[type]
-	tic <- get(".tic_simpleCache", envir=baseenv())
+	tic <- get(".tic_simpleCache", envir=ticTocEnv)
 	timeInSec = as.numeric(toc-tic);
 	message("<", secToTime(timeInSec), ">", appendLF=FALSE)
 	invisible(toc)
