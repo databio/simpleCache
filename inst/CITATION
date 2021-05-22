@@ -1,0 +1,21 @@
+citHeader("When using simpleCache in your work, please consider citing:")
+
+citEntry(entry = "Article", 
+  title        = "{simpleCache}: R caching for reproducible, distributed, large-scale projects", 
+  author       = personList(as.person("VP Nagraj"),
+                   as.person("Vince Reuter"), 
+                   as.person("Nathan Sheffield")),
+  journal      = "Journal of Open Source Software", 
+  year         = "2018", 
+  volume       = "3", 
+  number       = "21", 
+  pages        = "463", 
+  url          = "https://doi.org/10.21105/joss.00463", 
+
+  textVersion  = 
+  paste("VP Nagraj, Vince Reuter, Nathan Sheffield (2018).", 
+        "simpleCache: R caching for reproducible, distributed, large-scale projects", 
+        "Journal of Open Source Software, 3(21), 463.", 
+  "URL https://doi.org/10.21105/joss.00463")
+)
+
