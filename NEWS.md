@@ -1,6 +1,11 @@
 # Change log
 All notable changes to this project will be documented in this file.
 
+## simpleCache [0.4.3] -- 2026-02-26
+
+	- Fixed BugReports URL in DESCRIPTION to point to issues tracker
+	- Fixed NEWS.md version header formatting for CRAN compliance
+
 ## simpleCache [0.4.2] -- 2021-04-16
 
 	- updates to accommodate latest knitr for vignettes
@@ -42,6 +47,6 @@ All notable changes to this project will be documented in this file.
 	- support for batchjobs parallel processing
 	- docs, prep for submission to CRAN
 
-## simpleCache [0.0.1]
+## simpleCache [0.0.1] -- 2017-06-16
 
 	- long-term stable version
