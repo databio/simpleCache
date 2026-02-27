@@ -77,6 +77,12 @@ paramount**. `simpleCache` assumes that your name for an object is a perfect
 identifier for that object; in other words, don't cache things that you plan to
 change.
 
+### Citation
+
+Please consider citing `simpleCache` if you use it in your research or project.
+
+Sheffield et al., (2018). simpleCache: R caching for reproducible, distributed, large-scale projects. Journal of Open Source Software, 3(21), 463, https://doi.org/10.21105/joss.00463
+
 ### Contributing
 
 `simpleCache` is licensed under the [2-Clause BSD License](https://opensource.org/licenses/BSD-2-Clause). Questions, feature requests and bug reports are welcome via the [issue queue](https://github.com/databio/simpleCache/issues). The maintainer will review pull requests and incorporate contributions at his discretion.
