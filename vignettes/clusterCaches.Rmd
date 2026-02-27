@@ -60,3 +60,7 @@ batchtools::removeRegistry(reg=registry)
 ```
 
 See `batchtools` documentation for more details on using registries.
+
+# Lock files
+
+When a cache is submitted to the cluster, `simpleCache` creates a `.lock` file so that if you later call `simpleCache` for the same cache — whether you forgot the job was running or are working locally — it will see the lock and skip rebuilding. The lock file is removed automatically when the cluster job completes. This mechanism is a simple convenience guard, not a robust concurrency lock — it is possible for two processes to both check for the lock file before either creates it, resulting in duplicate builds.
