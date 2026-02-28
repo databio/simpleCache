@@ -17,9 +17,10 @@ deleteCaches = function(cacheNames, cacheDir=getCacheDir(),
 		response = readline("Are you sure you want to delete this cache? [y/N]")
 	}
 
+	backend = .getBackend()
 	if (tolower(response) == "yes" || tolower(response) == "y") {
 		for (cacheName in cacheNames) {
-			cacheFile = file.path(cacheDir, paste0(cacheName, ".RData"))
+			cacheFile = file.path(cacheDir, paste0(cacheName, backend$ext))
 			message("Deleting ", cacheFile)
 			unlink(cacheFile)
 		}

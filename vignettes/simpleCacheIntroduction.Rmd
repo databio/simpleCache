@@ -142,6 +142,32 @@ tResult$p.value
 
 The point is that the code could be quite complicated and time-consuming. You may only want to calculate it once, and then re-use the result in another script -- or in this same script next time you run it. `simpleCache` makes that, well, simple.
 
+## Custom serialization backends
+
+By default, `simpleCache` uses base R `save()`/`load()` with `.RData` files. You can swap in any serialization format by setting the `RCACHE.BACKEND` option. The option takes a list with three elements:
+
+- **save**: a function with signature `function(obj, file)` that writes `obj` to `file`
+- **load**: a function with signature `function(file)` that reads and returns the object
+- **ext**: the file extension (e.g., `".qs2"`)
+
+For example, to use the fast `qs2` serialization:
+
+```r
+options(RCACHE.BACKEND = list(
+  save = function(obj, file) qs2::qs_save(obj, file),
+  load = function(file) qs2::qs_read(file),
+  ext  = ".qs2"
+))
+```
+
+Once set, all `simpleCache()`, `storeCache()`, `listCaches()`, and `deleteCaches()` calls use the custom backend. To switch back to the default, reset the option:
+
+```r
+options(RCACHE.BACKEND = NULL)
+```
+
+Note that `listCaches()` and `deleteCaches()` only operate on the current backend's extension. If you switch backends, old-format caches are still on disk but won't appear in listings.
+
 That's the end of the basics. There are a few more advanced options as well, such as using a shared cache directory, submitting compute requests to a cluster using `batchtools`, tweaking the loading environment with the `loadEnvir` parameter (if you need to call `simpleCache()` from within a function), and tweaking the cache building resources with the `buildEnvir` parameter. But these options are more advanced and probably not needed for 95% of `simpleCache` use cases. If you do need more information, you can find further help in the other vignettes or in the detailed R function documentation (see `?simpleCache`).
 
 ```{r Clean up}
