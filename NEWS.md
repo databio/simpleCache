@@ -1,6 +1,13 @@
 # Change log
 All notable changes to this project will be documented in this file.
 
+## simpleCache [0.5.0] -- 2026-02-27
+
+	- Added custom serialization backend support via RCACHE.BACKEND option,
+	  allowing users to plug in qs2, saveRDS, or any save/load functions
+	- Added lock file documentation to cluster caches vignette
+	- Added custom backend demo script in inst/examples/custom_backends.R
+
 ## simpleCache [0.4.3] -- 2026-02-26
 
 	- Fixed BugReports URL in DESCRIPTION to point to issues tracker
