@@ -42,7 +42,8 @@ storeCache = function(cacheName, cacheDir = getCacheDir(),
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir, recursive=TRUE)
 	}
-	cacheFile = file.path(cacheDir, paste0(cacheName, ".RData"))
+	backend = .getBackend()
+	cacheFile = file.path(cacheDir, paste0(cacheName, backend$ext))
 	if(file.exists(cacheFile) & !recreate) {
 		message("::Cache already exists (use recreate to overwrite)::\t",
 		cacheFile)
@@ -53,6 +54,6 @@ storeCache = function(cacheName, cacheDir = getCacheDir(),
 	} else {
 		message("::Creating cache::\t", cacheFile)
 		ret = get(cacheName)
-		save(ret, file=cacheFile)
+		backend$save(ret, cacheFile)
 	}
 }

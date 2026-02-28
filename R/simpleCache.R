@@ -98,6 +98,8 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 		stop("simpleCache expects the cacheName variable to be a character vector.")
 	}
 
+	backend = .getBackend()
+
 	# Because R evaluates arguments lazily (only when they are used),
 	# it will not evaluate the instruction if I first wrap it in a
 	# primitive substitute call. Then I can evaluate conditionally
@@ -121,7 +123,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 	if (!file.exists(cacheDir)) {
 		dir.create(cacheDir, recursive=TRUE)
 	}
-	cacheFile = file.path(cacheDir, paste0(cacheName, ".RData"))
+	cacheFile = file.path(cacheDir, paste0(cacheName, backend$ext))
 	lockFile = file.path(cacheDir, paste0(cacheName, ".lock"))
 	if (ignoreLock) {
 		# remove the lock file when this function call is complete.
@@ -176,7 +178,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 
 	} else if(file.exists(cacheFile) & !recreate & !noload) {
 		message("::Loading cache::\t", cacheFile)
-		load(cacheFile)
+		ret = backend$load(cacheFile)
 	} else if(file.exists(cacheFile) & !recreate) {
 		message("::Cache exists (no load)::\t", cacheFile)
 		return(NULL)
@@ -297,7 +299,7 @@ simpleCache = function(cacheName, instruction=NULL, buildEnvir=NULL,
 			message("NULL value returned, no cache created")
 			return() #so we don't assign NULL to the object.
 		} else {
-			save(ret, file=cacheFile)
+			backend$save(ret, cacheFile)
 		}
 	}
 	if (noload) {

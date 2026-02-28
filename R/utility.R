@@ -3,12 +3,41 @@
 ################################################################################
 # These are functions copied over from my repository of utilities used
 # by this package. They are repeated here simply for portability, so this
-# package can be deployed on systems without access to my utilities. 
-# Any changes should probably be backported to the primary functions rather 
+# package can be deployed on systems without access to my utilities.
+# Any changes should probably be backported to the primary functions rather
 # than in these convenience duplications.
 #
 # These functions should probably remain interior to the package (not exported)
 #
+
+#' Get the active serialization backend.
+#'
+#' Returns a list with \code{save}, \code{load}, and \code{ext} elements.
+#' When \code{getOption("RCACHE.BACKEND")} is NULL (the default), uses
+#' base R \code{save}/\code{load} with \code{.RData} extension.
+#' Users can set a custom backend via
+#' \code{options(RCACHE.BACKEND = list(save=..., load=..., ext=...))}.
+#' @return A list with \code{save} (function(obj, file)),
+#'   \code{load} (function(file)), and \code{ext} (character).
+.getBackend = function() {
+	backend = getOption("RCACHE.BACKEND")
+	if (is.null(backend)) {
+		backend = list(
+			save = function(obj, file) { ret = obj; base::save(ret, file=file) },
+			load = function(file) { e = new.env(); base::load(file, envir=e); e$ret },
+			ext  = ".RData"
+		)
+	} else {
+		if (!all(c("save", "load", "ext") %in% names(backend)))
+			stop("RCACHE.BACKEND must contain 'save', 'load', and 'ext'")
+		if (!is.function(backend$save) || !is.function(backend$load))
+			stop("RCACHE.BACKEND 'save' and 'load' must be functions")
+		if (!startsWith(backend$ext, "."))
+			backend$ext = paste0(".", backend$ext)
+	}
+	backend
+}
+
 #' Determine if a cache file is sufficiently old to warrant refresh.
 #' 
 #' \code{.tooOld} accepts a maximum cache age and checks for an option with 
